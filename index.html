@@ -1,0 +1,562 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Famasi Onboarding Prototype</title>
+  <meta name="description" content="Interactive prototype for the proposed Famasi onboarding flow." />
+  <style>
+    :root {
+      --bg: #f6f6f5;
+      --card: #ffffff;
+      --text: #141414;
+      --muted: #6e6e6e;
+      --line: #dededb;
+      --soft: #efefed;
+      --black: #161616;
+    }
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--text);
+      font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      -webkit-font-smoothing: antialiased;
+    }
+    button, input { font: inherit; }
+    button { cursor: pointer; }
+    .shell {
+      width: min(760px, calc(100% - 32px));
+      margin: 0 auto;
+      padding: 34px 0 56px;
+    }
+    .topbar {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 24px;
+      margin-bottom: 30px;
+    }
+    .eyebrow {
+      margin: 0;
+      font-size: 13px;
+      font-weight: 700;
+      color: #5d5d5d;
+      letter-spacing: .04em;
+      text-transform: uppercase;
+    }
+    .subtle { margin: 5px 0 0; font-size: 13px; color: #9a9a9a; }
+    .restart {
+      border: 0;
+      background: transparent;
+      color: #5f5f5f;
+      padding: 0;
+      text-decoration: underline;
+      text-underline-offset: 4px;
+      white-space: nowrap;
+    }
+    .progress-track {
+      height: 5px;
+      background: #e3e3e1;
+      border-radius: 999px;
+      overflow: hidden;
+      margin-bottom: 36px;
+    }
+    .progress-bar {
+      height: 100%;
+      width: 0;
+      background: var(--black);
+      transition: width .25s ease;
+    }
+    .card {
+      background: var(--card);
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      padding: clamp(24px, 5vw, 44px);
+      box-shadow: 0 1px 1px rgba(0,0,0,.02);
+    }
+    h1 {
+      margin: 0;
+      font-size: clamp(31px, 5vw, 46px);
+      line-height: 1.04;
+      letter-spacing: -.035em;
+      font-weight: 690;
+    }
+    h2 {
+      margin: 0;
+      font-size: clamp(25px, 4vw, 35px);
+      line-height: 1.08;
+      letter-spacing: -.025em;
+    }
+    .body {
+      margin: 16px 0 0;
+      font-size: 18px;
+      line-height: 1.55;
+      color: var(--muted);
+    }
+    .helper {
+      margin: 10px 0 0;
+      color: #999;
+      font-size: 14px;
+      line-height: 1.5;
+    }
+    .stack { display: grid; gap: 12px; margin-top: 30px; }
+    .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 30px; }
+    .option {
+      width: 100%;
+      text-align: left;
+      border: 1px solid #d6d6d2;
+      border-radius: 13px;
+      background: white;
+      padding: 16px 17px;
+      color: var(--text);
+      transition: border .15s, background .15s, color .15s;
+    }
+    .option:hover { border-color: #8c8c88; }
+    .option.selected { background: var(--black); border-color: var(--black); color: white; }
+    .option-title { display: block; font-weight: 650; line-height: 1.35; }
+    .option-desc { display: block; margin-top: 4px; color: #7b7b7b; line-height: 1.45; font-size: 14px; }
+    .option.selected .option-desc { color: #cfcfcf; }
+    .checkmark { display: inline-block; width: 22px; font-weight: 700; }
+    .input {
+      width: 100%;
+      margin-top: 28px;
+      padding: 16px 17px;
+      border-radius: 13px;
+      border: 1px solid #d2d2ce;
+      background: white;
+      outline: none;
+      font-size: 17px;
+    }
+    .input:focus { border-color: #222; box-shadow: 0 0 0 2px rgba(0,0,0,.05); }
+    .actions { display: grid; gap: 10px; margin-top: 32px; }
+    .btn {
+      width: 100%;
+      border-radius: 12px;
+      padding: 14px 18px;
+      font-weight: 650;
+      border: 1px solid var(--black);
+    }
+    .btn.primary { background: var(--black); color: white; }
+    .btn.secondary { background: white; color: var(--text); border-color: #d1d1cd; }
+    .btn:disabled { opacity: .35; cursor: not-allowed; }
+    .back {
+      margin-top: 18px;
+      border: 0;
+      padding: 0;
+      background: transparent;
+      color: #777;
+      text-decoration: underline;
+      text-underline-offset: 4px;
+    }
+    .summary {
+      margin-top: 28px;
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      padding: 18px;
+      background: #fafafa;
+    }
+    .summary-row { display: flex; justify-content: space-between; gap: 20px; padding: 10px 0; border-bottom: 1px solid #ececea; }
+    .summary-row:last-child { border-bottom: 0; }
+    .summary-label { color: #777; }
+    .summary-value { font-weight: 650; text-align: right; }
+    .loading {
+      width: 36px;
+      height: 36px;
+      border: 3px solid #ddd;
+      border-top-color: #222;
+      border-radius: 50%;
+      margin-top: 28px;
+      animation: spin .8s linear infinite;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    .success-dot {
+      width: 66px; height: 66px; border-radius: 50%; background: var(--black); color: white;
+      display: grid; place-items: center; font-size: 28px; margin: 28px 0 0;
+    }
+    .tiny-note { margin: 22px 0 0; padding-top: 18px; border-top: 1px solid #ececea; font-size: 13px; line-height: 1.5; color: #8b8b8b; }
+    @media (max-width: 620px) {
+      .shell { width: min(100% - 22px, 760px); padding-top: 22px; }
+      .card { padding: 24px 20px; border-radius: 16px; }
+      .grid-2 { grid-template-columns: 1fr; }
+      .topbar { margin-bottom: 22px; }
+      .body { font-size: 17px; }
+    }
+  </style>
+</head>
+<body>
+  <main class="shell">
+    <div class="topbar">
+      <div>
+        <p class="eyebrow">Famasi onboarding prototype</p>
+        <p class="subtle">Interactive internal review</p>
+      </div>
+      <button id="restartTop" class="restart">Start again</button>
+    </div>
+    <div class="progress-track"><div id="progress" class="progress-bar"></div></div>
+    <section id="screen" class="card"></section>
+    <button id="back" class="back" hidden>Back</button>
+  </main>
+
+<script>
+const state = {
+  step: 'welcome',
+  history: [],
+  answers: {
+    careScope: null,
+    familyRelations: [],
+    familyName: '',
+    goals: [],
+    setupType: null,
+    medication: '',
+    medicationStrength: '',
+    medicationFor: '',
+    frequency: '',
+    reminderTime: '',
+    notifications: null,
+    healthGoal: '',
+    healthTarget: ''
+  }
+};
+
+const progressMap = {
+  welcome: 0, careScope: 8, family: 15, familyName: 22, goals: 30, setupType: 38,
+  medication: 46, medicationConfirm: 53, medicationFor: 58, frequency: 64, reminder: 70,
+  notifications: 76, buildingMedication: 82, medicationAha: 87,
+  healthGoal: 50, healthTarget: 68, healthAha: 87,
+  save: 92, account: 97, success: 100
+};
+
+const familyOptions = ['Mum','Dad','Partner','Child','Sibling','Someone else'];
+const goalOptions = [
+  'Take medication consistently',
+  'Keep track of someone else’s medication',
+  'Refill medicines before they run out',
+  'Track health numbers',
+  'Build healthier daily habits',
+  'Keep my family’s health organised'
+];
+const healthGoalOptions = ['Medication adherence','Blood pressure','Blood sugar','Water','Weight','Something else'];
+const frequencyOptions = ['Once a day','Twice a day','Three times a day','On specific days','As needed','Something else'];
+
+function esc(str='') {
+  return String(str).replace(/[&<>'"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'}[c]));
+}
+function isSelected(key, value) {
+  const val = state.answers[key];
+  return Array.isArray(val) ? val.includes(value) : val === value;
+}
+function option(value, key, title=value, desc='') {
+  const selected = isSelected(key, value);
+  return `<button class="option ${selected ? 'selected':''}" data-select="${key}" data-value="${esc(value)}">
+    <span class="option-title">${Array.isArray(state.answers[key]) ? `<span class="checkmark">${selected ? '✓':'□'}</span>` : ''}${esc(title)}</span>
+    ${desc ? `<span class="option-desc">${esc(desc)}</span>` : ''}
+  </button>`;
+}
+function go(next) {
+  state.history.push(state.step);
+  state.step = next;
+  render();
+}
+function back() {
+  const previous = state.history.pop();
+  if (!previous) return;
+  state.step = previous;
+  render();
+}
+function restart() {
+  state.step = 'welcome';
+  state.history = [];
+  state.answers = {
+    careScope:null, familyRelations:[], familyName:'', goals:[], setupType:null,
+    medication:'', medicationStrength:'', medicationFor:'', frequency:'', reminderTime:'',
+    notifications:null, healthGoal:'', healthTarget:''
+  };
+  render();
+}
+function firstFamily() {
+  return state.answers.familyName || state.answers.familyRelations[0] || 'Family member';
+}
+function medicinePerson() {
+  return state.answers.medicationFor || (state.answers.careScope === 'self' ? 'You' : firstFamily());
+}
+function actions(primaryLabel, primaryNext, secondaryLabel='', secondaryNext='', disabled=false) {
+  return `<div class="actions">
+    <button class="btn primary" data-go="${primaryNext}" ${disabled ? 'disabled':''}>${primaryLabel}</button>
+    ${secondaryLabel ? `<button class="btn secondary" data-go="${secondaryNext}">${secondaryLabel}</button>` : ''}
+  </div>`;
+}
+function summaryRow(label, value) {
+  return `<div class="summary-row"><span class="summary-label">${esc(label)}</span><span class="summary-value">${esc(value || 'Not set')}</span></div>`;
+}
+
+function render() {
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+  document.getElementById('progress').style.width = `${progressMap[state.step] ?? 0}%`;
+  const screen = document.getElementById('screen');
+  const a = state.answers;
+  let html = '';
+
+  if (state.step === 'welcome') {
+    html = `<h1>Let’s make your care easier to stay on top of.</h1>
+      <p class="body">Set up the medications, health goals and people you care for. We’ll organise the rest around you.</p>
+      <p class="helper">Takes about 2 minutes. You can change anything later.</p>
+      ${actions('Get started','careScope','I already have an account','careScope')}`;
+  }
+
+  if (state.step === 'careScope') {
+    html = `<h2>Who are you taking care of with Famasi?</h2>
+      <p class="body">This helps us set up the right things first.</p>
+      <div class="stack">
+        ${option('self','careScope','Myself','My medications and health routines')}
+        ${option('other','careScope','Someone else','Help me stay on top of their care')}
+        ${option('both','careScope','Both','Keep my care and my family’s care in one place')}
+      </div>
+      ${actions('Continue', a.careScope === 'self' ? 'goals' : 'family', 'Skip for now','goals', !a.careScope)}`;
+  }
+
+  if (state.step === 'family') {
+    html = `<h2>Who do you help care for?</h2>
+      <p class="body">Choose everyone you may want to manage in Famasi. We’ll set up just one person for now.</p>
+      <div class="grid-2">${familyOptions.map(x => option(x,'familyRelations')).join('')}</div>
+      ${actions('Continue','familyName','I’ll add them later','goals', a.familyRelations.length === 0)}`;
+  }
+
+  if (state.step === 'familyName') {
+    html = `<h2>What should we call them?</h2>
+      <p class="body">A first name or nickname is enough.</p>
+      <input id="familyName" class="input" value="${esc(a.familyName)}" placeholder="Name or nickname" />
+      <p class="helper">Example: Dad, Mama, Aisha</p>
+      ${actions('Continue','goals','Use relationship instead','useRelationship')}`;
+  }
+
+  if (state.step === 'goals') {
+    html = `<h2>What would you like Famasi to help you stay on top of?</h2>
+      <p class="body">Choose as many as you like.</p>
+      <div class="stack">${goalOptions.map(x => option(x,'goals')).join('')}</div>
+      <p class="helper">You can add or change goals anytime.</p>
+      ${actions('Continue','setupType','Skip for now','setupType', a.goals.length === 0)}`;
+  }
+
+  if (state.step === 'setupType') {
+    html = `<h2>Let’s make one of those useful right now.</h2>
+      <p class="body">Pick one thing to set up first. You can finish the rest later.</p>
+      <div class="stack">
+        ${option('medication','setupType','Add a medication','Set a schedule and keep track of doses')}
+        ${option('goal','setupType','Set up a health goal','Start tracking one number or habit')}
+      </div>
+      ${actions('Continue', a.setupType === 'goal' ? 'healthGoal' : 'medication', 'I’ll do this later','save', !a.setupType)}`;
+  }
+
+  if (state.step === 'medication') {
+    html = `<h2>Which medication should we set up first?</h2>
+      <p class="body">Search by medication or brand name.</p>
+      <input id="medication" class="input" value="${esc(a.medication)}" placeholder="Search medications" />
+      <p class="helper">Prototype note: this search is not connected to the formulary yet.</p>
+      ${actions('Continue','medicationConfirm','I can’t find it','medicationNotFound', !a.medication.trim())}`;
+  }
+
+  if (state.step === 'medicationConfirm') {
+    html = `<h2>Is this the one?</h2>
+      <p class="body">Check the name and strength before we add it.</p>
+      <div class="summary">
+        ${summaryRow('Medication', a.medication)}
+        <label class="summary-label" style="display:block;margin-top:15px">Strength</label>
+        <input id="medicationStrength" class="input" style="margin-top:8px" value="${esc(a.medicationStrength)}" placeholder="e.g. 20mg or Not sure" />
+      </div>
+      <p class="helper">If the strength is not listed, enter “Not sure” and edit it later.</p>
+      ${actions('Yes, add this', (a.careScope === 'both' || (a.careScope === 'other' && a.familyRelations.length > 1)) ? 'medicationFor' : 'frequency', 'Choose another medication','medication')}
+      <p class="tiny-note">Famasi is confirming the medication identity, not deciding your dose.</p>`;
+  }
+
+  if (state.step === 'medicationFor') {
+    const people = [];
+    if (a.careScope === 'both') people.push('Me');
+    if (a.familyRelations.length) people.push(firstFamily());
+    html = `<h2>Who takes this medication?</h2>
+      <div class="stack">${people.map(x => option(x,'medicationFor')).join('')}</div>
+      ${actions('Continue','frequency','','', !a.medicationFor)}`;
+  }
+
+  if (state.step === 'frequency') {
+    html = `<h2>How often is it taken?</h2>
+      <p class="body">Choose what matches the instructions you already have.</p>
+      <div class="stack">${frequencyOptions.map(x => option(x,'frequency')).join('')}</div>
+      ${actions('Continue','reminder','I’m not sure','reminder', !a.frequency)}
+      <p class="tiny-note">Famasi should not prescribe a frequency. You are entering instructions you already have.</p>`;
+  }
+
+  if (state.step === 'reminder') {
+    html = `<h2>When should Famasi remind you?</h2>
+      <p class="body">Choose the time you usually take it.</p>
+      <input id="reminderTime" type="time" class="input" value="${esc(a.reminderTime)}" />
+      <p class="helper">You can change this anytime.</p>
+      ${actions('Continue','notifications','Don’t set a reminder','buildingMedication', !a.reminderTime)}`;
+  }
+
+  if (state.step === 'notifications') {
+    html = `<h2>Want Famasi to remind you${a.reminderTime ? ` at ${esc(a.reminderTime)}` : ''}?</h2>
+      <p class="body">Turn on notifications so we can remind you about the routines you choose.</p>
+      <p class="helper">You control your reminders and can turn them off anytime.</p>
+      <div class="actions">
+        <button class="btn primary" data-notify="yes">Turn on reminders</button>
+        <button class="btn secondary" data-notify="no">Not now</button>
+      </div>
+      <p class="tiny-note">In the real product, the native notification prompt would appear only after choosing “Turn on reminders.”</p>`;
+  }
+
+  if (state.step === 'buildingMedication') {
+    html = `<h2>Organising your first routine…</h2>
+      <p class="body">We’re adding ${esc(a.medication || 'your medication')} to ${esc(medicinePerson())}’s care plan.</p>
+      <div class="loading"></div>
+      <p class="helper">This loading state should stay short in the real product.</p>`;
+    setTimeout(() => { if (state.step === 'buildingMedication') go('medicationAha'); }, 850);
+  }
+
+  if (state.step === 'medicationAha') {
+    html = `<h2>You’re set for today.</h2>
+      <p class="body">${esc(medicinePerson())}’s medication is now organised in Famasi.</p>
+      <div class="summary">
+        ${summaryRow(a.reminderTime || 'Routine', `${a.medication || 'Medication'} ${a.medicationStrength || ''}`.trim())}
+        ${summaryRow('Goal','Stay consistent with medication')}
+        ${summaryRow('Next step','Add another medication or finish later')}
+      </div>
+      <p class="helper">From here, Famasi can help you see what is due, what has been taken and what needs attention.</p>
+      ${actions('Save my care plan','save','Add another medication','medication')}`;
+  }
+
+  if (state.step === 'healthGoal') {
+    html = `<h2>What should we set up first?</h2>
+      <p class="body">Choose one to start. You can track more than one later.</p>
+      <div class="stack">${healthGoalOptions.map(x => option(x,'healthGoal')).join('')}</div>
+      ${actions('Continue','healthTarget','','', !a.healthGoal)}`;
+  }
+
+  if (state.step === 'healthTarget') {
+    const clinical = ['Blood pressure','Blood sugar'].includes(a.healthGoal);
+    html = `<h2>How would you like to track ${esc(a.healthGoal || 'this goal')}?</h2>
+      <p class="body">Set a target if you already have one, or start by simply recording your progress.</p>
+      <input id="healthTarget" class="input" value="${esc(a.healthTarget)}" placeholder="Optional target" />
+      <p class="helper">${clinical ? 'For clinical measures, use a target given to you by your clinician.' : 'You can change this later.'}</p>
+      ${actions('Set up goal','healthAha','Track without a target','healthAha')}
+      ${clinical ? '<p class="tiny-note">Famasi should not generate clinical targets from demographics.</p>' : ''}`;
+  }
+
+  if (state.step === 'healthAha') {
+    html = `<h2>You can start tracking from today.</h2>
+      <p class="body">We’ve added ${esc(a.healthGoal || 'your goal')} to your Famasi so you can see your progress over time.</p>
+      <div class="summary">
+        ${summaryRow('Today','Add your first entry')}
+        ${summaryRow('Goal',a.healthGoal || 'Health goal')}
+        ${a.healthTarget ? summaryRow('Target',a.healthTarget) : ''}
+      </div>
+      <p class="helper">Your dashboard will keep this visible so it is easy to come back to.</p>
+      ${actions('Save my setup','save','Add another goal','healthGoal')}`;
+  }
+
+  if (state.step === 'save') {
+    const person = a.careScope === 'self' ? 'You' : firstFamily();
+    html = `<h2>Save what you just set up.</h2>
+      <p class="body">Create an account so your medications, goals and family setup stay with you across devices.</p>
+      <div class="summary">
+        ${summaryRow('Managing for', person)}
+        ${a.medication ? summaryRow('Medication',a.medication) : ''}
+        ${a.healthGoal ? summaryRow('Health goal',a.healthGoal) : ''}
+        ${a.goals.length ? summaryRow('Goals selected',String(a.goals.length)) : ''}
+      </div>
+      <p class="helper">Your care plan is already ready. This just saves it.</p>
+      ${actions('Create my account','account','Not now','success')}`;
+  }
+
+  if (state.step === 'account') {
+    html = `<h2>How would you like to save your Famasi?</h2>
+      <div class="stack">
+        <button class="option" data-go="success"><span class="option-title">Continue with Google</span></button>
+        <button class="option" data-go="success"><span class="option-title">Continue with Apple</span></button>
+        <button class="option" data-go="success"><span class="option-title">Use email</span></button>
+      </div>
+      <p class="helper">Prototype only. No account is actually created.</p>`;
+  }
+
+  if (state.step === 'success') {
+    html = `<div class="success-dot">✓</div>
+      <h2 style="margin-top:24px">Your Famasi is ready.</h2>
+      <p class="body">We’ve saved your setup. You can add more medications, people and goals whenever you’re ready.</p>
+      <div class="summary">
+        ${a.medication ? summaryRow('Medication',a.medication) : ''}
+        ${a.healthGoal ? summaryRow('Tracking',a.healthGoal) : ''}
+        ${a.familyRelations.length ? summaryRow('Family',a.familyRelations.join(', ')) : ''}
+      </div>
+      <div class="actions">
+        <button class="btn primary" data-restart>Go to my home</button>
+        <button class="btn secondary" data-restart>Start again</button>
+      </div>
+      <p class="tiny-note">In the real experience this lands on a populated Home, not an empty dashboard.</p>`;
+  }
+
+  screen.innerHTML = html;
+  document.getElementById('back').hidden = state.history.length === 0 || state.step === 'success';
+  wireEvents();
+}
+
+function wireEvents() {
+  document.querySelectorAll('[data-select]').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const key = btn.dataset.select;
+      const value = btn.dataset.value;
+      if (Array.isArray(state.answers[key])) {
+        const arr = state.answers[key];
+        state.answers[key] = arr.includes(value) ? arr.filter(x => x !== value) : [...arr, value];
+      } else {
+        state.answers[key] = value;
+      }
+      render();
+    });
+  });
+
+  document.querySelectorAll('[data-go]').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const next = btn.dataset.go;
+      if (next === 'useRelationship') {
+        state.answers.familyName = state.answers.familyRelations[0] || 'Family member';
+        go('goals');
+        return;
+      }
+      if (next === 'medicationNotFound') {
+        state.answers.medication = 'Medication not listed';
+        go('medicationConfirm');
+        return;
+      }
+      if (state.step === 'medicationConfirm' && next !== 'medication') {
+        const strength = document.getElementById('medicationStrength');
+        if (strength) state.answers.medicationStrength = strength.value;
+      }
+      if (state.step === 'healthTarget' && next === 'healthAha') {
+        const target = document.getElementById('healthTarget');
+        if (target) state.answers.healthTarget = target.value;
+      }
+      go(next);
+    });
+  });
+
+  const familyName = document.getElementById('familyName');
+  if (familyName) familyName.addEventListener('input', e => state.answers.familyName = e.target.value);
+  const medication = document.getElementById('medication');
+  if (medication) medication.addEventListener('input', e => { state.answers.medication = e.target.value; const b=document.querySelector('.btn.primary'); if(b) b.disabled=!e.target.value.trim(); });
+  const reminderTime = document.getElementById('reminderTime');
+  if (reminderTime) reminderTime.addEventListener('input', e => { state.answers.reminderTime = e.target.value; const b=document.querySelector('.btn.primary'); if(b) b.disabled=!e.target.value; });
+
+  document.querySelectorAll('[data-notify]').forEach(btn => btn.addEventListener('click', () => {
+    state.answers.notifications = btn.dataset.notify;
+    go('buildingMedication');
+  }));
+  document.querySelectorAll('[data-restart]').forEach(btn => btn.addEventListener('click', restart));
+}
+
+document.getElementById('back').addEventListener('click', back);
+document.getElementById('restartTop').addEventListener('click', restart);
+render();
+</script>
+</body>
+</html>
