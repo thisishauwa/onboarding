@@ -1,562 +1,1689 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Famasi Onboarding Prototype</title>
-  <meta name="description" content="Interactive prototype for the proposed Famasi onboarding flow." />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Famasi Onboarding Flow (Wireframe Prototype)</title>
   <style>
-    :root {
-      --bg: #f6f6f5;
-      --card: #ffffff;
-      --text: #141414;
-      --muted: #6e6e6e;
-      --line: #dededb;
-      --soft: #efefed;
-      --black: #161616;
-    }
-    * { box-sizing: border-box; }
-    html { scroll-behavior: smooth; }
-    body {
+    /* Clean, minimal, wireframe styling - pure text and buttons */
+    * {
+      box-sizing: border-box;
       margin: 0;
-      background: var(--bg);
-      color: var(--text);
-      font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-      -webkit-font-smoothing: antialiased;
-    }
-    button, input { font: inherit; }
-    button { cursor: pointer; }
-    .shell {
-      width: min(760px, calc(100% - 32px));
-      margin: 0 auto;
-      padding: 34px 0 56px;
-    }
-    .topbar {
-      display: flex;
-      align-items: flex-start;
-      justify-content: space-between;
-      gap: 24px;
-      margin-bottom: 30px;
-    }
-    .eyebrow {
-      margin: 0;
-      font-size: 13px;
-      font-weight: 700;
-      color: #5d5d5d;
-      letter-spacing: .04em;
-      text-transform: uppercase;
-    }
-    .subtle { margin: 5px 0 0; font-size: 13px; color: #9a9a9a; }
-    .restart {
-      border: 0;
-      background: transparent;
-      color: #5f5f5f;
       padding: 0;
-      text-decoration: underline;
-      text-underline-offset: 4px;
+    }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      line-height: 1.5;
+      color: #111;
+      background-color: #f7f7f8;
+      padding: 20px 16px;
+    }
+    .wrapper {
+      max-width: 660px;
+      margin: 0 auto;
+    }
+    
+    /* Top bar: strictly non-wrapping */
+    header.meta-bar {
+      background: #fff;
+      border: 1px solid #e0e0e0;
+      border-radius: 6px;
+      padding: 8px 14px;
+      margin-bottom: 16px;
+      font-size: 13px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: nowrap;
       white-space: nowrap;
+      gap: 12px;
+      overflow-x: auto;
     }
-    .progress-track {
-      height: 5px;
-      background: #e3e3e1;
-      border-radius: 999px;
+    .meta-bar-left {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-shrink: 1;
       overflow: hidden;
-      margin-bottom: 36px;
+      text-overflow: ellipsis;
     }
-    .progress-bar {
-      height: 100%;
-      width: 0;
-      background: var(--black);
-      transition: width .25s ease;
+    .meta-bar-right {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-shrink: 0;
     }
-    .card {
-      background: var(--card);
-      border: 1px solid var(--line);
-      border-radius: 18px;
-      padding: clamp(24px, 5vw, 44px);
-      box-shadow: 0 1px 1px rgba(0,0,0,.02);
+    .meta-bar select {
+      padding: 4px 8px;
+      font-size: 13px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      background: #fff;
+    }
+    
+    /* Screen container card */
+    .screen-card {
+      background: #fff;
+      border: 1px solid #e0e0e0;
+      border-radius: 8px;
+      padding: 28px 24px;
+      margin-bottom: 20px;
+    }
+    .badge {
+      display: inline-block;
+      background: #f4f4f4;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+      font-size: 11px;
+      font-weight: 600;
+      color: #666;
+      padding: 2px 8px;
+      margin-bottom: 14px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    h1, h2, h3 {
+      margin-bottom: 12px;
+      color: #111;
+      font-weight: 700;
     }
     h1 {
-      margin: 0;
-      font-size: clamp(31px, 5vw, 46px);
-      line-height: 1.04;
-      letter-spacing: -.035em;
-      font-weight: 690;
+      font-size: 24px;
+      line-height: 1.3;
     }
     h2 {
-      margin: 0;
-      font-size: clamp(25px, 4vw, 35px);
-      line-height: 1.08;
-      letter-spacing: -.025em;
+      font-size: 20px;
+      line-height: 1.35;
     }
-    .body {
-      margin: 16px 0 0;
-      font-size: 18px;
-      line-height: 1.55;
-      color: var(--muted);
+    p {
+      margin-bottom: 14px;
+      color: #333;
     }
-    .helper {
-      margin: 10px 0 0;
-      color: #999;
-      font-size: 14px;
-      line-height: 1.5;
+    .hint {
+      font-size: 13px;
+      color: #666;
+      margin-bottom: 16px;
     }
-    .stack { display: grid; gap: 12px; margin-top: 30px; }
-    .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 30px; }
-    .option {
-      width: 100%;
-      text-align: left;
-      border: 1px solid #d6d6d2;
-      border-radius: 13px;
-      background: white;
-      padding: 16px 17px;
-      color: var(--text);
-      transition: border .15s, background .15s, color .15s;
+    .options-group {
+      margin: 16px 0;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
     }
-    .option:hover { border-color: #8c8c88; }
-    .option.selected { background: var(--black); border-color: var(--black); color: white; }
-    .option-title { display: block; font-weight: 650; line-height: 1.35; }
-    .option-desc { display: block; margin-top: 4px; color: #7b7b7b; line-height: 1.45; font-size: 14px; }
-    .option.selected .option-desc { color: #cfcfcf; }
-    .checkmark { display: inline-block; width: 22px; font-weight: 700; }
-    .input {
-      width: 100%;
-      margin-top: 28px;
-      padding: 16px 17px;
-      border-radius: 13px;
-      border: 1px solid #d2d2ce;
-      background: white;
-      outline: none;
-      font-size: 17px;
-    }
-    .input:focus { border-color: #222; box-shadow: 0 0 0 2px rgba(0,0,0,.05); }
-    .actions { display: grid; gap: 10px; margin-top: 32px; }
-    .btn {
-      width: 100%;
-      border-radius: 12px;
-      padding: 14px 18px;
-      font-weight: 650;
-      border: 1px solid var(--black);
-    }
-    .btn.primary { background: var(--black); color: white; }
-    .btn.secondary { background: white; color: var(--text); border-color: #d1d1cd; }
-    .btn:disabled { opacity: .35; cursor: not-allowed; }
-    .back {
-      margin-top: 18px;
-      border: 0;
-      padding: 0;
-      background: transparent;
-      color: #777;
-      text-decoration: underline;
-      text-underline-offset: 4px;
-    }
-    .summary {
-      margin-top: 28px;
-      border: 1px solid var(--line);
-      border-radius: 14px;
-      padding: 18px;
+    label.option-row {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      padding: 12px 14px;
+      border: 1px solid #ddd;
+      border-radius: 6px;
       background: #fafafa;
+      cursor: pointer;
     }
-    .summary-row { display: flex; justify-content: space-between; gap: 20px; padding: 10px 0; border-bottom: 1px solid #ececea; }
-    .summary-row:last-child { border-bottom: 0; }
-    .summary-label { color: #777; }
-    .summary-value { font-weight: 650; text-align: right; }
-    .loading {
+    label.option-row:hover {
+      background: #f0f0f0;
+      border-color: #ccc;
+    }
+    label.option-row input {
+      margin-top: 3px;
+      cursor: pointer;
+    }
+    .option-title {
+      font-weight: 600;
+      display: block;
+      color: #111;
+    }
+    .option-desc {
+      font-size: 13px;
+      color: #555;
+      display: block;
+      margin-top: 2px;
+    }
+    input[type="text"], input[type="time"], select {
+      width: 100%;
+      padding: 9px 12px;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      font-size: 14px;
+      margin-top: 4px;
+      margin-bottom: 12px;
+      font-family: inherit;
+      background: #fff;
+    }
+    input[type="text"]:focus, select:focus {
+      outline: none;
+      border-color: #666;
+    }
+    .button-stack {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      margin-top: 22px;
+    }
+    button {
+      padding: 10px 16px;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      border-radius: 6px;
+      border: 1px solid #ccc;
+      background: #f7f7f7;
+      color: #111;
+      text-align: center;
+    }
+    button:hover {
+      background: #ececec;
+    }
+    button.primary {
+      background: #111;
+      color: #fff;
+      border-color: #111;
+    }
+    button.primary:hover {
+      background: #333;
+    }
+    button.secondary {
+      background: #fff;
+      border: 1px solid #ccc;
+    }
+    button.secondary:hover {
+      background: #f5f5f5;
+    }
+    button.link-button {
+      background: none;
+      border: none;
+      color: #555;
+      text-decoration: underline;
+      font-weight: normal;
+      padding: 6px 0;
+      cursor: pointer;
+    }
+    button.link-button:hover {
+      color: #111;
+    }
+    .card-preview {
+      border: 1px solid #e0e0e0;
+      border-radius: 6px;
+      background: #fbfbfb;
+      padding: 16px;
+      margin: 16px 0;
+    }
+    .card-preview h4 {
+      margin-bottom: 8px;
+      font-size: 15px;
+    }
+    .search-results {
+      border: 1px solid #ddd;
+      border-radius: 6px;
+      background: #fff;
+      max-height: 220px;
+      overflow-y: auto;
+      margin-top: -6px;
+      margin-bottom: 14px;
+    }
+    .search-item {
+      padding: 10px 14px;
+      border-bottom: 1px solid #f0f0f0;
+      cursor: pointer;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 14px;
+    }
+    .search-item:last-child {
+      border-bottom: none;
+    }
+    .search-item:hover {
+      background: #f5f5f5;
+    }
+    .search-item-badge {
+      font-size: 12px;
+      background: #eee;
+      padding: 2px 6px;
+      border-radius: 4px;
+      color: #555;
+    }
+    .stepper {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      margin: 16px 0;
+    }
+    .stepper-btn {
       width: 36px;
       height: 36px;
-      border: 3px solid #ddd;
-      border-top-color: #222;
-      border-radius: 50%;
-      margin-top: 28px;
-      animation: spin .8s linear infinite;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 18px;
+      padding: 0;
     }
-    @keyframes spin { to { transform: rotate(360deg); } }
-    .success-dot {
-      width: 66px; height: 66px; border-radius: 50%; background: var(--black); color: white;
-      display: grid; place-items: center; font-size: 28px; margin: 28px 0 0;
+    .stepper-val {
+      font-size: 16px;
+      font-weight: 600;
+      min-width: 80px;
+      text-align: center;
     }
-    .tiny-note { margin: 22px 0 0; padding-top: 18px; border-top: 1px solid #ececea; font-size: 13px; line-height: 1.5; color: #8b8b8b; }
-    @media (max-width: 620px) {
-      .shell { width: min(100% - 22px, 760px); padding-top: 22px; }
-      .card { padding: 24px 20px; border-radius: 16px; }
-      .grid-2 { grid-template-columns: 1fr; }
-      .topbar { margin-bottom: 22px; }
-      .body { font-size: 17px; }
+    .basket-item {
+      padding: 10px 12px;
+      background: #fff;
+      border: 1px solid #ddd;
+      border-radius: 6px;
+      margin-bottom: 8px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .nav-helpers {
+      display: flex;
+      justify-content: space-between;
+      gap: 10px;
+      margin-top: 16px;
     }
   </style>
 </head>
 <body>
-  <main class="shell">
-    <div class="topbar">
-      <div>
-        <p class="eyebrow">Famasi onboarding prototype</p>
-        <p class="subtle">Interactive internal review</p>
-      </div>
-      <button id="restartTop" class="restart">Start again</button>
+
+<div class="wrapper">
+
+  <!-- Top bar: strictly non-wrapping -->
+  <header class="meta-bar">
+    <div class="meta-bar-left">
+      <strong>Famasi Flow</strong>
+      <span id="currentScreenIndicator" style="color: #777;"></span>
     </div>
-    <div class="progress-track"><div id="progress" class="progress-bar"></div></div>
-    <section id="screen" class="card"></section>
-    <button id="back" class="back" hidden>Back</button>
-  </main>
+    <div class="meta-bar-right">
+      <label for="screenJumpSelect" style="font-size: 12px; font-weight: 500;">Jump to:</label>
+      <select id="screenJumpSelect" onchange="jumpToScreen(this.value)">
+        <optgroup label="Universal Onboarding">
+          <option value="1">1 · Who do you manage for?</option>
+          <option value="1B">1B · Who should we start with? (Family)</option>
+          <option value="2">2 · Goals</option>
+          <option value="3">3 · What to do first?</option>
+        </optgroup>
+        <optgroup label="Branch A: Order Medication">
+          <option value="A1">A1 · Who is order for?</option>
+          <option value="A2">A2 · Search medication</option>
+          <option value="A4">A4 · How many packs?</option>
+          <option value="A5">A5 · Anything else?</option>
+          <option value="A6">A6 · Delivery destination</option>
+          <option value="A7">A7 · Finding pharmacy offers</option>
+          <option value="A8">A8 · Introduce recurring refill</option>
+          <option value="A9">A9 · Order summary (Value moment)</option>
+          <option value="A10">A10 · Create account</option>
+          <option value="A11">A11 · Order confirmed (Goals bridge)</option>
+        </optgroup>
+        <optgroup label="Branch B: Set up Refill">
+          <option value="B1">B1 · Who is it for?</option>
+          <option value="B2">B2 · Search medication</option>
+          <option value="B3">B3 · Amount needed</option>
+          <option value="B4">B4 · Refill frequency</option>
+          <option value="B5">B5 · Delivery destination</option>
+          <option value="B6">B6 · Refill value moment</option>
+          <option value="Account">Account · Save setup</option>
+        </optgroup>
+        <optgroup label="Branch C: Add to Famasi (Save)">
+          <option value="C1">C1 · Who is it for?</option>
+          <option value="C2">C2 · Search medication</option>
+          <option value="C3">C3 · Saved value moment</option>
+        </optgroup>
+        <optgroup label="Branch D: Reminders">
+          <option value="D1">D1 · Who is it for?</option>
+          <option value="D2">D2 · Choose medication</option>
+          <option value="D3">D3 · Dose schedule</option>
+          <option value="D4">D4 · Notification permission</option>
+          <option value="D5">D5 · Reminder value moment</option>
+        </optgroup>
+        <optgroup label="Branch E: Health Numbers">
+          <option value="E1">E1 · Who is this for?</option>
+          <option value="E2">E2 · What to track?</option>
+          <option value="E3">E3 · Health metric setup</option>
+          <option value="E4">E4 · Metric value moment</option>
+        </optgroup>
+        <optgroup label="Home & Existing Customer">
+          <option value="Home">Home · Populated Dashboard</option>
+          <option value="ExistingCustomer">Existing Customer Fast-Path</option>
+        </optgroup>
+      </select>
+      <button type="button" onclick="restartFlow()" style="font-size: 12px; padding: 4px 10px;">Reset</button>
+    </div>
+  </header>
+
+  <!-- Main Screen Container -->
+  <main id="screenContainer"></main>
+
+</div>
 
 <script>
-const state = {
-  step: 'welcome',
-  history: [],
-  answers: {
-    careScope: null,
-    familyRelations: [],
-    familyName: '',
-    goals: [],
-    setupType: null,
-    medication: '',
-    medicationStrength: '',
-    medicationFor: '',
-    frequency: '',
-    reminderTime: '',
-    notifications: null,
-    healthGoal: '',
-    healthTarget: ''
-  }
-};
-
-const progressMap = {
-  welcome: 0, careScope: 8, family: 15, familyName: 22, goals: 30, setupType: 38,
-  medication: 46, medicationConfirm: 53, medicationFor: 58, frequency: 64, reminder: 70,
-  notifications: 76, buildingMedication: 82, medicationAha: 87,
-  healthGoal: 50, healthTarget: 68, healthAha: 87,
-  save: 92, account: 97, success: 100
-};
-
-const familyOptions = ['Mum','Dad','Partner','Child','Sibling','Someone else'];
-const goalOptions = [
-  'Take medication consistently',
-  'Keep track of someone else’s medication',
-  'Refill medicines before they run out',
-  'Track health numbers',
-  'Build healthier daily habits',
-  'Keep my family’s health organised'
-];
-const healthGoalOptions = ['Medication adherence','Blood pressure','Blood sugar','Water','Weight','Something else'];
-const frequencyOptions = ['Once a day','Twice a day','Three times a day','On specific days','As needed','Something else'];
-
-function esc(str='') {
-  return String(str).replace(/[&<>'"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'}[c]));
-}
-function isSelected(key, value) {
-  const val = state.answers[key];
-  return Array.isArray(val) ? val.includes(value) : val === value;
-}
-function option(value, key, title=value, desc='') {
-  const selected = isSelected(key, value);
-  return `<button class="option ${selected ? 'selected':''}" data-select="${key}" data-value="${esc(value)}">
-    <span class="option-title">${Array.isArray(state.answers[key]) ? `<span class="checkmark">${selected ? '✓':'□'}</span>` : ''}${esc(title)}</span>
-    ${desc ? `<span class="option-desc">${esc(desc)}</span>` : ''}
-  </button>`;
-}
-function go(next) {
-  state.history.push(state.step);
-  state.step = next;
-  render();
-}
-function back() {
-  const previous = state.history.pop();
-  if (!previous) return;
-  state.step = previous;
-  render();
-}
-function restart() {
-  state.step = 'welcome';
-  state.history = [];
-  state.answers = {
-    careScope:null, familyRelations:[], familyName:'', goals:[], setupType:null,
-    medication:'', medicationStrength:'', medicationFor:'', frequency:'', reminderTime:'',
-    notifications:null, healthGoal:'', healthTarget:''
+  // Flow State
+  const state = {
+    currentScreen: '1',
+    history: [],
+    
+    // Screen 1: Manage for whom
+    careScope: 'Someone else', // 'Myself' | 'Someone else' | 'Both'
+    familyRelationship: 'Dad',
+    familyPersonName: 'Dad',
+    
+    // Screen 2: Goals
+    goals: [
+      'Make sure I don’t run out of regular medication',
+      'Manage medication for someone I care for',
+      'Remember when medication should be taken'
+    ],
+    
+    // Screen 3: First task
+    firstTask: 'order', // 'order' | 'refill' | 'save' | 'reminder' | 'health'
+    
+    // Current Active Person for the Task
+    taskPerson: 'Dad',
+    
+    // Basket for Order (Branch A)
+    orderBasket: [
+      { person: 'Dad', name: 'Amlodipine 10mg', quantity: 1, isPOM: true },
+      { person: 'Dad', name: 'Atorvastatin 20mg', quantity: 1, isPOM: true }
+    ],
+    pendingMedName: 'Amlodipine 10mg',
+    pendingMedQty: 1,
+    
+    // Delivery
+    deliveryAddress: 'Kaduna',
+    
+    // Refill config
+    refillMedName: 'Amlodipine 10mg',
+    refillQuantity: 1,
+    refillCadence: 'Every month',
+    customCadence: '',
+    
+    // Reminder config (Branch D)
+    reminderMed: 'Amlodipine 10mg',
+    reminderSchedule: 'Once daily',
+    reminderTimes: ['08:00'],
+    reminderGranted: false,
+    
+    // Health metric config (Branch E)
+    healthMetric: 'Blood pressure',
+    healthTarget: '',
+    
+    // Auth
+    authMethod: null
   };
-  render();
-}
-function firstFamily() {
-  return state.answers.familyName || state.answers.familyRelations[0] || 'Family member';
-}
-function medicinePerson() {
-  return state.answers.medicationFor || (state.answers.careScope === 'self' ? 'You' : firstFamily());
-}
-function actions(primaryLabel, primaryNext, secondaryLabel='', secondaryNext='', disabled=false) {
-  return `<div class="actions">
-    <button class="btn primary" data-go="${primaryNext}" ${disabled ? 'disabled':''}>${primaryLabel}</button>
-    ${secondaryLabel ? `<button class="btn secondary" data-go="${secondaryNext}">${secondaryLabel}</button>` : ''}
-  </div>`;
-}
-function summaryRow(label, value) {
-  return `<div class="summary-row"><span class="summary-label">${esc(label)}</span><span class="summary-value">${esc(value || 'Not set')}</span></div>`;
-}
 
-function render() {
-  window.scrollTo({ top: 0, behavior: 'smooth' });
-  document.getElementById('progress').style.width = `${progressMap[state.step] ?? 0}%`;
-  const screen = document.getElementById('screen');
-  const a = state.answers;
-  let html = '';
+  const sampleMedications = [
+    { name: 'Amlodipine 10mg', isPOM: true },
+    { name: 'Amlodipine 5mg', isPOM: true },
+    { name: 'Atorvastatin 20mg', isPOM: true },
+    { name: 'Metformin 500mg', isPOM: true },
+    { name: 'Metformin 850mg', isPOM: true },
+    { name: 'Lisinopril 10mg', isPOM: true },
+    { name: 'Paracetamol 500mg', isPOM: false },
+    { name: 'Omeprazole 20mg', isPOM: false }
+  ];
 
-  if (state.step === 'welcome') {
-    html = `<h1>Let’s make your care easier to stay on top of.</h1>
-      <p class="body">Set up the medications, health goals and people you care for. We’ll organise the rest around you.</p>
-      <p class="helper">Takes about 2 minutes. You can change anything later.</p>
-      ${actions('Get started','careScope','I already have an account','careScope')}`;
+  function escapeHtml(str) {
+    if (!str) return '';
+    return str.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
   }
 
-  if (state.step === 'careScope') {
-    html = `<h2>Who are you taking care of with Famasi?</h2>
-      <p class="body">This helps us set up the right things first.</p>
-      <div class="stack">
-        ${option('self','careScope','Myself','My medications and health routines')}
-        ${option('other','careScope','Someone else','Help me stay on top of their care')}
-        ${option('both','careScope','Both','Keep my care and my family’s care in one place')}
-      </div>
-      ${actions('Continue', a.careScope === 'self' ? 'goals' : 'family', 'Skip for now','goals', !a.careScope)}`;
+  function navigateTo(screenId) {
+    if (state.currentScreen !== screenId) {
+      state.history.push(state.currentScreen);
+    }
+    state.currentScreen = screenId;
+    renderScreen();
   }
 
-  if (state.step === 'family') {
-    html = `<h2>Who do you help care for?</h2>
-      <p class="body">Choose everyone you may want to manage in Famasi. We’ll set up just one person for now.</p>
-      <div class="grid-2">${familyOptions.map(x => option(x,'familyRelations')).join('')}</div>
-      ${actions('Continue','familyName','I’ll add them later','goals', a.familyRelations.length === 0)}`;
+  function goBack() {
+    if (state.history.length > 0) {
+      state.currentScreen = state.history.pop();
+      renderScreen();
+    }
   }
 
-  if (state.step === 'familyName') {
-    html = `<h2>What should we call them?</h2>
-      <p class="body">A first name or nickname is enough.</p>
-      <input id="familyName" class="input" value="${esc(a.familyName)}" placeholder="Name or nickname" />
-      <p class="helper">Example: Dad, Mama, Aisha</p>
-      ${actions('Continue','goals','Use relationship instead','useRelationship')}`;
+  function jumpToScreen(screenId) {
+    navigateTo(screenId);
   }
 
-  if (state.step === 'goals') {
-    html = `<h2>What would you like Famasi to help you stay on top of?</h2>
-      <p class="body">Choose as many as you like.</p>
-      <div class="stack">${goalOptions.map(x => option(x,'goals')).join('')}</div>
-      <p class="helper">You can add or change goals anytime.</p>
-      ${actions('Continue','setupType','Skip for now','setupType', a.goals.length === 0)}`;
+  function restartFlow() {
+    state.currentScreen = '1';
+    state.history = [];
+    state.careScope = 'Someone else';
+    state.familyRelationship = 'Dad';
+    state.familyPersonName = 'Dad';
+    state.taskPerson = 'Dad';
+    state.orderBasket = [
+      { person: 'Dad', name: 'Amlodipine 10mg', quantity: 1, isPOM: true },
+      { person: 'Dad', name: 'Atorvastatin 20mg', quantity: 1, isPOM: true }
+    ];
+    state.pendingMedName = 'Amlodipine 10mg';
+    state.pendingMedQty = 1;
+    state.deliveryAddress = 'Kaduna';
+    state.refillMedName = 'Amlodipine 10mg';
+    state.refillCadence = 'Every month';
+    renderScreen();
   }
 
-  if (state.step === 'setupType') {
-    html = `<h2>Let’s make one of those useful right now.</h2>
-      <p class="body">Pick one thing to set up first. You can finish the rest later.</p>
-      <div class="stack">
-        ${option('medication','setupType','Add a medication','Set a schedule and keep track of doses')}
-        ${option('goal','setupType','Set up a health goal','Start tracking one number or habit')}
-      </div>
-      ${actions('Continue', a.setupType === 'goal' ? 'healthGoal' : 'medication', 'I’ll do this later','save', !a.setupType)}`;
+  function getPrimaryPersonName() {
+    if (state.careScope === 'Myself') return 'Me';
+    return state.familyPersonName || state.familyRelationship || 'Dad';
   }
 
-  if (state.step === 'medication') {
-    html = `<h2>Which medication should we set up first?</h2>
-      <p class="body">Search by medication or brand name.</p>
-      <input id="medication" class="input" value="${esc(a.medication)}" placeholder="Search medications" />
-      <p class="helper">Prototype note: this search is not connected to the formulary yet.</p>
-      ${actions('Continue','medicationConfirm','I can’t find it','medicationNotFound', !a.medication.trim())}`;
+  // Render Screens
+  function renderScreen() {
+    const container = document.getElementById('screenContainer');
+    const indicator = document.getElementById('currentScreenIndicator');
+    const select = document.getElementById('screenJumpSelect');
+    
+    indicator.textContent = `· Screen ${state.currentScreen}`;
+    if (select) select.value = state.currentScreen;
+
+    let html = '';
+
+    switch(state.currentScreen) {
+      // -------------------------------------------------------------
+      // SCREEN 1 · Who do you manage medication for?
+      // -------------------------------------------------------------
+      case '1':
+        html = `
+          <div class="screen-card">
+            <span class="badge">Screen 1 · Who do you manage for?</span>
+            <h1>Who do you manage medication for?</h1>
+            <p class="hint">Establishes the basic shape of your Famasi.</p>
+
+            <div class="options-group">
+              <label class="option-row">
+                <input type="radio" name="careScope" value="Myself" ${state.careScope === 'Myself' ? 'checked' : ''} onchange="state.careScope='Myself'; state.taskPerson='Me';">
+                <div>
+                  <span class="option-title">Myself</span>
+                  <span class="option-desc">My own medications and routines</span>
+                </div>
+              </label>
+
+              <label class="option-row">
+                <input type="radio" name="careScope" value="Someone else" ${state.careScope === 'Someone else' ? 'checked' : ''} onchange="state.careScope='Someone else'; state.taskPerson=state.familyPersonName;">
+                <div>
+                  <span class="option-title">Someone else</span>
+                  <span class="option-desc">Help manage medication for a parent, partner, or child</span>
+                </div>
+              </label>
+
+              <label class="option-row">
+                <input type="radio" name="careScope" value="Both" ${state.careScope === 'Both' ? 'checked' : ''} onchange="state.careScope='Both'; state.taskPerson=state.familyPersonName;">
+                <div>
+                  <span class="option-title">Both</span>
+                  <span class="option-desc">Keep my care and my family’s care in one place</span>
+                </div>
+              </label>
+            </div>
+
+            <div class="button-stack">
+              <button class="primary" onclick="handleScreen1Continue()">Continue</button>
+            </div>
+
+            <div style="margin-top: 24px; border-top: 1px dashed #ddd; padding-top: 14px;">
+              <button class="link-button" onclick="navigateTo('ExistingCustomer')">Already ordered from Famasi before? Use order history →</button>
+            </div>
+          </div>
+        `;
+        break;
+
+      // -------------------------------------------------------------
+      // SCREEN 1B · Who should we start with? (Family)
+      // -------------------------------------------------------------
+      case '1B':
+        html = `
+          <div class="screen-card">
+            <span class="badge">Screen 1B · Family Context</span>
+            <h2>Who should we start with?</h2>
+            <p class="hint">The family profile gets richer through actual actions later. We just need one person to begin.</p>
+
+            <div class="options-group">
+              ${['Dad', 'Mum', 'Partner', 'Child'].map(rel => `
+                <label class="option-row">
+                  <input type="radio" name="famRel" value="${rel}" ${state.familyRelationship === rel ? 'checked' : ''} onchange="state.familyRelationship='${rel}'; state.familyPersonName='${rel}'; state.taskPerson='${rel}';">
+                  <span class="option-title">${rel}</span>
+                </label>
+              `).join('')}
+
+              <label class="option-row">
+                <input type="radio" name="famRel" value="Other" ${state.familyRelationship === 'Other' ? 'checked' : ''} onchange="state.familyRelationship='Other'">
+                <div style="width:100%;">
+                  <span class="option-title">Someone else</span>
+                  <input type="text" placeholder="Relationship or nickname" value="${state.familyRelationship === 'Other' ? escapeHtml(state.familyPersonName) : ''}" oninput="state.familyPersonName=this.value; state.taskPerson=this.value;" style="margin-top:6px;">
+                </div>
+              </label>
+            </div>
+
+            <div style="margin-top: 16px;">
+              <label style="font-size:13px; font-weight:600; display:block; margin-bottom:4px;">What should we call them? (Optional)</label>
+              <input type="text" placeholder="e.g. Dad, Mama, Baba" value="${escapeHtml(state.familyPersonName)}" oninput="state.familyPersonName=this.value; state.taskPerson=this.value;">
+            </div>
+
+            <div class="button-stack">
+              <button class="primary" onclick="navigateTo('2')">Continue</button>
+            </div>
+
+            <div class="nav-helpers">
+              <button type="button" class="secondary" onclick="goBack()" style="font-size:13px;">← Back</button>
+            </div>
+          </div>
+        `;
+        break;
+
+      // -------------------------------------------------------------
+      // SCREEN 2 · Goals
+      // -------------------------------------------------------------
+      case '2':
+        const allGoals = [
+          'Order medication when I need it',
+          'Make sure I don’t run out of regular medication',
+          'Manage medication for someone I care for',
+          'Remember when medication should be taken',
+          'Keep my medications organised',
+          'Track health numbers like blood pressure or blood sugar'
+        ];
+        html = `
+          <div class="screen-card">
+            <span class="badge">Screen 2 · Goals</span>
+            <h2>What would you like Famasi to help you with?</h2>
+            <p class="hint">Choose as many as you like. This personalises what Famasi prioritises without holding you hostage.</p>
+
+            <div class="options-group">
+              ${allGoals.map(g => `
+                <label class="option-row">
+                  <input type="checkbox" value="${g}" ${state.goals.includes(g) ? 'checked' : ''} onchange="toggleGoal('${g}')">
+                  <span class="option-title">${g}</span>
+                </label>
+              `).join('')}
+            </div>
+
+            <div class="button-stack">
+              <button class="primary" onclick="navigateTo('3')">Continue</button>
+            </div>
+
+            <div class="nav-helpers">
+              <button type="button" class="secondary" onclick="goBack()" style="font-size:13px;">← Back</button>
+            </div>
+          </div>
+        `;
+        break;
+
+      // -------------------------------------------------------------
+      // SCREEN 3 · What do you want to do first?
+      // -------------------------------------------------------------
+      case '3':
+        html = `
+          <div class="screen-card">
+            <span class="badge">Screen 3 · First Action</span>
+            <h2>Let’s set up one thing first.</h2>
+            <p class="hint">Converts your goals into real product use. Pick what you’d like to do right now:</p>
+
+            <div class="options-group">
+              <label class="option-row">
+                <input type="radio" name="firstTask" value="order" ${state.firstTask === 'order' ? 'checked' : ''} onchange="state.firstTask='order'">
+                <div>
+                  <span class="option-title">Order medication</span>
+                  <span class="option-desc">Get medication delivered now.</span>
+                </div>
+              </label>
+
+              <label class="option-row">
+                <input type="radio" name="firstTask" value="refill" ${state.firstTask === 'refill' ? 'checked' : ''} onchange="state.firstTask='refill'">
+                <div>
+                  <span class="option-title">Set up a regular refill</span>
+                  <span class="option-desc">Make repeat medication easier to stay on top of.</span>
+                </div>
+              </label>
+
+              <label class="option-row">
+                <input type="radio" name="firstTask" value="save" ${state.firstTask === 'save' ? 'checked' : ''} onchange="state.firstTask='save'">
+                <div>
+                  <span class="option-title">Add medication to Famasi</span>
+                  <span class="option-desc">Keep a medication here even if you don’t need to buy it today.</span>
+                </div>
+              </label>
+
+              <label class="option-row">
+                <input type="radio" name="firstTask" value="reminder" ${state.firstTask === 'reminder' ? 'checked' : ''} onchange="state.firstTask='reminder'">
+                <div>
+                  <span class="option-title">Set up medication reminders</span>
+                  <span class="option-desc">Get help remembering when medication should be taken.</span>
+                </div>
+              </label>
+
+              <label class="option-row">
+                <input type="radio" name="firstTask" value="health" ${state.firstTask === 'health' ? 'checked' : ''} onchange="state.firstTask='health'">
+                <div>
+                  <span class="option-title">Track a health number</span>
+                  <span class="option-desc">Start tracking something like blood pressure or blood sugar.</span>
+                </div>
+              </label>
+            </div>
+
+            <div class="button-stack">
+              <button class="primary" onclick="handleScreen3Continue()">Continue</button>
+            </div>
+
+            <div class="nav-helpers">
+              <button type="button" class="secondary" onclick="goBack()" style="font-size:13px;">← Back</button>
+            </div>
+          </div>
+        `;
+        break;
+
+      // =============================================================
+      // BRANCH A: ORDER MEDICATION NOW
+      // =============================================================
+      case 'A1':
+        html = `
+          <div class="screen-card">
+            <span class="badge">Branch A1 · Order Recipient</span>
+            <h2>Who are you ordering for?</h2>
+            <p class="hint">Specify who will receive this medication.</p>
+
+            <div class="options-group">
+              <label class="option-row">
+                <input type="radio" name="taskPerson" value="Me" ${state.taskPerson === 'Me' ? 'checked' : ''} onchange="state.taskPerson='Me'">
+                <span class="option-title">Me</span>
+              </label>
+              <label class="option-row">
+                <input type="radio" name="taskPerson" value="${escapeHtml(getPrimaryPersonName())}" ${state.taskPerson !== 'Me' ? 'checked' : ''} onchange="state.taskPerson='${getPrimaryPersonName()}'">
+                <span class="option-title">${escapeHtml(getPrimaryPersonName())}</span>
+              </label>
+            </div>
+
+            <div class="button-stack">
+              <button class="primary" onclick="navigateTo('A2')">Continue</button>
+            </div>
+
+            <div class="nav-helpers">
+              <button type="button" class="secondary" onclick="goBack()" style="font-size:13px;">← Back</button>
+            </div>
+          </div>
+        `;
+        break;
+
+      case 'A2':
+        const targetA2 = state.taskPerson || getPrimaryPersonName();
+        html = `
+          <div class="screen-card">
+            <span class="badge">Branch A2 · Search Medication</span>
+            <h2>What medication do you need for ${escapeHtml(targetA2)}?</h2>
+            <p class="hint">Search by medication name and strength. Tap to add.</p>
+
+            <div style="display: flex; gap: 8px;">
+              <input type="text" id="medSearchA2" placeholder="🔍 e.g. Amlodipine 10mg..." onkeydown="if(event.key==='Enter') selectMedA2(this.value)">
+              <button type="button" class="primary" onclick="selectMedA2(document.getElementById('medSearchA2').value)" style="padding: 9px 14px; margin-bottom: 12px; white-space: nowrap;">Add</button>
+            </div>
+
+            <div class="search-results">
+              ${sampleMedications.map(m => `
+                <div class="search-item" onclick="selectMedA2('${m.name}')">
+                  <span><strong>${m.name}</strong> ${m.isPOM ? '<span style="font-size:11px; color:#c62828; margin-left:4px;">[POM]</span>' : ''}</span>
+                  <span class="search-item-badge">Select</span>
+                </div>
+              `).join('')}
+            </div>
+
+            <div class="nav-helpers">
+              <button type="button" class="secondary" onclick="goBack()" style="font-size:13px;">← Back</button>
+            </div>
+          </div>
+        `;
+        break;
+
+      case 'A4':
+        const targetA4 = state.taskPerson || getPrimaryPersonName();
+        html = `
+          <div class="screen-card">
+            <span class="badge">Branch A4 · Quantity</span>
+            <h2>How many do you need for ${escapeHtml(targetA4)}?</h2>
+            <p>Medication: <strong>${escapeHtml(state.pendingMedName)}</strong></p>
+            <p class="hint">Product rules applied quietly (Prescription classification handled during order).</p>
+
+            <div class="stepper">
+              <button type="button" class="secondary stepper-btn" onclick="state.pendingMedQty=Math.max(1, state.pendingMedQty-1); renderScreen();">−</button>
+              <div class="stepper-val">${state.pendingMedQty} pack${state.pendingMedQty > 1 ? 's' : ''}</div>
+              <button type="button" class="secondary stepper-btn" onclick="state.pendingMedQty+=1; renderScreen();">+</button>
+            </div>
+
+            <div class="button-stack">
+              <button class="primary" onclick="handleAddMedToBasket()">Add to order</button>
+            </div>
+
+            <div class="nav-helpers">
+              <button type="button" class="secondary" onclick="goBack()" style="font-size:13px;">← Back</button>
+            </div>
+          </div>
+        `;
+        break;
+
+      case 'A5':
+        const targetA5 = state.taskPerson || getPrimaryPersonName();
+        html = `
+          <div class="screen-card">
+            <span class="badge">Branch A5 · Basket Review</span>
+            <h2>Anything else for ${escapeHtml(targetA5)}?</h2>
+            <p class="hint">You can add more medications for ${escapeHtml(targetA5)}${state.careScope === 'Both' ? ' or for someone else' : ''}.</p>
+
+            <div class="card-preview">
+              <h4 style="margin-bottom:10px;">Current Order Items:</h4>
+              ${state.orderBasket.map((item, idx) => `
+                <div class="basket-item">
+                  <div>
+                    <strong>${escapeHtml(item.name)}</strong> × ${item.quantity}
+                    <div style="font-size:12px; color:#666;">For ${escapeHtml(item.person)}</div>
+                  </div>
+                  <button type="button" onclick="removeItemFromBasket(${idx})" style="padding:2px 8px; font-size:12px;">Remove</button>
+                </div>
+              `).join('')}
+            </div>
+
+            <div class="button-stack">
+              <button class="secondary" onclick="navigateTo('A2')">+ Add another medication for ${escapeHtml(targetA5)}</button>
+              ${state.careScope === 'Both' ? `
+                <button class="secondary" onclick="state.taskPerson = (state.taskPerson==='Me' ? getPrimaryPersonName() : 'Me'); navigateTo('A2');">+ Add medication for ${state.taskPerson==='Me' ? getPrimaryPersonName() : 'Me'}</button>
+              ` : ''}
+              <button class="primary" onclick="navigateTo('A6')" style="margin-top:8px;">Continue to delivery</button>
+            </div>
+
+            <div class="nav-helpers">
+              <button type="button" class="secondary" onclick="goBack()" style="font-size:13px;">← Back</button>
+            </div>
+          </div>
+        `;
+        break;
+
+      case 'A6':
+        const deliveryPerson = getPrimaryPersonName();
+        html = `
+          <div class="screen-card">
+            <span class="badge">Branch A6 · Delivery Destination</span>
+            <h2>Where should we deliver this order?</h2>
+            <p class="hint">The user's location is distinguished from the medication's destination.</p>
+
+            <label style="font-weight:600; display:block; margin-bottom:4px;">${escapeHtml(deliveryPerson)}’s delivery address:</label>
+            <input type="text" value="${escapeHtml(state.deliveryAddress)}" oninput="state.deliveryAddress=this.value" placeholder="e.g. Kaduna or Abuja">
+
+            <div class="button-stack">
+              <button class="primary" onclick="navigateTo('A7')">Find available pharmacy offers</button>
+            </div>
+
+            <div class="nav-helpers">
+              <button type="button" class="secondary" onclick="goBack()" style="font-size:13px;">← Back</button>
+            </div>
+          </div>
+        `;
+        break;
+
+      case 'A7':
+        html = `
+          <div class="screen-card" style="text-align: center; padding: 40px 20px;">
+            <span class="badge">Branch A7 · Pharmacy Search</span>
+            <h2>Finding available options…</h2>
+            <p class="hint">Connecting to verified pharmacies with stock in ${escapeHtml(state.deliveryAddress)}.</p>
+            <div style="font-size: 28px; margin: 24px 0;">🔍</div>
+            <div class="button-stack" style="max-width: 240px; margin: 0 auto;">
+              <button class="primary" onclick="navigateTo('A8')">View offers</button>
+            </div>
+          </div>
+        `;
+        break;
+
+      case 'A8':
+        const refPerson = getPrimaryPersonName();
+        html = `
+          <div class="screen-card">
+            <span class="badge">Branch A8 · Introduce Refill</span>
+            <h2>Does ${escapeHtml(refPerson)} take any of these medications regularly?</h2>
+            <p class="hint">How often does this supply need replacing? Adherence and fulfilment remain separate concepts.</p>
+
+            <div class="options-group">
+              ${state.orderBasket.map(item => `
+                <label class="option-row">
+                  <input type="checkbox" checked onchange="state.refillMedName='${item.name}'">
+                  <div>
+                    <span class="option-title">${escapeHtml(item.name)}</span>
+                    <span class="option-desc">Mark as regular recurring medication</span>
+                  </div>
+                </label>
+              `).join('')}
+            </div>
+
+            <div style="margin-top: 16px;">
+              <label style="font-weight:600; display:block; margin-bottom:6px;">How often does ${escapeHtml(refPerson)} usually need more?</label>
+              <select onchange="state.refillCadence=this.value">
+                <option value="Every month">Every month</option>
+                <option value="Every 2 months">Every 2 months</option>
+                <option value="Every 3 months">Every 3 months</option>
+                <option value="Something else">Something else</option>
+                <option value="I’m not sure">I’m not sure</option>
+              </select>
+            </div>
+
+            <div class="button-stack">
+              <button class="primary" onclick="navigateTo('A9')">Continue</button>
+              <button class="link-button" onclick="state.refillCadence='None'; navigateTo('A9');">No regular refills needed</button>
+            </div>
+
+            <div class="nav-helpers">
+              <button type="button" class="secondary" onclick="goBack()" style="font-size:13px;">← Back</button>
+            </div>
+          </div>
+        `;
+        break;
+
+      case 'A9':
+        const personA9 = getPrimaryPersonName();
+        html = `
+          <div class="screen-card">
+            <span class="badge">Branch A9 · Order Summary (Value Moment)</span>
+            <h2>${escapeHtml(personA9)}’s medication is ready.</h2>
+            <p class="hint">Famasi has now understood: the person, their medication, quantity, destination, and which items are recurring.</p>
+
+            <div class="card-preview">
+              <p><strong>Order:</strong></p>
+              ${state.orderBasket.map(b => `<p style="margin-left:8px;">• ${escapeHtml(b.name)} × ${b.quantity} (${escapeHtml(b.person)})</p>`).join('')}
+              <p style="margin-top:10px;"><strong>Delivery:</strong> ${escapeHtml(personA9)}, ${escapeHtml(state.deliveryAddress)}</p>
+              ${state.refillCadence !== 'None' ? `<p><strong>Regular medication:</strong> ${escapeHtml(state.refillMedName)} (${escapeHtml(state.refillCadence)} refill)</p>` : ''}
+            </div>
+
+            <div class="button-stack">
+              <button class="primary" onclick="navigateTo('A10')">Continue with this order</button>
+            </div>
+
+            <div class="nav-helpers">
+              <button type="button" class="secondary" onclick="goBack()" style="font-size:13px;">← Back</button>
+            </div>
+          </div>
+        `;
+        break;
+
+      case 'A10':
+        const personA10 = getPrimaryPersonName();
+        html = `
+          <div class="screen-card">
+            <span class="badge">Branch A10 · Create Account</span>
+            <h2>Save ${escapeHtml(personA10)}’s medication and continue</h2>
+            <p class="hint">Create your account so we can save this order, ${escapeHtml(personA10)}’s medications and the refill information you’ve added.</p>
+
+            <div class="button-stack">
+              <button class="secondary" onclick="state.authMethod='Google'; navigateTo('A11')">Continue with Google</button>
+              <button class="secondary" onclick="state.authMethod='Apple'; navigateTo('A11')">Continue with Apple</button>
+            </div>
+
+            <div style="margin: 16px 0; text-align: center; color: #888;">— or —</div>
+
+            <div>
+              <label style="font-weight:600; display:block; margin-bottom:4px;">Email or Phone number:</label>
+              <input type="text" placeholder="name@example.com or +234...">
+              <button class="primary" onclick="state.authMethod='Direct'; navigateTo('A11')" style="width:100%;">Continue to Payment</button>
+            </div>
+
+            <div class="nav-helpers">
+              <button type="button" class="secondary" onclick="goBack()" style="font-size:13px;">← Back</button>
+            </div>
+          </div>
+        `;
+        break;
+
+      case 'A11':
+        const personA11 = getPrimaryPersonName();
+        html = `
+          <div class="screen-card">
+            <span class="badge">Branch A11 · Order Confirmed</span>
+            <div style="font-size: 32px; margin: 10px 0;">✅</div>
+            <h2>${escapeHtml(personA11)}’s order is confirmed.</h2>
+            <p class="hint">Order #473929 · Next delivery: 17 October</p>
+
+            <div class="card-preview">
+              <p><strong>${escapeHtml(personA11)}</strong></p>
+              <p>• Amlodipine 10mg — Monthly refill</p>
+              <p>• Atorvastatin 20mg — Ordered today</p>
+            </div>
+
+            <!-- Natural goals reconnection -->
+            <div style="margin: 20px 0; border-top: 1px dashed #ddd; padding-top: 14px;">
+              <p style="font-weight:600;">You also wanted help remembering medications:</p>
+              <button class="secondary" onclick="navigateTo('D3')" style="font-size:13px; margin-top:4px; width:100%;">Set up ${escapeHtml(personA11)}’s medication times →</button>
+            </div>
+
+            <div style="margin-bottom: 20px;">
+              <p style="font-weight:600;">You also wanted to track health numbers:</p>
+              <button class="secondary" onclick="navigateTo('E3')" style="font-size:13px; margin-top:4px; width:100%;">Set up ${escapeHtml(personA11)}’s blood pressure →</button>
+            </div>
+
+            <div class="button-stack">
+              <button class="primary" onclick="navigateTo('Home')">Go to Famasi Home</button>
+            </div>
+          </div>
+        `;
+        break;
+
+      // =============================================================
+      // BRANCH B: SET UP A REGULAR REFILL
+      // =============================================================
+      case 'B1':
+        html = `
+          <div class="screen-card">
+            <span class="badge">Branch B1 · Refill Recipient</span>
+            <h2>Who is this refill for?</h2>
+            <p class="hint">Specify who will receive this recurring refill.</p>
+
+            <div class="options-group">
+              <label class="option-row">
+                <input type="radio" name="taskPerson" value="Me" ${state.taskPerson === 'Me' ? 'checked' : ''} onchange="state.taskPerson='Me'">
+                <span class="option-title">Me</span>
+              </label>
+              <label class="option-row">
+                <input type="radio" name="taskPerson" value="${escapeHtml(getPrimaryPersonName())}" ${state.taskPerson !== 'Me' ? 'checked' : ''} onchange="state.taskPerson='${getPrimaryPersonName()}'">
+                <span class="option-title">${escapeHtml(getPrimaryPersonName())}</span>
+              </label>
+            </div>
+
+            <div class="button-stack">
+              <button class="primary" onclick="navigateTo('B2')">Continue</button>
+            </div>
+
+            <div class="nav-helpers">
+              <button type="button" class="secondary" onclick="goBack()" style="font-size:13px;">← Back</button>
+            </div>
+          </div>
+        `;
+        break;
+
+      case 'B2':
+        const targetB2 = state.taskPerson || getPrimaryPersonName();
+        html = `
+          <div class="screen-card">
+            <span class="badge">Branch B2 · Search Medication</span>
+            <h2>What medication does ${escapeHtml(targetB2)} need refilled?</h2>
+            <p class="hint">Search by medication and strength.</p>
+
+            <div style="display: flex; gap: 8px;">
+              <input type="text" id="medSearchB2" placeholder="🔍 e.g. Amlodipine 10mg..." onkeydown="if(event.key==='Enter') selectMedB2(this.value)">
+              <button type="button" class="primary" onclick="selectMedB2(document.getElementById('medSearchB2').value)" style="padding: 9px 14px; margin-bottom: 12px; white-space: nowrap;">Add</button>
+            </div>
+
+            <div class="search-results">
+              ${sampleMedications.map(m => `
+                <div class="search-item" onclick="selectMedB2('${m.name}')">
+                  <span><strong>${m.name}</strong></span>
+                  <span class="search-item-badge">Select</span>
+                </div>
+              `).join('')}
+            </div>
+
+            <div class="nav-helpers">
+              <button type="button" class="secondary" onclick="goBack()" style="font-size:13px;">← Back</button>
+            </div>
+          </div>
+        `;
+        break;
+
+      case 'B3':
+        html = `
+          <div class="screen-card">
+            <span class="badge">Branch B3 · Amount Needed</span>
+            <h2>How much do you normally need each time?</h2>
+            <p class="hint">Quantity per refill for <strong>${escapeHtml(state.refillMedName)}</strong>.</p>
+
+            <div class="stepper">
+              <button type="button" class="secondary stepper-btn" onclick="state.refillQuantity=Math.max(1, state.refillQuantity-1); renderScreen();">−</button>
+              <div class="stepper-val">${state.refillQuantity} pack${state.refillQuantity > 1 ? 's' : ''}</div>
+              <button type="button" class="secondary stepper-btn" onclick="state.refillQuantity+=1; renderScreen();">+</button>
+            </div>
+
+            <div class="button-stack">
+              <button class="primary" onclick="navigateTo('B4')">Continue</button>
+            </div>
+
+            <div class="nav-helpers">
+              <button type="button" class="secondary" onclick="goBack()" style="font-size:13px;">← Back</button>
+            </div>
+          </div>
+        `;
+        break;
+
+      case 'B4':
+        const cadences = ['Every month', 'Every 2 months', 'Every 3 months', 'Something else', 'I’m not sure'];
+        html = `
+          <div class="screen-card">
+            <span class="badge">Branch B4 · Refill Cadence</span>
+            <h2>How often do you need more?</h2>
+            <p class="hint">We’ll keep track and prepare delivery ahead of time.</p>
+
+            <div class="options-group">
+              ${cadences.map(c => `
+                <label class="option-row">
+                  <input type="radio" name="refillCadence" value="${c}" ${state.refillCadence === c ? 'checked' : ''} onchange="state.refillCadence='${c}'">
+                  <span class="option-title">${c}</span>
+                </label>
+              `).join('')}
+            </div>
+
+            <div class="button-stack">
+              <button class="primary" onclick="navigateTo('B5')">Continue</button>
+            </div>
+
+            <div class="nav-helpers">
+              <button type="button" class="secondary" onclick="goBack()" style="font-size:13px;">← Back</button>
+            </div>
+          </div>
+        `;
+        break;
+
+      case 'B5':
+        const refillRecipient = state.taskPerson || getPrimaryPersonName();
+        html = `
+          <div class="screen-card">
+            <span class="badge">Branch B5 · Delivery Destination</span>
+            <h2>Where should ${escapeHtml(refillRecipient)}’s refill be delivered?</h2>
+            <p class="hint">Delivery destination for recurring replenishment.</p>
+
+            <input type="text" value="${escapeHtml(state.deliveryAddress)}" oninput="state.deliveryAddress=this.value" placeholder="e.g. Kaduna, Abuja">
+
+            <div class="button-stack">
+              <button class="primary" onclick="navigateTo('B6')">Continue</button>
+            </div>
+
+            <div class="nav-helpers">
+              <button type="button" class="secondary" onclick="goBack()" style="font-size:13px;">← Back</button>
+            </div>
+          </div>
+        `;
+        break;
+
+      case 'B6':
+        const pB6 = state.taskPerson || getPrimaryPersonName();
+        html = `
+          <div class="screen-card">
+            <span class="badge">Branch B6 · Refill Setup Ready</span>
+            <h2>${escapeHtml(pB6)}’s regular medication is set up.</h2>
+
+            <div class="card-preview">
+              <p><strong>Medication:</strong> ${escapeHtml(state.refillMedName)}</p>
+              <p><strong>Quantity:</strong> ${state.refillQuantity} pack</p>
+              <p><strong>Frequency:</strong> ${escapeHtml(state.refillCadence)}</p>
+              <p><strong>Delivered to:</strong> ${escapeHtml(pB6)}, ${escapeHtml(state.deliveryAddress)}</p>
+            </div>
+
+            <div class="button-stack">
+              <button class="primary" onclick="navigateTo('Account')">Save this refill</button>
+            </div>
+
+            <div class="nav-helpers">
+              <button type="button" class="secondary" onclick="goBack()" style="font-size:13px;">← Back</button>
+            </div>
+          </div>
+        `;
+        break;
+
+      // =============================================================
+      // BRANCH C: ADD MEDICATION, BUT DON'T BUY IT (SAVE FOR LATER)
+      // =============================================================
+      case 'C1':
+        html = `
+          <div class="screen-card">
+            <span class="badge">Branch C1 · Recipient</span>
+            <h2>Who are you adding medication for?</h2>
+            <p class="hint">Keep this saved under the right profile.</p>
+
+            <div class="options-group">
+              <label class="option-row">
+                <input type="radio" name="taskPerson" value="Me" ${state.taskPerson === 'Me' ? 'checked' : ''} onchange="state.taskPerson='Me'">
+                <span class="option-title">Me</span>
+              </label>
+              <label class="option-row">
+                <input type="radio" name="taskPerson" value="${escapeHtml(getPrimaryPersonName())}" ${state.taskPerson !== 'Me' ? 'checked' : ''} onchange="state.taskPerson='${getPrimaryPersonName()}'">
+                <span class="option-title">${escapeHtml(getPrimaryPersonName())}</span>
+              </label>
+            </div>
+
+            <div class="button-stack">
+              <button class="primary" onclick="navigateTo('C2')">Continue</button>
+            </div>
+
+            <div class="nav-helpers">
+              <button type="button" class="secondary" onclick="goBack()" style="font-size:13px;">← Back</button>
+            </div>
+          </div>
+        `;
+        break;
+
+      case 'C2':
+        const targetC2 = state.taskPerson || getPrimaryPersonName();
+        html = `
+          <div class="screen-card">
+            <span class="badge">Branch C2 · Search Medication</span>
+            <h2>What medication does ${escapeHtml(targetC2)} take?</h2>
+            <p class="hint">Search and add to profile without purchasing today.</p>
+
+            <div style="display: flex; gap: 8px;">
+              <input type="text" id="medSearchC2" placeholder="🔍 e.g. Amlodipine 10mg..." onkeydown="if(event.key==='Enter') selectMedC2(this.value)">
+              <button type="button" class="primary" onclick="selectMedC2(document.getElementById('medSearchC2').value)" style="padding: 9px 14px; margin-bottom: 12px; white-space: nowrap;">Add</button>
+            </div>
+
+            <div class="search-results">
+              ${sampleMedications.map(m => `
+                <div class="search-item" onclick="selectMedC2('${m.name}')">
+                  <span><strong>${m.name}</strong></span>
+                  <span class="search-item-badge">Select</span>
+                </div>
+              `).join('')}
+            </div>
+
+            <div class="nav-helpers">
+              <button type="button" class="secondary" onclick="goBack()" style="font-size:13px;">← Back</button>
+            </div>
+          </div>
+        `;
+        break;
+
+      case 'C3':
+        const targetC3 = state.taskPerson || getPrimaryPersonName();
+        html = `
+          <div class="screen-card">
+            <span class="badge">Branch C3 · Medication Saved</span>
+            <h2>Added to ${escapeHtml(targetC3)}’s medications.</h2>
+
+            <div class="card-preview">
+              <h4>💊 ${escapeHtml(state.pendingMedName || 'Amlodipine 10mg')}</h4>
+              <p class="hint">No quantity, address or purchase required.</p>
+              <p>When ${escapeHtml(targetC3)} needs more, you can order it or set up regular refills without searching again.</p>
+            </div>
+
+            <div class="button-stack">
+              <button class="primary" onclick="navigateTo('Account')">Save to Famasi</button>
+            </div>
+
+            <div class="nav-helpers">
+              <button type="button" class="secondary" onclick="goBack()" style="font-size:13px;">← Back</button>
+            </div>
+          </div>
+        `;
+        break;
+
+      // =============================================================
+      // BRANCH D: MEDICATION REMINDERS
+      // =============================================================
+      case 'D1':
+        html = `
+          <div class="screen-card">
+            <span class="badge">Branch D1 · Reminder Recipient</span>
+            <h2>Who needs medication reminders?</h2>
+
+            <div class="options-group">
+              <label class="option-row">
+                <input type="radio" name="taskPerson" value="Me" ${state.taskPerson === 'Me' ? 'checked' : ''} onchange="state.taskPerson='Me'">
+                <span class="option-title">Me</span>
+              </label>
+              <label class="option-row">
+                <input type="radio" name="taskPerson" value="${escapeHtml(getPrimaryPersonName())}" ${state.taskPerson !== 'Me' ? 'checked' : ''} onchange="state.taskPerson='${getPrimaryPersonName()}'">
+                <span class="option-title">${escapeHtml(getPrimaryPersonName())}</span>
+              </label>
+            </div>
+
+            <div class="button-stack">
+              <button class="primary" onclick="navigateTo('D2')">Continue</button>
+            </div>
+
+            <div class="nav-helpers">
+              <button type="button" class="secondary" onclick="goBack()" style="font-size:13px;">← Back</button>
+            </div>
+          </div>
+        `;
+        break;
+
+      case 'D2':
+        html = `
+          <div class="screen-card">
+            <span class="badge">Branch D2 · Choose Medication</span>
+            <h2>Which medication should we set reminders for?</h2>
+
+            <div class="options-group">
+              <label class="option-row">
+                <input type="radio" name="remMed" value="Amlodipine 10mg" checked onchange="state.reminderMed='Amlodipine 10mg'">
+                <span class="option-title">Amlodipine 10mg</span>
+              </label>
+              <label class="option-row">
+                <input type="radio" name="remMed" value="Other" onchange="state.reminderMed='Other'">
+                <div style="width:100%;">
+                  <span class="option-title">Search other medication</span>
+                  <input type="text" placeholder="Type medication name..." oninput="state.reminderMed=this.value" style="margin-top:6px;">
+                </div>
+              </label>
+            </div>
+
+            <div class="button-stack">
+              <button class="primary" onclick="navigateTo('D3')">Continue</button>
+            </div>
+
+            <div class="nav-helpers">
+              <button type="button" class="secondary" onclick="goBack()" style="font-size:13px;">← Back</button>
+            </div>
+          </div>
+        `;
+        break;
+
+      case 'D3':
+        html = `
+          <div class="screen-card">
+            <span class="badge">Branch D3 · Dose Schedule</span>
+            <h2>When is this taken?</h2>
+            <p class="hint">This is dose schedule, rather than refill cadence.</p>
+
+            <div class="options-group">
+              ${['Once daily', 'Twice daily', 'Specific times', 'As needed'].map(s => `
+                <label class="option-row">
+                  <input type="radio" name="remSched" value="${s}" ${state.reminderSchedule === s ? 'checked' : ''} onchange="state.reminderSchedule='${s}'">
+                  <span class="option-title">${s}</span>
+                </label>
+              `).join('')}
+            </div>
+
+            <label style="font-weight:600; display:block; margin-top:12px;">Dose time:</label>
+            <input type="time" value="${state.reminderTimes[0]}" onchange="state.reminderTimes[0]=this.value">
+
+            <div class="button-stack">
+              <button class="primary" onclick="navigateTo('D4')">Continue</button>
+            </div>
+
+            <div class="nav-helpers">
+              <button type="button" class="secondary" onclick="goBack()" style="font-size:13px;">← Back</button>
+            </div>
+          </div>
+        `;
+        break;
+
+      case 'D4':
+        html = `
+          <div class="screen-card">
+            <span class="badge">Branch D4 · Notification Permission</span>
+            <h2>Want Famasi to remind you?</h2>
+            <p>Turn on notifications so we can alert you at ${state.reminderTimes[0]} for ${escapeHtml(state.reminderMed)}.</p>
+
+            <div class="button-stack">
+              <button class="primary" onclick="state.reminderGranted=true; navigateTo('D5');">Turn on reminders</button>
+              <button class="secondary" onclick="state.reminderGranted=false; navigateTo('D5');">Not now</button>
+            </div>
+
+            <div class="nav-helpers">
+              <button type="button" class="secondary" onclick="goBack()" style="font-size:13px;">← Back</button>
+            </div>
+          </div>
+        `;
+        break;
+
+      case 'D5':
+        const targetD5 = state.taskPerson || getPrimaryPersonName();
+        html = `
+          <div class="screen-card">
+            <span class="badge">Branch D5 · Reminder Ready</span>
+            <h2>${escapeHtml(targetD5)}’s ${escapeHtml(state.reminderMed)} reminder is ready.</h2>
+
+            <div class="card-preview">
+              <p><strong>Dose:</strong> ${escapeHtml(state.reminderMed)}</p>
+              <p><strong>Time:</strong> ${state.reminderTimes[0]} (${state.reminderSchedule})</p>
+              <p><strong>Notifications:</strong> ${state.reminderGranted ? 'Enabled' : 'Off'}</p>
+            </div>
+
+            <div class="button-stack">
+              <button class="primary" onclick="navigateTo('Account')">Save reminder to Famasi</button>
+            </div>
+
+            <div class="nav-helpers">
+              <button type="button" class="secondary" onclick="goBack()" style="font-size:13px;">← Back</button>
+            </div>
+          </div>
+        `;
+        break;
+
+      // =============================================================
+      // BRANCH E: TRACK A HEALTH NUMBER
+      // =============================================================
+      case 'E1':
+        html = `
+          <div class="screen-card">
+            <span class="badge">Branch E1 · Who is this for?</span>
+            <h2>Who is this health tracking for?</h2>
+
+            <div class="options-group">
+              <label class="option-row">
+                <input type="radio" name="taskPerson" value="Me" ${state.taskPerson === 'Me' ? 'checked' : ''} onchange="state.taskPerson='Me'">
+                <span class="option-title">Me</span>
+              </label>
+              <label class="option-row">
+                <input type="radio" name="taskPerson" value="${escapeHtml(getPrimaryPersonName())}" ${state.taskPerson !== 'Me' ? 'checked' : ''} onchange="state.taskPerson='${getPrimaryPersonName()}'">
+                <span class="option-title">${escapeHtml(getPrimaryPersonName())}</span>
+              </label>
+            </div>
+
+            <div class="button-stack">
+              <button class="primary" onclick="navigateTo('E2')">Continue</button>
+            </div>
+
+            <div class="nav-helpers">
+              <button type="button" class="secondary" onclick="goBack()" style="font-size:13px;">← Back</button>
+            </div>
+          </div>
+        `;
+        break;
+
+      case 'E2':
+        html = `
+          <div class="screen-card">
+            <span class="badge">Branch E2 · What to track?</span>
+            <h2>What would you like to track?</h2>
+
+            <div class="options-group">
+              ${['Blood pressure', 'Blood sugar', 'Weight', 'Water'].map(m => `
+                <label class="option-row">
+                  <input type="radio" name="healthMetric" value="${m}" ${state.healthMetric === m ? 'checked' : ''} onchange="state.healthMetric='${m}'">
+                  <span class="option-title">${m}</span>
+                </label>
+              `).join('')}
+            </div>
+
+            <div class="button-stack">
+              <button class="primary" onclick="navigateTo('E3')">Continue</button>
+            </div>
+
+            <div class="nav-helpers">
+              <button type="button" class="secondary" onclick="goBack()" style="font-size:13px;">← Back</button>
+            </div>
+          </div>
+        `;
+        break;
+
+      case 'E3':
+        html = `
+          <div class="screen-card">
+            <span class="badge">Branch E3 · Clinical Target Setup</span>
+            <h2>How would you like to track ${escapeHtml(state.healthMetric)}?</h2>
+            <p class="hint">Neutral clinical tracking. No Famasi-generated medical targets.</p>
+
+            <label style="font-weight:600; display:block; margin-bottom:4px;">Optional target from your clinician:</label>
+            <input type="text" placeholder="e.g. 120/80 or 7.0 mmol/L" value="${escapeHtml(state.healthTarget)}" oninput="state.healthTarget=this.value">
+
+            <div class="button-stack">
+              <button class="primary" onclick="navigateTo('E4')">Save target</button>
+              <button class="secondary" onclick="state.healthTarget='Track readings only'; navigateTo('E4');">Track readings only (No target)</button>
+            </div>
+
+            <div class="nav-helpers">
+              <button type="button" class="secondary" onclick="goBack()" style="font-size:13px;">← Back</button>
+            </div>
+          </div>
+        `;
+        break;
+
+      case 'E4':
+        const targetE4 = state.taskPerson || getPrimaryPersonName();
+        html = `
+          <div class="screen-card">
+            <span class="badge">Branch E4 · Metric Ready</span>
+            <h2>${escapeHtml(targetE4)}’s ${escapeHtml(state.healthMetric)} is ready to track.</h2>
+
+            <div class="card-preview">
+              <p><strong>Metric:</strong> ${escapeHtml(state.healthMetric)}</p>
+              <p><strong>Mode:</strong> ${escapeHtml(state.healthTarget || 'Track readings')}</p>
+              <p><strong>For:</strong> ${escapeHtml(targetE4)}</p>
+            </div>
+
+            <div class="button-stack">
+              <button class="primary" onclick="navigateTo('Account')">Save to Famasi</button>
+            </div>
+
+            <div class="nav-helpers">
+              <button type="button" class="secondary" onclick="goBack()" style="font-size:13px;">← Back</button>
+            </div>
+          </div>
+        `;
+        break;
+
+      // =============================================================
+      // SHARED ACCOUNT CREATION (Deferred Signup)
+      // =============================================================
+      case 'Account':
+        const accPerson = state.taskPerson || getPrimaryPersonName();
+        html = `
+          <div class="screen-card">
+            <span class="badge">Account · Save Setup</span>
+            <h2>Create an account to save your setup</h2>
+            <p class="hint">Preserves ${escapeHtml(accPerson)}’s medications, routines and refills across devices.</p>
+
+            <div class="button-stack">
+              <button class="secondary" onclick="state.authMethod='Google'; navigateTo('Home')">Continue with Google</button>
+              <button class="secondary" onclick="state.authMethod='Apple'; navigateTo('Home')">Continue with Apple</button>
+            </div>
+
+            <div style="margin: 16px 0; text-align: center; color: #888;">— or —</div>
+
+            <div>
+              <label style="font-weight:600; display:block; margin-bottom:4px;">Use email address:</label>
+              <input type="text" placeholder="name@example.com">
+              <button class="primary" onclick="state.authMethod='Email'; navigateTo('Home')" style="width:100%;">Create Account</button>
+            </div>
+
+            <div class="button-stack" style="margin-top: 14px;">
+              <button class="link-button" onclick="navigateTo('Home')">Not now (Continue as guest)</button>
+            </div>
+
+            <div class="nav-helpers">
+              <button type="button" class="secondary" onclick="goBack()" style="font-size:13px;">← Back</button>
+            </div>
+          </div>
+        `;
+        break;
+
+      // =============================================================
+      // POPULATED HOME (Personalisation Creating Continuity)
+      // =============================================================
+      case 'Home':
+        const homePerson = getPrimaryPersonName();
+        html = `
+          <div class="screen-card">
+            <span class="badge">Home · Populated Medication Dashboard</span>
+            <h2>Famasi</h2>
+            <p class="hint">The home is already populated with the person, medication, and refill/order/goal created during onboarding.</p>
+
+            <!-- Dad / Family Member Profile Card -->
+            <div class="card-preview" style="background: #fff; border: 1px solid #ccc;">
+              <h3 style="margin-bottom: 6px;">👤 ${escapeHtml(homePerson)}</h3>
+
+              <div style="margin-top: 12px;">
+                <strong style="font-size: 13px; text-transform: uppercase; color: #555;">Medications</strong>
+                <div style="margin-top: 6px; padding: 10px; background: #fafafa; border: 1px solid #eee; border-radius: 4px;">
+                  <div style="display:flex; justify-content:space-between;">
+                    <strong>Amlodipine 10mg</strong>
+                    <span style="font-size:12px; background:#e8f5e9; color:#2e7d32; padding:2px 6px; border-radius:4px; font-weight:bold;">Monthly Refill</span>
+                  </div>
+                  <div style="font-size:12px; color:#666; margin-top:4px;">Next automated order: Oct 14</div>
+                </div>
+
+                <div style="margin-top: 6px; padding: 10px; background: #fafafa; border: 1px solid #eee; border-radius: 4px;">
+                  <div style="display:flex; justify-content:space-between;">
+                    <strong>Atorvastatin 20mg</strong>
+                    <span style="font-size:12px; color:#555;">Ordered Sep 16</span>
+                  </div>
+                  <div style="font-size:12px; color:#666; margin-top:4px;">Delivery to Kaduna in progress</div>
+                </div>
+              </div>
+
+              <div style="margin-top: 14px; border-top: 1px dashed #e0e0e0; padding-top: 10px;">
+                <strong style="font-size: 13px; text-transform: uppercase; color: #555;">Goals</strong>
+                <div style="display:flex; gap:8px; margin-top:6px; flex-wrap:wrap;">
+                  <button class="secondary" style="font-size:12px; padding:6px 10px;" onclick="navigateTo('E3')">Blood pressure: Add first reading →</button>
+                  <button class="secondary" style="font-size:12px; padding:6px 10px;" onclick="navigateTo('D3')">Medication reminders: Set up →</button>
+                </div>
+              </div>
+            </div>
+
+            <!-- Me Profile Card (if Both) -->
+            ${state.careScope === 'Both' ? `
+              <div class="card-preview" style="background: #fff; border: 1px solid #ddd;">
+                <h3 style="margin-bottom: 4px;">👤 Me</h3>
+                <p class="hint" style="margin-bottom: 8px;">No medications yet.</p>
+                <button class="secondary" onclick="state.taskPerson='Me'; navigateTo('A2');" style="font-size:12px; padding:6px 10px;">+ Add medication for Me</button>
+              </div>
+            ` : ''}
+
+            <div class="button-stack">
+              <button class="primary" onclick="restartFlow()">Restart Flow Prototype</button>
+            </div>
+          </div>
+        `;
+        break;
+
+      // =============================================================
+      // EXISTING CUSTOMER FAST-PATH
+      // =============================================================
+      case 'ExistingCustomer':
+        html = `
+          <div class="screen-card">
+            <span class="badge">Existing Customer · Smart Start</span>
+            <h2>Let’s set up Famasi around the medications you already use.</h2>
+            <p class="hint">We found medications you’ve ordered before. Which of these do you still manage?</p>
+
+            <div class="options-group">
+              <label class="option-row">
+                <input type="checkbox" checked>
+                <div>
+                  <span class="option-title">Amlodipine 10mg</span>
+                  <span class="option-desc">Last ordered 28 days ago</span>
+                </div>
+              </label>
+
+              <label class="option-row">
+                <input type="checkbox" checked>
+                <div>
+                  <span class="option-title">Metformin 500mg</span>
+                  <span class="option-desc">Last ordered 35 days ago</span>
+                </div>
+              </label>
+
+              <label class="option-row">
+                <input type="checkbox">
+                <div>
+                  <span class="option-title">Atorvastatin 20mg</span>
+                  <span class="option-desc">Last ordered 60 days ago</span>
+                </div>
+              </label>
+            </div>
+
+            <p class="hint">Previous orders become the immediate starting point for person → medication → refill → goals without starting from scratch.</p>
+
+            <div class="button-stack">
+              <button class="primary" onclick="navigateTo('2')">Continue with selected medications</button>
+              <button class="secondary" onclick="navigateTo('1')">Back to new user onboarding</button>
+            </div>
+          </div>
+        `;
+        break;
+
+      default:
+        html = `<div class="screen-card"><h2>Screen not found</h2><button onclick="restartFlow()">Return to start</button></div>`;
+    }
+
+    container.innerHTML = html;
   }
 
-  if (state.step === 'medicationConfirm') {
-    html = `<h2>Is this the one?</h2>
-      <p class="body">Check the name and strength before we add it.</p>
-      <div class="summary">
-        ${summaryRow('Medication', a.medication)}
-        <label class="summary-label" style="display:block;margin-top:15px">Strength</label>
-        <input id="medicationStrength" class="input" style="margin-top:8px" value="${esc(a.medicationStrength)}" placeholder="e.g. 20mg or Not sure" />
-      </div>
-      <p class="helper">If the strength is not listed, enter “Not sure” and edit it later.</p>
-      ${actions('Yes, add this', (a.careScope === 'both' || (a.careScope === 'other' && a.familyRelations.length > 1)) ? 'medicationFor' : 'frequency', 'Choose another medication','medication')}
-      <p class="tiny-note">Famasi is confirming the medication identity, not deciding your dose.</p>`;
+  // Navigation Logic
+  function handleScreen1Continue() {
+    if (state.careScope === 'Myself') {
+      state.taskPerson = 'Me';
+      navigateTo('2');
+    } else {
+      navigateTo('1B');
+    }
   }
 
-  if (state.step === 'medicationFor') {
-    const people = [];
-    if (a.careScope === 'both') people.push('Me');
-    if (a.familyRelations.length) people.push(firstFamily());
-    html = `<h2>Who takes this medication?</h2>
-      <div class="stack">${people.map(x => option(x,'medicationFor')).join('')}</div>
-      ${actions('Continue','frequency','','', !a.medicationFor)}`;
+  function toggleGoal(goal) {
+    const idx = state.goals.indexOf(goal);
+    if (idx > -1) {
+      state.goals.splice(idx, 1);
+    } else {
+      state.goals.push(goal);
+    }
   }
 
-  if (state.step === 'frequency') {
-    html = `<h2>How often is it taken?</h2>
-      <p class="body">Choose what matches the instructions you already have.</p>
-      <div class="stack">${frequencyOptions.map(x => option(x,'frequency')).join('')}</div>
-      ${actions('Continue','reminder','I’m not sure','reminder', !a.frequency)}
-      <p class="tiny-note">Famasi should not prescribe a frequency. You are entering instructions you already have.</p>`;
-  }
-
-  if (state.step === 'reminder') {
-    html = `<h2>When should Famasi remind you?</h2>
-      <p class="body">Choose the time you usually take it.</p>
-      <input id="reminderTime" type="time" class="input" value="${esc(a.reminderTime)}" />
-      <p class="helper">You can change this anytime.</p>
-      ${actions('Continue','notifications','Don’t set a reminder','buildingMedication', !a.reminderTime)}`;
-  }
-
-  if (state.step === 'notifications') {
-    html = `<h2>Want Famasi to remind you${a.reminderTime ? ` at ${esc(a.reminderTime)}` : ''}?</h2>
-      <p class="body">Turn on notifications so we can remind you about the routines you choose.</p>
-      <p class="helper">You control your reminders and can turn them off anytime.</p>
-      <div class="actions">
-        <button class="btn primary" data-notify="yes">Turn on reminders</button>
-        <button class="btn secondary" data-notify="no">Not now</button>
-      </div>
-      <p class="tiny-note">In the real product, the native notification prompt would appear only after choosing “Turn on reminders.”</p>`;
-  }
-
-  if (state.step === 'buildingMedication') {
-    html = `<h2>Organising your first routine…</h2>
-      <p class="body">We’re adding ${esc(a.medication || 'your medication')} to ${esc(medicinePerson())}’s care plan.</p>
-      <div class="loading"></div>
-      <p class="helper">This loading state should stay short in the real product.</p>`;
-    setTimeout(() => { if (state.step === 'buildingMedication') go('medicationAha'); }, 850);
-  }
-
-  if (state.step === 'medicationAha') {
-    html = `<h2>You’re set for today.</h2>
-      <p class="body">${esc(medicinePerson())}’s medication is now organised in Famasi.</p>
-      <div class="summary">
-        ${summaryRow(a.reminderTime || 'Routine', `${a.medication || 'Medication'} ${a.medicationStrength || ''}`.trim())}
-        ${summaryRow('Goal','Stay consistent with medication')}
-        ${summaryRow('Next step','Add another medication or finish later')}
-      </div>
-      <p class="helper">From here, Famasi can help you see what is due, what has been taken and what needs attention.</p>
-      ${actions('Save my care plan','save','Add another medication','medication')}`;
-  }
-
-  if (state.step === 'healthGoal') {
-    html = `<h2>What should we set up first?</h2>
-      <p class="body">Choose one to start. You can track more than one later.</p>
-      <div class="stack">${healthGoalOptions.map(x => option(x,'healthGoal')).join('')}</div>
-      ${actions('Continue','healthTarget','','', !a.healthGoal)}`;
-  }
-
-  if (state.step === 'healthTarget') {
-    const clinical = ['Blood pressure','Blood sugar'].includes(a.healthGoal);
-    html = `<h2>How would you like to track ${esc(a.healthGoal || 'this goal')}?</h2>
-      <p class="body">Set a target if you already have one, or start by simply recording your progress.</p>
-      <input id="healthTarget" class="input" value="${esc(a.healthTarget)}" placeholder="Optional target" />
-      <p class="helper">${clinical ? 'For clinical measures, use a target given to you by your clinician.' : 'You can change this later.'}</p>
-      ${actions('Set up goal','healthAha','Track without a target','healthAha')}
-      ${clinical ? '<p class="tiny-note">Famasi should not generate clinical targets from demographics.</p>' : ''}`;
-  }
-
-  if (state.step === 'healthAha') {
-    html = `<h2>You can start tracking from today.</h2>
-      <p class="body">We’ve added ${esc(a.healthGoal || 'your goal')} to your Famasi so you can see your progress over time.</p>
-      <div class="summary">
-        ${summaryRow('Today','Add your first entry')}
-        ${summaryRow('Goal',a.healthGoal || 'Health goal')}
-        ${a.healthTarget ? summaryRow('Target',a.healthTarget) : ''}
-      </div>
-      <p class="helper">Your dashboard will keep this visible so it is easy to come back to.</p>
-      ${actions('Save my setup','save','Add another goal','healthGoal')}`;
-  }
-
-  if (state.step === 'save') {
-    const person = a.careScope === 'self' ? 'You' : firstFamily();
-    html = `<h2>Save what you just set up.</h2>
-      <p class="body">Create an account so your medications, goals and family setup stay with you across devices.</p>
-      <div class="summary">
-        ${summaryRow('Managing for', person)}
-        ${a.medication ? summaryRow('Medication',a.medication) : ''}
-        ${a.healthGoal ? summaryRow('Health goal',a.healthGoal) : ''}
-        ${a.goals.length ? summaryRow('Goals selected',String(a.goals.length)) : ''}
-      </div>
-      <p class="helper">Your care plan is already ready. This just saves it.</p>
-      ${actions('Create my account','account','Not now','success')}`;
-  }
-
-  if (state.step === 'account') {
-    html = `<h2>How would you like to save your Famasi?</h2>
-      <div class="stack">
-        <button class="option" data-go="success"><span class="option-title">Continue with Google</span></button>
-        <button class="option" data-go="success"><span class="option-title">Continue with Apple</span></button>
-        <button class="option" data-go="success"><span class="option-title">Use email</span></button>
-      </div>
-      <p class="helper">Prototype only. No account is actually created.</p>`;
-  }
-
-  if (state.step === 'success') {
-    html = `<div class="success-dot">✓</div>
-      <h2 style="margin-top:24px">Your Famasi is ready.</h2>
-      <p class="body">We’ve saved your setup. You can add more medications, people and goals whenever you’re ready.</p>
-      <div class="summary">
-        ${a.medication ? summaryRow('Medication',a.medication) : ''}
-        ${a.healthGoal ? summaryRow('Tracking',a.healthGoal) : ''}
-        ${a.familyRelations.length ? summaryRow('Family',a.familyRelations.join(', ')) : ''}
-      </div>
-      <div class="actions">
-        <button class="btn primary" data-restart>Go to my home</button>
-        <button class="btn secondary" data-restart>Start again</button>
-      </div>
-      <p class="tiny-note">In the real experience this lands on a populated Home, not an empty dashboard.</p>`;
-  }
-
-  screen.innerHTML = html;
-  document.getElementById('back').hidden = state.history.length === 0 || state.step === 'success';
-  wireEvents();
-}
-
-function wireEvents() {
-  document.querySelectorAll('[data-select]').forEach(btn => {
-    btn.addEventListener('click', () => {
-      const key = btn.dataset.select;
-      const value = btn.dataset.value;
-      if (Array.isArray(state.answers[key])) {
-        const arr = state.answers[key];
-        state.answers[key] = arr.includes(value) ? arr.filter(x => x !== value) : [...arr, value];
+  function handleScreen3Continue() {
+    if (state.firstTask === 'order') {
+      if (state.careScope === 'Both') {
+        navigateTo('A1');
       } else {
-        state.answers[key] = value;
+        navigateTo('A2');
       }
-      render();
+    } else if (state.firstTask === 'refill') {
+      if (state.careScope === 'Both') {
+        navigateTo('B1');
+      } else {
+        navigateTo('B2');
+      }
+    } else if (state.firstTask === 'save') {
+      if (state.careScope === 'Both') {
+        navigateTo('C1');
+      } else {
+        navigateTo('C2');
+      }
+    } else if (state.firstTask === 'reminder') {
+      if (state.careScope === 'Both') {
+        navigateTo('D1');
+      } else {
+        navigateTo('D2');
+      }
+    } else if (state.firstTask === 'health') {
+      if (state.careScope === 'Both') {
+        navigateTo('E1');
+      } else {
+        navigateTo('E2');
+      }
+    }
+  }
+
+  // Branch A helpers
+  function selectMedA2(name) {
+    if (!name || !name.trim()) return;
+    state.pendingMedName = name.trim();
+    state.pendingMedQty = 1;
+    navigateTo('A4');
+  }
+
+  function handleAddMedToBasket() {
+    state.orderBasket.push({
+      person: state.taskPerson || getPrimaryPersonName(),
+      name: state.pendingMedName,
+      quantity: state.pendingMedQty,
+      isPOM: true
     });
+    navigateTo('A5');
+  }
+
+  function removeItemFromBasket(idx) {
+    state.orderBasket.splice(idx, 1);
+    renderScreen();
+  }
+
+  // Branch B helpers
+  function selectMedB2(name) {
+    if (!name || !name.trim()) return;
+    state.refillMedName = name.trim();
+    navigateTo('B3');
+  }
+
+  // Branch C helpers
+  function selectMedC2(name) {
+    if (!name || !name.trim()) return;
+    state.pendingMedName = name.trim();
+    navigateTo('C3');
+  }
+
+  // Initial boot
+  window.addEventListener('DOMContentLoaded', () => {
+    renderScreen();
   });
-
-  document.querySelectorAll('[data-go]').forEach(btn => {
-    btn.addEventListener('click', () => {
-      const next = btn.dataset.go;
-      if (next === 'useRelationship') {
-        state.answers.familyName = state.answers.familyRelations[0] || 'Family member';
-        go('goals');
-        return;
-      }
-      if (next === 'medicationNotFound') {
-        state.answers.medication = 'Medication not listed';
-        go('medicationConfirm');
-        return;
-      }
-      if (state.step === 'medicationConfirm' && next !== 'medication') {
-        const strength = document.getElementById('medicationStrength');
-        if (strength) state.answers.medicationStrength = strength.value;
-      }
-      if (state.step === 'healthTarget' && next === 'healthAha') {
-        const target = document.getElementById('healthTarget');
-        if (target) state.answers.healthTarget = target.value;
-      }
-      go(next);
-    });
-  });
-
-  const familyName = document.getElementById('familyName');
-  if (familyName) familyName.addEventListener('input', e => state.answers.familyName = e.target.value);
-  const medication = document.getElementById('medication');
-  if (medication) medication.addEventListener('input', e => { state.answers.medication = e.target.value; const b=document.querySelector('.btn.primary'); if(b) b.disabled=!e.target.value.trim(); });
-  const reminderTime = document.getElementById('reminderTime');
-  if (reminderTime) reminderTime.addEventListener('input', e => { state.answers.reminderTime = e.target.value; const b=document.querySelector('.btn.primary'); if(b) b.disabled=!e.target.value; });
-
-  document.querySelectorAll('[data-notify]').forEach(btn => btn.addEventListener('click', () => {
-    state.answers.notifications = btn.dataset.notify;
-    go('buildingMedication');
-  }));
-  document.querySelectorAll('[data-restart]').forEach(btn => btn.addEventListener('click', restart));
-}
-
-document.getElementById('back').addEventListener('click', back);
-document.getElementById('restartTop').addEventListener('click', restart);
-render();
 </script>
+
 </body>
 </html>
