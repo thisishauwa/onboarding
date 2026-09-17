@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Famasi Onboarding Flow & Event Management Prototype</title>
+  <title>Famasi Onboarding Flow Prototype</title>
   <style>
     /* Clean, minimal, wireframe styling - pure text and buttons */
     * {
@@ -190,7 +190,7 @@
       display: block;
       margin-top: 2px;
     }
-    input[type="text"], input[type="email"], input[type="password"], input[type="date"], input[type="time"], select, textarea {
+    input[type="text"], input[type="email"], input[type="password"], select, textarea {
       width: 100%;
       padding: 9px 12px;
       border: 1px solid #ccc;
@@ -201,7 +201,7 @@
       font-family: inherit;
       background: #fff;
     }
-    input[type="text"]:focus, input[type="email"]:focus, input[type="password"]:focus, select:focus, textarea:focus, input[type="date"]:focus {
+    input[type="text"]:focus, input[type="email"]:focus, input[type="password"]:focus, select:focus, textarea:focus {
       outline: none;
       border-color: #666;
     }
@@ -339,62 +339,6 @@
       gap: 10px;
       margin-top: 16px;
     }
-
-    /* Event management items */
-    .event-card {
-      border: 1px solid #e0e0e0;
-      border-radius: 8px;
-      background: #fff;
-      padding: 16px;
-      margin-bottom: 12px;
-    }
-    .event-card-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: flex-start;
-      gap: 12px;
-      margin-bottom: 8px;
-    }
-    .event-date-row {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      font-size: 13px;
-      color: #444;
-      margin-bottom: 8px;
-      font-weight: 500;
-    }
-    .event-actions {
-      display: flex;
-      gap: 8px;
-      margin-top: 12px;
-      flex-wrap: wrap;
-    }
-
-    /* Modal dialog */
-    .modal-overlay {
-      position: fixed;
-      top: 0;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      background: rgba(0,0,0,0.4);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      padding: 16px;
-      z-index: 1000;
-    }
-    .modal-content {
-      background: #fff;
-      border-radius: 8px;
-      border: 1px solid #ccc;
-      width: 100%;
-      max-width: 520px;
-      padding: 24px;
-      max-height: 90vh;
-      overflow-y: auto;
-    }
   </style>
 </head>
 <body>
@@ -410,9 +354,8 @@
     <div class="meta-bar-right">
       <label for="screenJumpSelect" style="font-size: 12px; font-weight: 500;">Jump to:</label>
       <select id="screenJumpSelect" onchange="jumpToScreen(this.value)">
-        <optgroup label="Views & Tabs">
+        <optgroup label="Views & Dashboard">
           <option value="Home">🏠 Populated Home (Dashboard)</option>
-          <option value="Events">📅 Event Management Tab</option>
         </optgroup>
         <optgroup label="Household Setup (Layer 1)">
           <option value="1">Step 1 · Welcome</option>
@@ -445,8 +388,7 @@
   <!-- Navigation Tab Bar -->
   <div class="top-tab-nav">
     <button id="tabNavOnboarding" class="tab-btn active" onclick="navigateTo('1')">Onboarding Flow</button>
-    <button id="tabNavDashboard" class="tab-btn" onclick="navigateTo('Home')">🏠 Dashboard (Populated)</button>
-    <button id="tabNavEvents" class="tab-btn" onclick="navigateTo('Events')">📅 Event Management</button>
+    <button id="tabNavDashboard" class="tab-btn" onclick="navigateTo('Home')">🏠 Dashboard (Populated Home)</button>
   </div>
 
   <!-- Screen Content Container -->
@@ -454,77 +396,7 @@
 
 </div>
 
-<!-- Modal Container -->
-<div id="modalContainer"></div>
-
 <script>
-  // Default Academic Events
-  const defaultEvents = [
-    {
-      id: 'ev_1',
-      title: 'Resumption',
-      category: 'Academic',
-      startDate: '2026-09-28',
-      endDate: '2026-09-28',
-      status: 'Active',
-      notes: 'Official semester commencement and hostel clearance.'
-    },
-    {
-      id: 'ev_2',
-      title: 'Registration',
-      category: 'Academic',
-      startDate: '2026-09-28',
-      endDate: '2026-10-16',
-      status: 'Active',
-      notes: 'Course portal registration, fee payment, and document verification.'
-    },
-    {
-      id: 'ev_3',
-      title: 'Lecture Begins',
-      category: 'Academic',
-      startDate: '2026-10-05',
-      endDate: '2026-11-20',
-      status: 'Upcoming',
-      notes: 'Facilitated online seminars, synchronous classes, and laboratory sessions.'
-    },
-    {
-      id: 'ev_4',
-      title: 'Add and Drop',
-      category: 'Academic',
-      startDate: '2026-10-19',
-      endDate: '2026-10-23',
-      status: 'Upcoming',
-      notes: 'Window for modifying enrolled courses and elective adjustments.'
-    },
-    {
-      id: 'ev_5',
-      title: 'Request for Change',
-      category: 'Administrative',
-      startDate: '2026-10-12',
-      endDate: '2026-10-30',
-      status: 'Upcoming',
-      notes: 'Study center relocation, programme transfers, or session deferment requests.'
-    },
-    {
-      id: 'ev_6',
-      title: 'Tutor Marked Assignment (TMA)',
-      category: 'Assessment',
-      startDate: '2026-11-02',
-      endDate: '2026-11-27',
-      status: 'Upcoming',
-      notes: 'Online continuous assessment submission window (TMA 1, 2, and 3).'
-    },
-    {
-      id: 'ev_7',
-      title: 'Examination',
-      category: 'Assessment',
-      startDate: '2026-12-07',
-      endDate: '2026-12-23',
-      status: 'Upcoming',
-      notes: 'First semester e-examinations and written papers.'
-    }
-  ];
-
   // Flow State
   const state = {
     currentScreen: '1',
@@ -557,7 +429,7 @@
     currentPersonIndex: 0,
     
     // Per-person configured data
-    // personName -> { medications: [{ name, action, details }], goals: [] }
+    // personName -> { medications: [{ name, action, summary }], goals: [] }
     personProfiles: {
       'Dad': {
         medications: [
@@ -611,12 +483,7 @@
     // Account creation fields
     accountName: 'Hauwa',
     accountEmail: 'hauwa@example.com',
-    accountPassword: '',
-
-    // Event Management Tab State
-    currentSession: '2026/2027 Academic Session — First Semester',
-    eventFilter: 'all',
-    events: JSON.parse(localStorage.getItem('famasi_events_data') || JSON.stringify(defaultEvents))
+    accountPassword: ''
   };
 
   const sampleMedications = [
@@ -630,25 +497,9 @@
     'Hydrochlorothiazide 25mg'
   ];
 
-  function persistEvents() {
-    localStorage.setItem('famasi_events_data', JSON.stringify(state.events));
-  }
-
   function escapeHtml(str) {
     if (!str) return '';
     return String(str).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
-  }
-
-  function formatDateDisplay(dateStr) {
-    if (!dateStr) return 'Date not set';
-    try {
-      const parts = dateStr.split('-');
-      if (parts.length === 3) {
-        const d = new Date(parts[0], parts[1] - 1, parts[2]);
-        return d.toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' });
-      }
-    } catch(e) {}
-    return dateStr;
   }
 
   function navigateTo(screenId) {
@@ -683,12 +534,10 @@
   function updateTabButtons() {
     const tabOnboarding = document.getElementById('tabNavOnboarding');
     const tabDashboard = document.getElementById('tabNavDashboard');
-    const tabEvents = document.getElementById('tabNavEvents');
     
     const isOnboarding = ['1','2','3','4','5','6','7','7A','7B','7C','7D','8','9','10','ExistingCustomer'].includes(state.currentScreen);
     if (tabOnboarding) tabOnboarding.className = 'tab-btn' + (isOnboarding ? ' active' : '');
     if (tabDashboard) tabDashboard.className = 'tab-btn' + (state.currentScreen === 'Home' ? ' active' : '');
-    if (tabEvents) tabEvents.className = 'tab-btn' + (state.currentScreen === 'Events' ? ' active' : '');
   }
 
   function getHouseholdList() {
@@ -715,101 +564,6 @@
     let html = '';
 
     switch(state.currentScreen) {
-      // -------------------------------------------------------------
-      // EVENT MANAGEMENT TAB
-      // -------------------------------------------------------------
-      case 'Events':
-        const filteredEvents = state.events.filter(ev => {
-          if (state.eventFilter === 'all') return true;
-          return ev.status.toLowerCase() === state.eventFilter.toLowerCase();
-        });
-
-        html = `
-          <div class="screen-card">
-            <div style="display:flex; justify-content:space-between; align-items:flex-start; flex-wrap:wrap; gap:10px; margin-bottom:12px;">
-              <div>
-                <span class="badge">Event Management Tab</span>
-                <h1>Session & Events Management</h1>
-                <p class="hint">Configure semester dates, manage academic milestones, and handle deadlines.</p>
-              </div>
-              <button class="primary" onclick="openAddEventModal()">+ Add New Event</button>
-            </div>
-
-            <!-- Session Switcher -->
-            <div class="card-preview" style="background:#fff; margin-top:0;">
-              <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:8px;">
-                <div>
-                  <span style="font-size:11px; text-transform:uppercase; color:#666; font-weight:700;">Current Active Session:</span>
-                  <div style="font-weight:700; font-size:15px; margin-top:2px;">${escapeHtml(state.currentSession)}</div>
-                </div>
-                <div style="display:flex; gap:6px;">
-                  <span class="status-badge status-active">Active</span>
-                  <button class="secondary" style="font-size:12px; padding:4px 8px;" onclick="promptSwitchSession()">Switch Session</button>
-                </div>
-              </div>
-            </div>
-
-            <!-- Filter Bar -->
-            <div style="display:flex; justify-content:space-between; align-items:center; margin:16px 0; gap:8px; flex-wrap:wrap;">
-              <div style="display:flex; gap:6px; flex-wrap:wrap;">
-                <button class="${state.eventFilter==='all'?'primary':'secondary'}" style="font-size:12px; padding:4px 10px;" onclick="state.eventFilter='all'; renderScreen();">All (${state.events.length})</button>
-                <button class="${state.eventFilter==='active'?'primary':'secondary'}" style="font-size:12px; padding:4px 10px;" onclick="state.eventFilter='active'; renderScreen();">Active</button>
-                <button class="${state.eventFilter==='upcoming'?'primary':'secondary'}" style="font-size:12px; padding:4px 10px;" onclick="state.eventFilter='upcoming'; renderScreen();">Upcoming</button>
-                <button class="${state.eventFilter==='completed'?'primary':'secondary'}" style="font-size:12px; padding:4px 10px;" onclick="state.eventFilter='completed'; renderScreen();">Completed</button>
-              </div>
-              <button class="secondary" style="font-size:12px; padding:4px 10px;" onclick="resetEventsToDefault()">Restore Default Events</button>
-            </div>
-
-            <!-- Events List -->
-            <div>
-              ${filteredEvents.length === 0 ? `
-                <div class="card-preview" style="text-align:center; padding:24px; color:#666;">
-                  <p>No events found for the selected filter.</p>
-                  <button class="secondary" onclick="openAddEventModal()">+ Create an Event</button>
-                </div>
-              ` : filteredEvents.map(ev => {
-                const statusClass = ev.status === 'Active' ? 'status-active' : ev.status === 'Upcoming' ? 'status-upcoming' : 'status-completed';
-                const dateText = (ev.startDate && ev.endDate) 
-                  ? `${formatDateDisplay(ev.startDate)} — ${formatDateDisplay(ev.endDate)}`
-                  : formatDateDisplay(ev.startDate || ev.endDate);
-
-                return `
-                  <div class="event-card">
-                    <div class="event-card-header">
-                      <div>
-                        <div style="display:flex; align-items:center; gap:8px; flex-wrap:wrap;">
-                          <h3 style="margin:0; font-size:16px;">${escapeHtml(ev.title)}</h3>
-                          <span class="search-item-badge">${escapeHtml(ev.category)}</span>
-                        </div>
-                      </div>
-                      <span class="status-badge ${statusClass}">${escapeHtml(ev.status)}</span>
-                    </div>
-
-                    <div class="event-date-row">
-                      <span>📅</span>
-                      <span>${dateText}</span>
-                    </div>
-
-                    <p style="font-size:13px; color:#555; margin-bottom:8px;">${escapeHtml(ev.notes || '')}</p>
-
-                    <div class="event-actions">
-                      <button class="secondary" style="font-size:12px; padding:4px 10px;" onclick="openSetDateModal('${ev.id}')">Set Date</button>
-                      <button class="secondary" style="font-size:12px; padding:4px 10px;" onclick="openEditEventModal('${ev.id}')">Edit</button>
-                      <button class="danger" style="font-size:12px; padding:4px 10px;" onclick="deleteEvent('${ev.id}')">Delete</button>
-                    </div>
-                  </div>
-                `;
-              }).join('')}
-            </div>
-
-            <div class="nav-helpers">
-              <button type="button" class="secondary" onclick="navigateTo('Home')">← Back to Dashboard</button>
-              <button type="button" class="secondary" onclick="navigateTo('1')">Go to Onboarding Flow</button>
-            </div>
-          </div>
-        `;
-        break;
-
       // -------------------------------------------------------------
       // STEP 1 · Welcome
       // -------------------------------------------------------------
@@ -1334,7 +1088,7 @@
         break;
 
       // -------------------------------------------------------------
-      // STEP 8 · Complete that person (Faruq's Principle: attach goals)
+      // STEP 8 · Complete that person (Attach Goals)
       // -------------------------------------------------------------
       case '8':
         const person8 = state.activePersonName || 'Dad';
@@ -1578,8 +1332,8 @@
 
             <!-- Navigation Helper -->
             <div class="nav-helpers" style="margin-top:20px;">
-              <button class="secondary" onclick="navigateTo('Events')">Go to Event Management Tab →</button>
               <button class="secondary" onclick="navigateTo('1')">← Back to Onboarding Flow</button>
+              <button class="secondary" onclick="restartFlow()">Reset All</button>
             </div>
           </div>
         `;
@@ -1835,226 +1589,6 @@
 
   function handleCreateAccount() {
     navigateTo('Home');
-  }
-
-  // -----------------------------------------------------------------
-  // Event Management Tab Functions & Modals
-  // -----------------------------------------------------------------
-  function closeModal() {
-    document.getElementById('modalContainer').innerHTML = '';
-  }
-
-  function promptSwitchSession() {
-    const newSession = prompt('Enter the name of the new academic session:', state.currentSession);
-    if (newSession && newSession.trim()) {
-      state.currentSession = newSession.trim();
-      renderScreen();
-    }
-  }
-
-  function resetEventsToDefault() {
-    if (confirm('Reset all events to the default 2026/2027 Academic Session milestones?')) {
-      state.events = JSON.parse(JSON.stringify(defaultEvents));
-      persistEvents();
-      renderScreen();
-    }
-  }
-
-  function deleteEvent(id) {
-    const ev = state.events.find(e => e.id === id);
-    if (!ev) return;
-    if (confirm(`Are you sure you want to delete the event: "${ev.title}"?`)) {
-      state.events = state.events.filter(e => e.id !== id);
-      persistEvents();
-      renderScreen();
-    }
-  }
-
-  function openAddEventModal() {
-    const m = document.getElementById('modalContainer');
-    m.innerHTML = `
-      <div class="modal-overlay" onclick="if(event.target===this) closeModal();">
-        <div class="modal-content">
-          <span class="badge">New Event</span>
-          <h3>Add Academic Event</h3>
-          <p class="hint">Create a new milestone, examination, or administrative window.</p>
-
-          <label style="font-size:13px; font-weight:600; display:block; margin-bottom:4px;">Event Title:</label>
-          <input type="text" id="newEvTitle" placeholder="e.g. Matriculation Ceremony">
-
-          <label style="font-size:13px; font-weight:600; display:block; margin-bottom:4px;">Category:</label>
-          <select id="newEvCategory">
-            <option value="Academic">Academic</option>
-            <option value="Administrative">Administrative</option>
-            <option value="Assessment">Assessment</option>
-            <option value="General">General</option>
-          </select>
-
-          <div style="display:grid; grid-template-columns: 1fr 1fr; gap:12px;">
-            <div>
-              <label style="font-size:13px; font-weight:600; display:block; margin-bottom:4px;">Start Date:</label>
-              <input type="date" id="newEvStartDate">
-            </div>
-            <div>
-              <label style="font-size:13px; font-weight:600; display:block; margin-bottom:4px;">End Date (Optional):</label>
-              <input type="date" id="newEvEndDate">
-            </div>
-          </div>
-
-          <label style="font-size:13px; font-weight:600; display:block; margin-bottom:4px;">Status:</label>
-          <select id="newEvStatus">
-            <option value="Upcoming">Upcoming</option>
-            <option value="Active">Active</option>
-            <option value="Completed">Completed</option>
-          </select>
-
-          <label style="font-size:13px; font-weight:600; display:block; margin-bottom:4px;">Notes / Description:</label>
-          <textarea id="newEvNotes" rows="3" placeholder="Additional details or requirements..."></textarea>
-
-          <div style="display:flex; justify-content:flex-end; gap:8px; margin-top:16px;">
-            <button type="button" class="secondary" onclick="closeModal()">Cancel</button>
-            <button type="button" class="primary" onclick="saveNewEvent()">Create Event</button>
-          </div>
-        </div>
-      </div>
-    `;
-  }
-
-  function saveNewEvent() {
-    const title = document.getElementById('newEvTitle').value.trim();
-    if (!title) {
-      alert('Please enter an event title.');
-      return;
-    }
-
-    const newEv = {
-      id: 'ev_' + Date.now(),
-      title: title,
-      category: document.getElementById('newEvCategory').value,
-      startDate: document.getElementById('newEvStartDate').value,
-      endDate: document.getElementById('newEvEndDate').value,
-      status: document.getElementById('newEvStatus').value,
-      notes: document.getElementById('newEvNotes').value.trim()
-    };
-
-    state.events.push(newEv);
-    persistEvents();
-    closeModal();
-    renderScreen();
-  }
-
-  function openEditEventModal(id) {
-    const ev = state.events.find(e => e.id === id);
-    if (!ev) return;
-
-    const m = document.getElementById('modalContainer');
-    m.innerHTML = `
-      <div class="modal-overlay" onclick="if(event.target===this) closeModal();">
-        <div class="modal-content">
-          <span class="badge">Edit Event</span>
-          <h3>Edit ${escapeHtml(ev.title)}</h3>
-          <p class="hint">Modify milestone details, dates, or status.</p>
-
-          <label style="font-size:13px; font-weight:600; display:block; margin-bottom:4px;">Event Title:</label>
-          <input type="text" id="editEvTitle" value="${escapeHtml(ev.title)}">
-
-          <label style="font-size:13px; font-weight:600; display:block; margin-bottom:4px;">Category:</label>
-          <select id="editEvCategory">
-            <option value="Academic" ${ev.category==='Academic'?'selected':''}>Academic</option>
-            <option value="Administrative" ${ev.category==='Administrative'?'selected':''}>Administrative</option>
-            <option value="Assessment" ${ev.category==='Assessment'?'selected':''}>Assessment</option>
-            <option value="General" ${ev.category==='General'?'selected':''}>General</option>
-          </select>
-
-          <div style="display:grid; grid-template-columns: 1fr 1fr; gap:12px;">
-            <div>
-              <label style="font-size:13px; font-weight:600; display:block; margin-bottom:4px;">Start Date:</label>
-              <input type="date" id="editEvStartDate" value="${ev.startDate || ''}">
-            </div>
-            <div>
-              <label style="font-size:13px; font-weight:600; display:block; margin-bottom:4px;">End Date (Optional):</label>
-              <input type="date" id="editEvEndDate" value="${ev.endDate || ''}">
-            </div>
-          </div>
-
-          <label style="font-size:13px; font-weight:600; display:block; margin-bottom:4px;">Status:</label>
-          <select id="editEvStatus">
-            <option value="Upcoming" ${ev.status==='Upcoming'?'selected':''}>Upcoming</option>
-            <option value="Active" ${ev.status==='Active'?'selected':''}>Active</option>
-            <option value="Completed" ${ev.status==='Completed'?'selected':''}>Completed</option>
-          </select>
-
-          <label style="font-size:13px; font-weight:600; display:block; margin-bottom:4px;">Notes / Description:</label>
-          <textarea id="editEvNotes" rows="3">${escapeHtml(ev.notes || '')}</textarea>
-
-          <div style="display:flex; justify-content:flex-end; gap:8px; margin-top:16px;">
-            <button type="button" class="secondary" onclick="closeModal()">Cancel</button>
-            <button type="button" class="primary" onclick="saveEditEvent('${ev.id}')">Save Changes</button>
-          </div>
-        </div>
-      </div>
-    `;
-  }
-
-  function saveEditEvent(id) {
-    const ev = state.events.find(e => e.id === id);
-    if (!ev) return;
-
-    const title = document.getElementById('editEvTitle').value.trim();
-    if (!title) {
-      alert('Please enter an event title.');
-      return;
-    }
-
-    ev.title = title;
-    ev.category = document.getElementById('editEvCategory').value;
-    ev.startDate = document.getElementById('editEvStartDate').value;
-    ev.endDate = document.getElementById('editEvEndDate').value;
-    ev.status = document.getElementById('editEvStatus').value;
-    ev.notes = document.getElementById('editEvNotes').value.trim();
-
-    persistEvents();
-    closeModal();
-    renderScreen();
-  }
-
-  function openSetDateModal(id) {
-    const ev = state.events.find(e => e.id === id);
-    if (!ev) return;
-
-    const m = document.getElementById('modalContainer');
-    m.innerHTML = `
-      <div class="modal-overlay" onclick="if(event.target===this) closeModal();">
-        <div class="modal-content" style="max-width:400px;">
-          <span class="badge">Set Date</span>
-          <h3>Set Dates for ${escapeHtml(ev.title)}</h3>
-          <p class="hint">Adjust the active dates for this event.</p>
-
-          <label style="font-size:13px; font-weight:600; display:block; margin-bottom:4px;">Start Date:</label>
-          <input type="date" id="quickStartDate" value="${ev.startDate || ''}">
-
-          <label style="font-size:13px; font-weight:600; display:block; margin-bottom:4px;">End Date (Optional):</label>
-          <input type="date" id="quickEndDate" value="${ev.endDate || ''}">
-
-          <div style="display:flex; justify-content:flex-end; gap:8px; margin-top:16px;">
-            <button type="button" class="secondary" onclick="closeModal()">Cancel</button>
-            <button type="button" class="primary" onclick="saveQuickDate('${ev.id}')">Update Dates</button>
-          </div>
-        </div>
-      </div>
-    `;
-  }
-
-  function saveQuickDate(id) {
-    const ev = state.events.find(e => e.id === id);
-    if (!ev) return;
-
-    ev.startDate = document.getElementById('quickStartDate').value;
-    ev.endDate = document.getElementById('quickEndDate').value;
-
-    persistEvents();
-    closeModal();
-    renderScreen();
   }
 
   // Initial boot
