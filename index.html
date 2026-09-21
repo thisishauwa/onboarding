@@ -133,6 +133,11 @@
       color: #616161;
       border: 1px solid #e0e0e0;
     }
+    .status-promo {
+      background: #fef3c7;
+      color: #92400e;
+      border: 1px solid #fde68a;
+    }
     h1, h2, h3 {
       margin-bottom: 12px;
       color: #111;
@@ -190,7 +195,7 @@
       display: block;
       margin-top: 2px;
     }
-    input[type="text"], input[type="email"], input[type="password"], select, textarea {
+    input[type="text"], input[type="email"], input[type="password"], input[type="date"], select, textarea {
       width: 100%;
       padding: 9px 12px;
       border: 1px solid #ccc;
@@ -201,7 +206,7 @@
       font-family: inherit;
       background: #fff;
     }
-    input[type="text"]:focus, input[type="email"]:focus, input[type="password"]:focus, select:focus, textarea:focus {
+    input[type="text"]:focus, input[type="email"]:focus, input[type="password"]:focus, input[type="date"]:focus, select:focus, textarea:focus {
       outline: none;
       border-color: #666;
     }
@@ -271,37 +276,6 @@
       margin-bottom: 8px;
       font-size: 15px;
     }
-    .search-results {
-      border: 1px solid #ddd;
-      border-radius: 6px;
-      background: #fff;
-      max-height: 220px;
-      overflow-y: auto;
-      margin-top: -6px;
-      margin-bottom: 14px;
-    }
-    .search-item {
-      padding: 10px 14px;
-      border-bottom: 1px solid #f0f0f0;
-      cursor: pointer;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      font-size: 14px;
-    }
-    .search-item:last-child {
-      border-bottom: none;
-    }
-    .search-item:hover {
-      background: #f5f5f5;
-    }
-    .search-item-badge {
-      font-size: 12px;
-      background: #eee;
-      padding: 2px 6px;
-      border-radius: 4px;
-      color: #555;
-    }
     .stepper {
       display: flex;
       align-items: center;
@@ -339,6 +313,27 @@
       gap: 10px;
       margin-top: 16px;
     }
+    .promo-banner {
+      background: #fffbeb;
+      border: 1px solid #fde68a;
+      border-radius: 6px;
+      padding: 10px 14px;
+      margin: 14px 0;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 13px;
+      color: #92400e;
+    }
+    .contextual-edu {
+      background: #eff6ff;
+      border: 1px solid #bfdbfe;
+      border-radius: 6px;
+      padding: 14px;
+      margin: 14px 0;
+      font-size: 13px;
+      color: #1e3a8a;
+    }
   </style>
 </head>
 <body>
@@ -354,31 +349,29 @@
     <div class="meta-bar-right">
       <label for="screenJumpSelect" style="font-size: 12px; font-weight: 500;">Jump to:</label>
       <select id="screenJumpSelect" onchange="jumpToScreen(this.value)">
-        <optgroup label="Views & Dashboard">
-          <option value="Home">🏠 Populated Home (Dashboard)</option>
+        <optgroup label="Dashboard">
+          <option value="16">16 · Populated Home (Dashboard)</option>
         </optgroup>
-        <optgroup label="Household Setup (Layer 1)">
-          <option value="1">Step 1 · Welcome</option>
-          <option value="2">Step 2 · Who do you manage for?</option>
-          <option value="3">Step 3 · Add the people you manage</option>
-          <option value="4">Step 4 · What should Famasi help with? (Goals)</option>
+        <optgroup label="Household Setup">
+          <option value="1">1 · Welcome</option>
+          <option value="2">2 · Basic Profile (DOB, Sex, Pay)</option>
+          <option value="3">3 · Who do you manage for?</option>
+          <option value="4">4 · Goals</option>
+          <option value="5">5 · Who to set up today?</option>
         </optgroup>
-        <optgroup label="Person Setup Selection (Layer 2)">
-          <option value="5">Step 5 · Who would you like to set up today?</option>
-          <option value="6">Step 6 · Grouped setup for selected person</option>
+        <optgroup label="Person & Medication Setup">
+          <option value="6">6 · Person Health Basics (Allergies)</option>
+          <option value="7">7 · Add Medications (+10% promo)</option>
+          <option value="8">8 · Configure Medication (Multi-action)</option>
+          <option value="9">9 · Action Details (Order/Refill/Remind)</option>
+          <option value="10">10 · Medication Review for Dad</option>
+          <option value="11">11 · Person Goals & Contextual Edu</option>
+          <option value="12">12 · Dad Setup Summary</option>
+          <option value="13">13 · Next Selected Person (Mum)</option>
         </optgroup>
-        <optgroup label="Medication Divergence (Layer 3)">
-          <option value="7">Step 7 · What should Famasi do with this med?</option>
-          <option value="7A">Step 7A · Order it now</option>
-          <option value="7B">Step 7B · Set up refills</option>
-          <option value="7C">Step 7C · Add to medications (Save)</option>
-          <option value="7D">Step 7D · Set up reminders</option>
-        </optgroup>
-        <optgroup label="Person Completion & Home">
-          <option value="8">Step 8 · Complete person & attach goals</option>
-          <option value="9">Step 9 · Loop to next person</option>
-          <option value="10">Step 10 · Save your Famasi (Account)</option>
-          <option value="ExistingCustomer">Existing Customer Fast-Path</option>
+        <optgroup label="Account & Personalisation">
+          <option value="14">14 · Save Your Famasi (Account)</option>
+          <option value="15">15 · Optional Personalisation & Insights</option>
         </optgroup>
       </select>
       <button class="secondary" style="font-size: 12px; padding: 4px 10px;" onclick="restartFlow()">Reset</button>
@@ -388,7 +381,7 @@
   <!-- Navigation Tab Bar -->
   <div class="top-tab-nav">
     <button id="tabNavOnboarding" class="tab-btn active" onclick="navigateTo('1')">Onboarding Flow</button>
-    <button id="tabNavDashboard" class="tab-btn" onclick="navigateTo('Home')">🏠 Dashboard (Populated Home)</button>
+    <button id="tabNavDashboard" class="tab-btn" onclick="navigateTo('16')">🏠 Dashboard (Populated Home)</button>
   </div>
 
   <!-- Screen Content Container -->
@@ -401,98 +394,134 @@
   const state = {
     currentScreen: '1',
     history: [],
+
+    // 2. User's Basic Profile
+    userProfile: {
+      dob: '1992-05-14',
+      sex: 'Female',
+      location: 'Lagos',
+      paymentMethod: 'Self-pay (Card / Bank Transfer)' // Self-pay / Insurance / Employer / Someone else
+    },
     
-    // Step 2: Care Scope
+    // 3. Who do you manage medication for?
     careScope: 'Someone else', // 'Myself' | 'Someone else' | 'Both'
-    
-    // Step 3: Household people
-    // Array of { id, label, name, isSelected, customLabel }
     peopleOptions: [
-      { id: 'dad', label: 'Dad', name: 'Dad', checked: true },
-      { id: 'mum', label: 'Mum', name: 'Mum', checked: true },
-      { id: 'partner', label: 'Partner', name: 'Partner', checked: false },
-      { id: 'child', label: 'Child', name: 'Child', checked: false },
-      { id: 'sibling', label: 'Sibling', name: 'Sibling', checked: false },
-      { id: 'other', label: 'Someone else', name: 'Auntie', checked: false }
+      { id: 'dad', label: 'Dad', name: 'Dad', checked: true, sex: 'Male', ageGroup: 'Senior (65+)' },
+      { id: 'mum', label: 'Mum', name: 'Mum', checked: true, sex: 'Female', ageGroup: 'Senior (60+)' },
+      { id: 'partner', label: 'Partner', name: 'Partner', checked: false, sex: 'Female', ageGroup: 'Adult' },
+      { id: 'child', label: 'Child', name: 'Child', checked: false, sex: 'Male', ageGroup: 'Child' },
+      { id: 'sibling', label: 'Sibling', name: 'Sibling', checked: false, sex: 'Female', ageGroup: 'Adult' },
+      { id: 'other', label: 'Someone else', name: 'Auntie', checked: false, sex: 'Female', ageGroup: 'Adult' }
     ],
 
-    // Step 4: Goals
+    // 4. Goals
     goals: [
       'Get medication when I need it',
       'Never run out of regular medication',
       'Manage medication for my family',
-      'Remember to take medication'
+      'Remember to take medication',
+      'Keep all my medications organised',
+      'Track health numbers like BP/blood sugar'
     ],
     
-    // Step 5: Selected people to set up today
+    // 5. Setup Queue
     setupQueue: ['Dad', 'Mum'],
     currentPersonIndex: 0,
-    
-    // Per-person configured data
-    // personName -> { medications: [{ name, action, summary }], goals: [] }
-    personProfiles: {
+    activePersonName: 'Dad',
+
+    // 6. Person-level health basics (per person)
+    personHealthBasics: {
       'Dad': {
-        medications: [
-          { name: 'Amlodipine 10mg', action: 'refill', summary: 'Monthly refill', nextDate: '14 Oct' },
-          { name: 'Metformin 500mg', action: 'save', summary: 'Saved for later' },
-          { name: 'Atorvastatin 20mg', action: 'order', summary: '1 pack · Kaduna · ₦4,200' }
-        ],
-        goals: ['Track blood pressure']
+        allergies: ['Penicillin'],
+        conditions: ['Hypertension', 'Type 2 Diabetes'],
+        additionalNotes: ''
       },
       'Mum': {
-        medications: [
-          { name: 'Losartan 50mg', action: 'order', summary: 'Order when needed' }
-        ],
-        goals: []
+        allergies: ['None known'],
+        conditions: ['None known'],
+        additionalNotes: ''
       },
       'Me': {
-        medications: [],
-        goals: []
+        allergies: ['None known'],
+        conditions: ['None known'],
+        additionalNotes: ''
       }
     },
 
-    // Temporary active screen state for Step 6 & 7
-    activePersonName: 'Dad',
+    // 7. Medications for active person
     pendingMedList: [
       { name: 'Amlodipine 10mg', selected: true },
-      { name: 'Atorvastatin 20mg', selected: true },
-      { name: 'Metformin 500mg', selected: true }
+      { name: 'Metformin 500mg', selected: true },
+      { name: 'Paracetamol 500mg', selected: true }
     ],
-    activeMedication: 'Amlodipine 10mg',
-    medActionChoice: 'refill', // 'order' | 'refill' | 'save' | 'reminder'
-    
-    // Order fields
-    orderQty: 1,
+
+    // 8. Active medication being configured
+    activeMedIndex: 0,
+    currentMedActions: {
+      order: true,
+      refill: true,
+      reminder: true
+    },
+
+    // 9. Specific sub-action parameters
+    orderQuantity: 1,
     deliveryAddress: 'Kaduna',
-    pharmacyPrice: '₦4,200',
-    orderRegularRefillNeeded: 'Yes',
-    orderRefillCadence: 'Monthly',
-
-    // Refill fields
     refillAmount: 1,
-    refillCadence: 'Monthly',
-    
-    // Reminder fields
-    reminderSchedule: 'Once daily',
+    refillFrequency: 'Monthly',
+    reminderFrequency: 'Once daily',
     reminderTime: '08:00 AM',
-    reminderNotificationsEnabled: true,
 
-    // Step 8 Goals selection for current person
-    personGoals: ['Track blood pressure'],
+    // 10 & 12. Finalized person profiles
+    personProfiles: {
+      'Dad': {
+        medications: [
+          { name: 'Amlodipine 10mg', order: true, refill: true, reminder: true, summary: 'Ordered · Monthly refill · 08:00 AM reminder' },
+          { name: 'Metformin 500mg', order: true, refill: true, reminder: false, summary: 'Ordered · Monthly refill' },
+          { name: 'Paracetamol 500mg', order: false, refill: false, reminder: false, summary: 'Saved to profile' }
+        ],
+        goals: ['Track blood pressure', 'Refill reminders'],
+        delivery: 'Kaduna'
+      },
+      'Mum': {
+        medications: [
+          { name: 'Losartan 50mg', order: false, refill: false, reminder: false, summary: 'Saved to profile' }
+        ],
+        goals: [],
+        delivery: 'Lagos'
+      },
+      'Me': {
+        medications: [],
+        goals: [],
+        delivery: 'Lagos'
+      }
+    },
 
-    // Account creation fields
+    // 11. Specific goals
+    bpGoalEnabled: true,
+
+    // 14. Account fields
     accountName: 'Hauwa',
     accountEmail: 'hauwa@example.com',
-    accountPassword: ''
+    accountPassword: '',
+
+    // 15. Optional Personalisation & Research questions
+    optionalInsights: {
+      familyHistory: ['Hypertension', 'Diabetes'],
+      whereTheyBuy: 'Local neighborhood pharmacy',
+      refillMissReason: 'Pharmacy out of stock when needed',
+      hasInsurance: 'No, self-pay',
+      buyFrequencyForOthers: 'Monthly regular supplies',
+      biggestWish: 'Predictable pricing and never having to hunt for authentic stock'
+    }
   };
 
   const sampleMedications = [
     'Amlodipine 10mg',
-    'Atorvastatin 20mg',
     'Metformin 500mg',
+    'Paracetamol 500mg',
+    'Atorvastatin 20mg',
     'Losartan 50mg',
     'Lisinopril 10mg',
-    'Paracetamol 500mg',
     'Omeprazole 20mg',
     'Hydrochlorothiazide 25mg'
   ];
@@ -535,9 +564,9 @@
     const tabOnboarding = document.getElementById('tabNavOnboarding');
     const tabDashboard = document.getElementById('tabNavDashboard');
     
-    const isOnboarding = ['1','2','3','4','5','6','7','7A','7B','7C','7D','8','9','10','ExistingCustomer'].includes(state.currentScreen);
+    const isOnboarding = state.currentScreen !== '16';
     if (tabOnboarding) tabOnboarding.className = 'tab-btn' + (isOnboarding ? ' active' : '');
-    if (tabDashboard) tabDashboard.className = 'tab-btn' + (state.currentScreen === 'Home' ? ' active' : '');
+    if (tabDashboard) tabDashboard.className = 'tab-btn' + (state.currentScreen === '16' ? ' active' : '');
   }
 
   function getHouseholdList() {
@@ -565,58 +594,103 @@
 
     switch(state.currentScreen) {
       // -------------------------------------------------------------
-      // STEP 1 · Welcome
+      // 1. WELCOME
       // -------------------------------------------------------------
       case '1':
         html = `
           <div class="screen-card">
-            <span class="badge">Step 1 · Welcome</span>
-            <h1>Take the stress out of managing medication.</h1>
-            <p style="font-size:16px; color:#444; margin-top:10px; margin-bottom:24px;">
-              Order what you need, stay ahead of refills and manage medication for the people you care for.
+            <span class="badge">1 · Welcome</span>
+            <h1>Order medications, stay ahead of refills, and manage medication for yourself or your family.</h1>
+            <p style="font-size:16px; color:#444; margin-top:12px; margin-bottom:24px;">
+              Take the stress out of health routines. Connect directly with licensed pharmacies for genuine medicines and automatic refills.
             </p>
 
-            <div class="card-preview" style="background:#fcfcfc;">
-              <h4 style="font-size:14px; margin-bottom:6px;">Why Famasi?</h4>
-              <ul style="padding-left:20px; font-size:13px; color:#555; display:flex; flex-direction:column; gap:6px;">
-                <li>Keep everyone’s medications organized in one clear place</li>
-                <li>One-click recurring refills so parents never run out</li>
-                <li>Reliable delivery across Kaduna, Abuja, Lagos & nationwide</li>
+            <div class="card-preview">
+              <h4 style="margin-bottom:6px; font-size:14px;">How Famasi works for you:</h4>
+              <ul style="padding-left:18px; font-size:13px; color:#555; display:flex; flex-direction:column; gap:6px;">
+                <li><strong>Safe dispensing:</strong> Verified authenticity & licensed pharmacist oversight</li>
+                <li><strong>Never run out:</strong> Auto-refills arrive 3 days before supply ends</li>
+                <li><strong>Family care:</strong> Keep medications, doses, and tracking organized in one hub</li>
               </ul>
             </div>
 
             <div class="button-stack">
               <button class="primary" onclick="navigateTo('2')">Get started</button>
             </div>
+          </div>
+        `;
+        break;
 
-            <div style="margin-top: 24px; border-top: 1px dashed #ddd; padding-top: 14px;">
-              <button class="link-button" onclick="navigateTo('ExistingCustomer')">Already ordered from Famasi before? Use order history →</button>
+      // -------------------------------------------------------------
+      // 2. BASIC PROFILE (Grouped fields)
+      // -------------------------------------------------------------
+      case '2':
+        html = `
+          <div class="screen-card">
+            <span class="badge">2 · Your Basic Profile</span>
+            <h1>Let’s start with a few basics about you</h1>
+            <p class="hint">Grouping this together helps us verify clinical safety, delivery availability, and payment options.</p>
+
+            <div style="display:grid; grid-template-columns: 1fr 1fr; gap:14px;">
+              <div>
+                <label style="font-size:13px; font-weight:600; display:block; margin-bottom:4px;">Date of Birth</label>
+                <input type="date" value="${state.userProfile.dob}" onchange="state.userProfile.dob=this.value">
+              </div>
+
+              <div>
+                <label style="font-size:13px; font-weight:600; display:block; margin-bottom:4px;">Sex</label>
+                <select onchange="state.userProfile.sex=this.value">
+                  <option value="Female" ${state.userProfile.sex==='Female'?'selected':''}>Female</option>
+                  <option value="Male" ${state.userProfile.sex==='Male'?'selected':''}>Male</option>
+                  <option value="Other" ${state.userProfile.sex==='Other'?'selected':''}>Other</option>
+                  <option value="Prefer not to say" ${state.userProfile.sex==='Prefer not to say'?'selected':''}>Prefer not to say</option>
+                </select>
+              </div>
+            </div>
+
+            <label style="font-size:13px; font-weight:600; display:block; margin-bottom:4px;">Your Location (City or State)</label>
+            <input type="text" placeholder="e.g. Lagos, Kaduna, Abuja" value="${escapeHtml(state.userProfile.location)}" oninput="state.userProfile.location=this.value">
+
+            <label style="font-size:13px; font-weight:600; display:block; margin-bottom:4px;">How do you usually pay for medications?</label>
+            <select onchange="state.userProfile.paymentMethod=this.value">
+              <option value="Self-pay (Card / Bank Transfer)" ${state.userProfile.paymentMethod.includes('Self-pay')?'selected':''}>Self-pay (Card / Bank Transfer)</option>
+              <option value="Health Insurance / HMO" ${state.userProfile.paymentMethod.includes('Insurance')?'selected':''}>Health Insurance / HMO</option>
+              <option value="Employer covered" ${state.userProfile.paymentMethod.includes('Employer')?'selected':''}>Employer covered</option>
+              <option value="Someone else pays" ${state.userProfile.paymentMethod.includes('Someone else')?'selected':''}>Someone else pays</option>
+            </select>
+
+            <div class="button-stack">
+              <button class="primary" onclick="navigateTo('3')">Continue</button>
+            </div>
+
+            <div class="nav-helpers">
+              <button type="button" class="secondary" onclick="goBack()" style="font-size:13px;">← Back</button>
             </div>
           </div>
         `;
         break;
 
       // -------------------------------------------------------------
-      // STEP 2 · Who do you manage medication for?
+      // 3. WHO DO YOU MANAGE MEDICATION FOR?
       // -------------------------------------------------------------
-      case '2':
+      case '3':
         html = `
           <div class="screen-card">
-            <span class="badge">Step 2 · Household Scope</span>
-            <h1>Who do you manage medication for with Famasi?</h1>
-            <p class="hint">This determines whether family management needs to exist at all.</p>
+            <span class="badge">3 · Household Setup</span>
+            <h1>Who do you manage medication for?</h1>
+            <p class="hint">Tell us who is in your care circle.</p>
 
             <div class="options-group">
               <label class="option-row">
-                <input type="radio" name="careScope" value="Myself" ${state.careScope === 'Myself' ? 'checked' : ''} onchange="state.careScope='Myself'">
+                <input type="radio" name="careScope" value="Myself" ${state.careScope === 'Myself' ? 'checked' : ''} onchange="state.careScope='Myself'; renderScreen();">
                 <div>
                   <span class="option-title">Myself</span>
-                  <span class="option-desc">Only for my own medications and routines</span>
+                  <span class="option-desc">Only for my own medications</span>
                 </div>
               </label>
 
               <label class="option-row">
-                <input type="radio" name="careScope" value="Someone else" ${state.careScope === 'Someone else' ? 'checked' : ''} onchange="state.careScope='Someone else'">
+                <input type="radio" name="careScope" value="Someone else" ${state.careScope === 'Someone else' ? 'checked' : ''} onchange="state.careScope='Someone else'; renderScreen();">
                 <div>
                   <span class="option-title">Someone else</span>
                   <span class="option-desc">Help manage medication for a parent, partner, or child</span>
@@ -624,55 +698,51 @@
               </label>
 
               <label class="option-row">
-                <input type="radio" name="careScope" value="Both" ${state.careScope === 'Both' ? 'checked' : ''} onchange="state.careScope='Both'">
+                <input type="radio" name="careScope" value="Both" ${state.careScope === 'Both' ? 'checked' : ''} onchange="state.careScope='Both'; renderScreen();">
                 <div>
                   <span class="option-title">Both</span>
-                  <span class="option-desc">Keep my care and my family’s care in one unified place</span>
+                  <span class="option-desc">Manage my care and my family’s care in one account</span>
                 </div>
               </label>
             </div>
 
-            <div class="button-stack">
-              <button class="primary" onclick="handleStep2Continue()">Continue</button>
-            </div>
+            ${state.careScope !== 'Myself' ? `
+              <div style="margin-top: 20px; border-top: 1px solid #eee; padding-top: 16px;">
+                <h3 style="font-size: 16px;">Add the people you manage:</h3>
+                <p class="hint">Only a label/name and basic details are needed for now.</p>
 
-            <div class="nav-helpers">
-              <button type="button" class="secondary" onclick="goBack()" style="font-size:13px;">← Back</button>
-            </div>
-          </div>
-        `;
-        break;
+                <div class="options-group">
+                  ${state.peopleOptions.map((person, idx) => `
+                    <div style="border: 1px solid #ddd; border-radius: 6px; padding: 10px 12px; background: #fafafa;">
+                      <label style="display:flex; align-items:center; gap:10px; cursor:pointer; font-weight:600;">
+                        <input type="checkbox" ${person.checked ? 'checked' : ''} onchange="state.peopleOptions[${idx}].checked = this.checked; renderScreen();">
+                        <span>${person.label}</span>
+                      </label>
 
-      // -------------------------------------------------------------
-      // STEP 3 · Add the people you manage
-      // -------------------------------------------------------------
-      case '3':
-        html = `
-          <div class="screen-card">
-            <span class="badge">Step 3 · Household Structure</span>
-            <h1>Who do you help manage medication for?</h1>
-            <p class="hint">Select the people you manage. For now, only a name or label is needed. You do not have to configure everyone right away.</p>
-
-            <div class="options-group">
-              ${state.peopleOptions.map((person, idx) => `
-                <div style="border: 1px solid #ddd; border-radius: 6px; padding: 12px; background: #fafafa;">
-                  <label style="display:flex; align-items:center; gap:10px; cursor:pointer; font-weight:600;">
-                    <input type="checkbox" ${person.checked ? 'checked' : ''} onchange="state.peopleOptions[${idx}].checked = this.checked; renderScreen();">
-                    <span>${person.label}</span>
-                  </label>
-
-                  ${person.checked ? `
-                    <div style="margin-top: 8px; margin-left: 24px;">
-                      <label style="font-size:12px; color:#555; display:block; margin-bottom:2px;">What should we call them?</label>
-                      <input type="text" value="${escapeHtml(person.name)}" placeholder="e.g. Dad, Mama, Baba" oninput="state.peopleOptions[${idx}].name = this.value" style="margin-bottom:0; max-width:320px; padding:6px 10px; font-size:13px;">
+                      ${person.checked ? `
+                        <div style="margin-top: 8px; margin-left: 24px; display:grid; grid-template-columns: 1fr 1fr; gap:10px;">
+                          <div>
+                            <label style="font-size:11px; color:#555; display:block;">Name or nickname:</label>
+                            <input type="text" value="${escapeHtml(person.name)}" oninput="state.peopleOptions[${idx}].name = this.value" style="margin-bottom:0; padding:5px 8px; font-size:12px;">
+                          </div>
+                          <div>
+                            <label style="font-size:11px; color:#555; display:block;">Age category or DOB:</label>
+                            <select onchange="state.peopleOptions[${idx}].ageGroup = this.value" style="margin-bottom:0; padding:5px 8px; font-size:12px;">
+                              <option value="Senior (65+)" ${person.ageGroup.includes('65+')?'selected':''}>Senior (65+)</option>
+                              <option value="Adult" ${person.ageGroup==='Adult'?'selected':''}>Adult</option>
+                              <option value="Child" ${person.ageGroup==='Child'?'selected':''}>Child</option>
+                            </select>
+                          </div>
+                        </div>
+                      ` : ''}
                     </div>
-                  ` : ''}
+                  `).join('')}
                 </div>
-              `).join('')}
-            </div>
+              </div>
+            ` : ''}
 
             <div class="button-stack">
-              <button class="primary" onclick="handleStep3Continue()">Continue</button>
+              <button class="primary" onclick="navigateTo('4')">Continue</button>
             </div>
 
             <div class="nav-helpers">
@@ -683,35 +753,35 @@
         break;
 
       // -------------------------------------------------------------
-      // STEP 4 · Goals
+      // 4. GOALS
       // -------------------------------------------------------------
       case '4':
-        const allGoals = [
+        const goalList = [
           'Get medication when I need it',
           'Never run out of regular medication',
           'Manage medication for my family',
           'Remember to take medication',
-          'Keep all my medications organised',
-          'Track health numbers like blood pressure or blood sugar'
+          'Keep my medications organised',
+          'Track health numbers like BP/blood sugar'
         ];
 
         html = `
           <div class="screen-card">
-            <span class="badge">Step 4 · Priorities</span>
+            <span class="badge">4 · Priorities</span>
             <h1>What would you like Famasi to help you with?</h1>
-            <p class="hint">Choose as many as you like. This directly informs what Famasi prioritizes for your household.</p>
+            <p class="hint">Choose as many as you like. This helps tailor your dashboard.</p>
 
             <div class="options-group">
-              ${allGoals.map(g => `
+              ${goalList.map(g => `
                 <label class="option-row">
                   <input type="checkbox" value="${g}" ${state.goals.includes(g) ? 'checked' : ''} onchange="toggleGoal('${g}')">
-                  <span class="option-title" style="font-weight: 500;">${g}</span>
+                  <span class="option-title" style="font-weight:500;">${g}</span>
                 </label>
               `).join('')}
             </div>
 
             <div class="button-stack">
-              <button class="primary" onclick="handleStep4Continue()">Continue</button>
+              <button class="primary" onclick="handleGoalsContinue()">Continue</button>
             </div>
 
             <div class="nav-helpers">
@@ -722,23 +792,23 @@
         break;
 
       // -------------------------------------------------------------
-      // STEP 5 · Who would you like to set up today? (Faruq's Key Insight)
+      // 5. WHO WOULD YOU LIKE TO SET UP TODAY?
       // -------------------------------------------------------------
       case '5':
         const household = getHouseholdList();
-        
+
         html = `
           <div class="screen-card">
-            <span class="badge">Step 5 · Setup Selection</span>
-            <h1>Who would you like to set up now?</h1>
-            <p class="hint">You can come back for everyone else later. We will complete setup one person at a time to keep it fast and focused.</p>
+            <span class="badge">5 · Setup Selection</span>
+            <h1>Who would you like to set up today?</h1>
+            <p class="hint">You can choose multiple people, but we will complete setup <strong>one person at a time</strong> to keep it light and easy.</p>
 
             <div class="options-group">
               ${household.map(person => {
                 const isChecked = state.setupQueue.includes(person);
                 return `
                   <label class="option-row">
-                    <input type="checkbox" value="${person}" ${isChecked ? 'checked' : ''} onchange="toggleSetupPerson('${person}')">
+                    <input type="checkbox" value="${person}" ${isChecked ? 'checked' : ''} onchange="toggleSetupQueuePerson('${person}')">
                     <div>
                       <span class="option-title">${person}</span>
                       <span class="option-desc">${person === 'Me' ? 'Your personal medications' : `Medications, refills & health targets for ${person}`}</span>
@@ -749,8 +819,8 @@
             </div>
 
             <div class="button-stack">
-              <button class="primary" onclick="startSetupQueue()">
-                ${state.setupQueue.length > 1 ? `Set up selected people (${state.setupQueue.length})` : state.setupQueue.length === 1 ? `Set up ${state.setupQueue[0]} first` : 'Select at least one person'}
+              <button class="primary" onclick="startPersonLoop()">
+                ${state.setupQueue.length > 0 ? `Let’s set up ${state.setupQueue[0]} first →` : 'Select at least one person'}
               </button>
             </div>
 
@@ -762,66 +832,42 @@
         break;
 
       // -------------------------------------------------------------
-      // STEP 6 · Grouped person setup (Medications & Prescription Demo)
+      // 6. PERSON-LEVEL HEALTH BASICS (Dad)
       // -------------------------------------------------------------
       case '6':
-        const currentPerson = state.activePersonName || 'Dad';
+        const p6 = state.activePersonName;
+        const p6Data = state.personHealthBasics[p6] || { allergies: [], conditions: [] };
 
         html = `
           <div class="screen-card">
-            <span class="badge">Step 6 · Grouped Setup (${currentPerson})</span>
-            <h1>Let’s set up ${currentPerson}</h1>
-            <p class="hint">Add ${currentPerson}’s medications in one quick step. You can search by name or upload a prescription to extract everything at once.</p>
+            <span class="badge">6 · Health Basics (${p6})</span>
+            <h1>Essential health basics for ${p6}</h1>
+            <p class="hint">Pharmacists check these details to ensure safe dispensing and prevent adverse drug interactions.</p>
 
-            <!-- Two Ways to Add Meds -->
-            <div style="display:grid; grid-template-columns: 1fr 1fr; gap:12px; margin-bottom:16px;">
-              <!-- Option A: Prescription extraction -->
-              <div style="border: 2px dashed #bbb; border-radius:8px; padding:16px; background:#fafafa; text-align:center;">
-                <div style="font-size:22px; margin-bottom:4px;">📄</div>
-                <strong style="font-size:13px; display:block; margin-bottom:4px;">Upload a prescription</strong>
-                <p style="font-size:12px; color:#666; margin-bottom:10px;">We automatically read and extract the medications.</p>
-                <button class="secondary" style="font-size:12px; padding:5px 10px; width:100%;" onclick="simulatePrescriptionUpload()">Simulate Upload (3 meds)</button>
-              </div>
-
-              <!-- Option B: Quick search -->
-              <div style="border: 1px solid #ddd; border-radius:8px; padding:16px; background:#fafafa;">
-                <div style="font-size:22px; margin-bottom:4px;">🔍</div>
-                <strong style="font-size:13px; display:block; margin-bottom:4px;">Search medication</strong>
-                <p style="font-size:12px; color:#666; margin-bottom:8px;">Find specific drugs by name & dosage.</p>
-                <input type="text" id="medSearchInput" placeholder="Type name (e.g. Amlodipine)" oninput="filterSampleMeds(this.value)" style="margin-bottom:4px; padding:6px 8px; font-size:12px;">
-                <div id="quickSearchList" style="max-height:80px; overflow-y:auto; font-size:12px; border:1px solid #eee; background:#fff; border-radius:4px; display:none;"></div>
-              </div>
+            <!-- Allergies -->
+            <label style="font-size:13px; font-weight:600; display:block; margin-bottom:4px;">Known Drug Allergies or Sensitivities</label>
+            <div style="display:flex; flex-direction:column; gap:8px; margin-bottom:16px;">
+              ${['Penicillin', 'Sulfa antibiotics', 'Aspirin / NSAIDs', 'None known'].map(al => `
+                <label style="display:flex; align-items:center; gap:8px; font-size:13px; cursor:pointer;">
+                  <input type="checkbox" ${p6Data.allergies.includes(al) ? 'checked' : ''} onchange="togglePersonAllergy('${p6}', '${al}')">
+                  <span>${al}</span>
+                </label>
+              `).join('')}
             </div>
 
-            <!-- Current medications for this person -->
-            <div class="card-preview" style="background:#fff;">
-              <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
-                <h4 style="margin:0; font-size:14px;">Medications for ${currentPerson} (${state.pendingMedList.length})</h4>
-                <span class="search-item-badge">Review list</span>
-              </div>
-
-              ${state.pendingMedList.length === 0 ? `
-                <p style="font-size:13px; color:#777; margin:12px 0;">No medications added yet. Upload a prescription or search above.</p>
-              ` : `
-                <div style="display:flex; flex-direction:column; gap:6px;">
-                  ${state.pendingMedList.map((m, i) => `
-                    <div class="basket-item" style="padding:8px 10px; font-size:13px;">
-                      <div style="display:flex; align-items:center; gap:8px;">
-                        <span style="font-weight:600;">${escapeHtml(m.name)}</span>
-                      </div>
-                      <button class="danger" style="font-size:11px; padding:2px 8px;" onclick="removePendingMed(${i})">Remove</button>
-                    </div>
-                  `).join('')}
-                </div>
-              `}
+            <!-- Long term conditions -->
+            <label style="font-size:13px; font-weight:600; display:block; margin-bottom:4px;">Long-term Conditions (if any)</label>
+            <div style="display:flex; flex-direction:column; gap:8px; margin-bottom:16px;">
+              ${['Hypertension (High blood pressure)', 'Type 2 Diabetes', 'High Cholesterol', 'Asthma', 'None'].map(cd => `
+                <label style="display:flex; align-items:center; gap:8px; font-size:13px; cursor:pointer;">
+                  <input type="checkbox" ${p6Data.conditions.some(c => cd.includes(c)) ? 'checked' : ''} onchange="togglePersonCondition('${p6}', '${cd}')">
+                  <span>${cd}</span>
+                </label>
+              `).join('')}
             </div>
-
-            <p class="hint" style="font-size:12px;">Next, we will decide what Famasi should do for ${currentPerson}’s medication (refills, ordering, reminders, or saving).</p>
 
             <div class="button-stack">
-              <button class="primary" onclick="proceedToMedDivergence()" ${state.pendingMedList.length === 0 ? 'disabled' : ''}>
-                Continue: Configure Medications →
-              </button>
+              <button class="primary" onclick="navigateTo('7')">Continue: Add ${p6}’s Medications →</button>
             </div>
 
             <div class="nav-helpers">
@@ -832,312 +878,246 @@
         break;
 
       // -------------------------------------------------------------
-      // STEP 7 · Medication is where the flow diverges (Faruq's Principle)
+      // 7. ADD MEDICATIONS (+ 10% Incentive Promo)
       // -------------------------------------------------------------
       case '7':
-        const person7 = state.activePersonName || 'Dad';
-        const med7 = state.activeMedication || (state.pendingMedList[0] ? state.pendingMedList[0].name : 'Amlodipine 10mg');
+        const p7 = state.activePersonName;
 
         html = `
           <div class="screen-card">
-            <span class="badge">Step 7 · Medication Divergence</span>
-            <div style="font-size:12px; color:#777; margin-bottom:4px;">Setting up for ${person7}</div>
-            <h1>What would you like Famasi to do with ${escapeHtml(med7)}?</h1>
-            <p class="hint">“Meds are typically the ones that diverge.” Choose the exact path for this medication.</p>
+            <span class="badge">7 · Add Medications (${p7})</span>
+            <h1>Add ${p7}’s medications</h1>
+            <p class="hint">You can search for medications or upload a prescription to populate them automatically.</p>
 
-            <div class="options-group">
-              <label class="option-row">
-                <input type="radio" name="medAction" value="order" ${state.medActionChoice === 'order' ? 'checked' : ''} onchange="state.medActionChoice='order'">
-                <div>
-                  <span class="option-title">Order it now</span>
-                  <span class="option-desc">Buy immediately with delivery to ${person7}’s address</span>
-                </div>
-              </label>
-
-              <label class="option-row">
-                <input type="radio" name="medAction" value="refill" ${state.medActionChoice === 'refill' ? 'checked' : ''} onchange="state.medActionChoice='refill'">
-                <div>
-                  <span class="option-title">Set up refills</span>
-                  <span class="option-desc">Never run out with scheduled automated refills (monthly / custom)</span>
-                </div>
-              </label>
-
-              <label class="option-row">
-                <input type="radio" name="medAction" value="save" ${state.medActionChoice === 'save' ? 'checked' : ''} onchange="state.medActionChoice='save'">
-                <div>
-                  <span class="option-title">Add it to ${person7}’s medications (Save for later)</span>
-                  <span class="option-desc">No delivery or payment now — keep it organized for when you need it</span>
-                </div>
-              </label>
-
-              <label class="option-row">
-                <input type="radio" name="medAction" value="reminder" ${state.medActionChoice === 'reminder' ? 'checked' : ''} onchange="state.medActionChoice='reminder'">
-                <div>
-                  <span class="option-title">Set up reminders</span>
-                  <span class="option-desc">Get daily reminders when it’s time to take ${escapeHtml(med7)}</span>
-                </div>
-              </label>
-            </div>
-
-            <div class="button-stack">
-              <button class="primary" onclick="handleMedActionDivergence()">Continue with selected action</button>
-            </div>
-
-            <div class="nav-helpers">
-              <button type="button" class="secondary" onclick="goBack()" style="font-size:13px;">← Back</button>
-            </div>
-          </div>
-        `;
-        break;
-
-      // -------------------------------------------------------------
-      // STEP 7A · Order it now
-      // -------------------------------------------------------------
-      case '7A':
-        const p7A = state.activePersonName || 'Dad';
-        const med7A = state.activeMedication || 'Amlodipine 10mg';
-
-        html = `
-          <div class="screen-card">
-            <span class="badge">Step 7A · Order Details</span>
-            <h1>Ordering ${escapeHtml(med7A)} for ${p7A}</h1>
-            <p class="hint">Ask only the essential fields needed for fulfillment.</p>
-
-            <!-- Quantity -->
-            <label style="font-size:13px; font-weight:600; display:block; margin-bottom:4px;">How many packs do you need?</label>
-            <div class="stepper">
-              <button type="button" class="secondary stepper-btn" onclick="state.orderQty=Math.max(1, state.orderQty-1); renderScreen();">−</button>
-              <div class="stepper-val">${state.orderQty} pack${state.orderQty > 1 ? 's' : ''}</div>
-              <button type="button" class="secondary stepper-btn" onclick="state.orderQty+=1; renderScreen();">+</button>
-            </div>
-
-            <!-- Delivery destination -->
-            <label style="font-size:13px; font-weight:600; display:block; margin-bottom:4px;">Where should we deliver ${p7A}’s medication?</label>
-            <input type="text" value="${escapeHtml(state.deliveryAddress)}" oninput="state.deliveryAddress=this.value" placeholder="e.g. Kaduna, Lagos, Abuja">
-
-            <!-- Partner Pharmacy offer preview -->
-            <div class="card-preview">
-              <div style="display:flex; justify-content:space-between; align-items:center;">
-                <div>
-                  <strong style="font-size:14px;">MedPlus Pharmacy Kaduna</strong>
-                  <div style="font-size:12px; color:#555;">Estimated delivery: Tomorrow morning</div>
-                </div>
-                <span style="font-weight:700; font-size:16px;">₦4,200</span>
+            <!-- Incentive Banner -->
+            <div class="promo-banner">
+              <span style="font-size:18px;">🎁</span>
+              <div>
+                <strong>Add your regular medications and get 10% off your first order!</strong>
+                <div style="font-size:12px; margin-top:2px;">Applied automatically at checkout.</div>
               </div>
             </div>
 
-            <!-- Refill bridge -->
-            <div style="background:#f4f9f4; border:1px solid #c8e6c9; border-radius:6px; padding:14px; margin:16px 0;">
-              <strong style="font-size:13px; display:block; margin-bottom:4px; color:#2e7d32;">Does ${p7A} need this medication regularly?</strong>
-              <div style="display:flex; gap:12px; margin-top:6px;">
-                <label><input type="radio" name="orderRegular" value="Yes" ${state.orderRegularRefillNeeded==='Yes'?'checked':''} onchange="state.orderRegularRefillNeeded='Yes'; renderScreen();"> Yes</label>
-                <label><input type="radio" name="orderRegular" value="No" ${state.orderRegularRefillNeeded==='No'?'checked':''} onchange="state.orderRegularRefillNeeded='No'; renderScreen();"> No</label>
-                <label><input type="radio" name="orderRegular" value="Not sure" ${state.orderRegularRefillNeeded==='Not sure'?'checked':''} onchange="state.orderRegularRefillNeeded='Not sure'; renderScreen();"> Not sure</label>
+            <!-- Two Entry Methods -->
+            <div style="display:grid; grid-template-columns: 1fr 1fr; gap:12px; margin: 16px 0;">
+              <div style="border: 2px dashed #bbb; border-radius:8px; padding:14px; background:#fafafa; text-align:center;">
+                <div style="font-size:22px; margin-bottom:4px;">📄</div>
+                <strong style="font-size:13px; display:block; margin-bottom:4px;">Upload Prescription</strong>
+                <p style="font-size:12px; color:#666; margin-bottom:8px;">Instant scan & extraction</p>
+                <button class="secondary" style="font-size:12px; padding:4px 8px; width:100%;" onclick="simulateUploadPrescription()">Simulate Upload (3 meds)</button>
               </div>
 
-              ${state.orderRegularRefillNeeded === 'Yes' ? `
-                <div style="margin-top:10px;">
-                  <label style="font-size:12px; font-weight:600; display:block; margin-bottom:4px;">How often does he/she usually need another supply?</label>
-                  <select onchange="state.orderRefillCadence=this.value" style="font-size:13px; padding:6px 10px;">
-                    <option value="Monthly">Monthly</option>
-                    <option value="Every 2 months">Every 2 months</option>
-                    <option value="Every 3 months">Every 3 months</option>
-                  </select>
-                </div>
-              ` : ''}
+              <div style="border: 1px solid #ddd; border-radius:8px; padding:14px; background:#fafafa;">
+                <div style="font-size:22px; margin-bottom:4px;">🔍</div>
+                <strong style="font-size:13px; display:block; margin-bottom:4px;">Search by Name</strong>
+                <input type="text" id="quickMedSearch" placeholder="e.g. Amlodipine" oninput="filterSampleMeds(this.value)" style="margin-bottom:4px; padding:6px 8px; font-size:12px;">
+                <div id="quickMedDropdown" style="max-height:80px; overflow-y:auto; font-size:12px; border:1px solid #eee; background:#fff; display:none;"></div>
+              </div>
             </div>
 
-            <div class="button-stack">
-              <button class="primary" onclick="completeMedicationStep('order')">Save & Continue</button>
-            </div>
-
-            <div class="nav-helpers">
-              <button type="button" class="secondary" onclick="goBack()" style="font-size:13px;">← Back</button>
-            </div>
-          </div>
-        `;
-        break;
-
-      // -------------------------------------------------------------
-      // STEP 7B · Set up refills
-      // -------------------------------------------------------------
-      case '7B':
-        const p7B = state.activePersonName || 'Dad';
-        const med7B = state.activeMedication || 'Amlodipine 10mg';
-
-        html = `
-          <div class="screen-card">
-            <span class="badge">Step 7B · Refill Schedule</span>
-            <h1>Set up refills for ${escapeHtml(med7B)}</h1>
-            <p class="hint">Ensure ${p7B} never runs out of their essential medication.</p>
-
-            <!-- Refill amount -->
-            <label style="font-size:13px; font-weight:600; display:block; margin-bottom:4px;">How much does ${p7B} usually need each time?</label>
-            <div class="stepper">
-              <button type="button" class="secondary stepper-btn" onclick="state.refillAmount=Math.max(1, state.refillAmount-1); renderScreen();">−</button>
-              <div class="stepper-val">${state.refillAmount} pack${state.refillAmount > 1 ? 's' : ''}</div>
-              <button type="button" class="secondary stepper-btn" onclick="state.refillAmount+=1; renderScreen();">+</button>
-            </div>
-
-            <!-- Refill cadence -->
-            <label style="font-size:13px; font-weight:600; display:block; margin-bottom:4px;">How often does ${p7B} usually need more?</label>
-            <div class="options-group">
-              ${['Monthly', 'Every 2 months', 'Every 3 months', 'Custom', 'Not sure'].map(cad => `
-                <label class="option-row" style="padding:8px 12px;">
-                  <input type="radio" name="refillCadence" value="${cad}" ${state.refillCadence === cad ? 'checked' : ''} onchange="state.refillCadence='${cad}'">
-                  <span class="option-title">${cad}</span>
-                </label>
-              `).join('')}
-            </div>
-
-            <!-- Delivery Address -->
-            <label style="font-size:13px; font-weight:600; display:block; margin-bottom:4px;">Delivery address for recurring refills</label>
-            <input type="text" value="${escapeHtml(state.deliveryAddress)}" oninput="state.deliveryAddress=this.value">
-
-            <div class="card-preview">
-              <p style="font-size:12px; color:#555; margin:0;">
-                ℹ️ <strong>Initial order note:</strong> The first supply will be scheduled to start recurring fulfillment directly.
-              </p>
-            </div>
-
-            <div class="button-stack">
-              <button class="primary" onclick="completeMedicationStep('refill')">Save Refill Schedule</button>
-            </div>
-
-            <div class="nav-helpers">
-              <button type="button" class="secondary" onclick="goBack()" style="font-size:13px;">← Back</button>
-            </div>
-          </div>
-        `;
-        break;
-
-      // -------------------------------------------------------------
-      // STEP 7C · Add to medications (Save for later)
-      // -------------------------------------------------------------
-      case '7C':
-        const p7C = state.activePersonName || 'Dad';
-        const med7C = state.activeMedication || 'Metformin 500mg';
-
-        html = `
-          <div class="screen-card">
-            <span class="badge">Step 7C · Saved for Later</span>
-            <h1>Add ${escapeHtml(med7C)} to ${p7C}’s medications</h1>
-            <p class="hint">No quantity, no delivery address, and no checkout needed right now.</p>
-
-            <div class="card-preview" style="text-align:center; padding:24px; background:#fff;">
-              <div style="font-size:28px; margin-bottom:8px;">📁</div>
-              <h3 style="margin-bottom:6px;">${escapeHtml(med7C)} is saved under ${p7C}</h3>
-              <p style="font-size:13px; color:#555; margin-bottom:0;">
-                You can order it or set up a refill whenever you’re ready, without searching again.
-              </p>
-            </div>
-
-            <div class="button-stack">
-              <button class="primary" onclick="completeMedicationStep('save')">Continue</button>
-            </div>
-
-            <div class="nav-helpers">
-              <button type="button" class="secondary" onclick="goBack()" style="font-size:13px;">← Back</button>
-            </div>
-          </div>
-        `;
-        break;
-
-      // -------------------------------------------------------------
-      // STEP 7D · Set up reminders
-      // -------------------------------------------------------------
-      case '7D':
-        const p7D = state.activePersonName || 'Dad';
-        const med7D = state.activeMedication || 'Amlodipine 10mg';
-
-        html = `
-          <div class="screen-card">
-            <span class="badge">Step 7D · Medication Reminders</span>
-            <h1>Daily reminder for ${escapeHtml(med7D)}</h1>
-            <p class="hint">Help ${p7D} stay on top of doses.</p>
-
-            <label style="font-size:13px; font-weight:600; display:block; margin-bottom:4px;">Frequency</label>
-            <div class="options-group">
-              ${['Once daily', 'Twice daily', 'Other'].map(freq => `
-                <label class="option-row" style="padding:8px 12px;">
-                  <input type="radio" name="remFreq" value="${freq}" ${state.reminderSchedule === freq ? 'checked' : ''} onchange="state.reminderSchedule='${freq}'">
-                  <span class="option-title">${freq}</span>
-                </label>
-              `).join('')}
-            </div>
-
-            <label style="font-size:13px; font-weight:600; display:block; margin-bottom:4px;">Reminder Time</label>
-            <input type="time" value="08:00" oninput="state.reminderTime=this.value">
-
-            <div class="card-preview">
-              <label style="display:flex; align-items:center; gap:8px; cursor:pointer;">
-                <input type="checkbox" checked onchange="state.reminderNotificationsEnabled=this.checked">
-                <span style="font-size:13px; font-weight:600;">Enable push & WhatsApp reminder notifications</span>
-              </label>
-            </div>
-
-            <div class="button-stack">
-              <button class="primary" onclick="completeMedicationStep('reminder')">Save Reminder & Continue</button>
-            </div>
-
-            <div class="nav-helpers">
-              <button type="button" class="secondary" onclick="goBack()" style="font-size:13px;">← Back</button>
-            </div>
-          </div>
-        `;
-        break;
-
-      // -------------------------------------------------------------
-      // STEP 8 · Complete that person (Attach Goals)
-      // -------------------------------------------------------------
-      case '8':
-        const person8 = state.activePersonName || 'Dad';
-        const prof8 = state.personProfiles[person8] || { medications: [], goals: [] };
-
-        html = `
-          <div class="screen-card">
-            <span class="badge">Step 8 · Person Complete</span>
-            <h1>${person8} is set up!</h1>
-            <p class="hint">Here is what Famasi now knows and manages for ${person8}:</p>
-
-            <!-- Medications summary -->
+            <!-- Medications list -->
             <div class="card-preview" style="background:#fff;">
-              <h4 style="margin-bottom:8px;">Medications (${prof8.medications.length})</h4>
-              <div style="display:flex; flex-direction:column; gap:8px;">
-                ${prof8.medications.map(m => `
-                  <div class="basket-item" style="padding:8px 12px;">
-                    <div>
-                      <strong style="font-size:14px;">${escapeHtml(m.name)}</strong>
-                      <div style="font-size:12px; color:#666;">${escapeHtml(m.summary)}</div>
-                    </div>
-                    <span class="status-badge status-active">Active</span>
+              <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+                <h4 style="margin:0; font-size:14px;">Medications for ${p7} (${state.pendingMedList.length})</h4>
+                <span class="status-badge status-promo">10% discount active</span>
+              </div>
+
+              <div style="display:flex; flex-direction:column; gap:6px;">
+                ${state.pendingMedList.map((m, i) => `
+                  <div class="basket-item" style="padding:8px 10px; font-size:13px;">
+                    <strong>${escapeHtml(m.name)}</strong>
+                    <button class="danger" style="font-size:11px; padding:2px 8px;" onclick="state.pendingMedList.splice(${i}, 1); renderScreen();">Remove</button>
                   </div>
                 `).join('')}
               </div>
             </div>
 
-            <!-- Person-level goals -->
-            <div class="card-preview" style="background:#fff;">
-              <h4 style="margin-bottom:4px;">Anything else you want Famasi to help with for ${person8}?</h4>
-              <p class="hint" style="margin-bottom:10px;">Attach health trackers or reminders directly to ${person8}:</p>
+            <div class="button-stack">
+              <button class="primary" onclick="startConfiguringMedications()" ${state.pendingMedList.length === 0 ? 'disabled' : ''}>
+                Configure Each Medication →
+              </button>
+            </div>
 
-              <div class="options-group" style="margin:0;">
-                ${[
-                  'Track blood pressure',
-                  'Track blood sugar',
-                  'Medication reminders',
-                  'Refill reminders'
-                ].map(g => `
-                  <label class="option-row" style="padding:8px 12px;">
-                    <input type="checkbox" ${state.personGoals.includes(g) ? 'checked' : ''} onchange="togglePersonGoal('${g}')">
-                    <span class="option-title" style="font-size:13px;">${g}</span>
-                  </label>
+            <div class="nav-helpers">
+              <button type="button" class="secondary" onclick="goBack()" style="font-size:13px;">← Back</button>
+            </div>
+          </div>
+        `;
+        break;
+
+      // -------------------------------------------------------------
+      // 8. CONFIGURE EACH MEDICATION (Multi-action co-existence)
+      // -------------------------------------------------------------
+      case '8':
+        const medName = state.pendingMedList[state.activeMedIndex] ? state.pendingMedList[state.activeMedIndex].name : 'Amlodipine 10mg';
+        const p8 = state.activePersonName;
+
+        html = `
+          <div class="screen-card">
+            <span class="badge">8 · Configure (${medName})</span>
+            <div style="font-size:12px; color:#777; margin-bottom:4px;">Setting up for ${p8}</div>
+            <h1>What should Famasi help you with for ${escapeHtml(medName)}?</h1>
+            <p class="hint">You can choose multiple actions. They are not mutually exclusive.</p>
+
+            <div class="options-group">
+              <label class="option-row">
+                <input type="checkbox" ${state.currentMedActions.order ? 'checked' : ''} onchange="state.currentMedActions.order = this.checked">
+                <div>
+                  <span class="option-title">Order it now</span>
+                  <span class="option-desc">Buy an immediate pack and deliver to ${p8}’s location</span>
+                </div>
+              </label>
+
+              <label class="option-row">
+                <input type="checkbox" ${state.currentMedActions.refill ? 'checked' : ''} onchange="state.currentMedActions.refill = this.checked">
+                <div>
+                  <span class="option-title">Keep it coming / set up refills</span>
+                  <span class="option-desc">Scheduled recurring supplies delivered before they run out</span>
+                </div>
+              </label>
+
+              <label class="option-row">
+                <input type="checkbox" ${state.currentMedActions.reminder ? 'checked' : ''} onchange="state.currentMedActions.reminder = this.checked">
+                <div>
+                  <span class="option-title">Medication reminders</span>
+                  <span class="option-desc">Daily adherence alerts (WhatsApp or push notifications)</span>
+                </div>
+              </label>
+            </div>
+
+            <p style="font-size:12px; color:#777;">If none are selected, the medication remains safely stored in ${p8}’s cabinet profile.</p>
+
+            <div class="button-stack">
+              <button class="primary" onclick="handleMedActionBranching()">Continue to Details →</button>
+            </div>
+
+            <div class="nav-helpers">
+              <button type="button" class="secondary" onclick="goBack()" style="font-size:13px;">← Back</button>
+            </div>
+          </div>
+        `;
+        break;
+
+      // -------------------------------------------------------------
+      // 9. BRANCH BASED ON SELECTED ACTIONS (Order, Refill, Reminders)
+      // -------------------------------------------------------------
+      case '9':
+        const med9 = state.pendingMedList[state.activeMedIndex].name;
+        const p9 = state.activePersonName;
+
+        html = `
+          <div class="screen-card">
+            <span class="badge">9 · Action Details (${med9})</span>
+            <h1>Action settings for ${escapeHtml(med9)}</h1>
+            <p class="hint">Fine-tune the choices for this medication.</p>
+
+            ${state.currentMedActions.order ? `
+              <!-- Order Details -->
+              <div class="card-preview" style="background:#fff; border-left:4px solid #111;">
+                <h4 style="font-size:14px; margin-bottom:6px;">📦 1. Immediate Order Details</h4>
+                <div style="display:flex; justify-content:space-between; align-items:center;">
+                  <div>
+                    <label style="font-size:12px; font-weight:600; display:block;">Packs needed:</label>
+                    <div class="stepper" style="margin:6px 0;">
+                      <button type="button" class="secondary stepper-btn" onclick="state.orderQuantity=Math.max(1, state.orderQuantity-1); renderScreen();">−</button>
+                      <div class="stepper-val">${state.orderQuantity} pack</div>
+                      <button type="button" class="secondary stepper-btn" onclick="state.orderQuantity+=1; renderScreen();">+</button>
+                    </div>
+                  </div>
+                  <div style="text-align:right;">
+                    <span style="font-size:11px; text-decoration:line-through; color:#888;">₦4,200</span>
+                    <div style="font-size:18px; font-weight:700; color:#2e7d32;">₦3,780</div>
+                    <span class="status-badge status-promo" style="font-size:10px;">10% Welcome Perk</span>
+                  </div>
+                </div>
+
+                <label style="font-size:12px; font-weight:600; display:block; margin-top:8px; margin-bottom:2px;">Delivery Address</label>
+                <input type="text" value="${escapeHtml(state.deliveryAddress)}" oninput="state.deliveryAddress=this.value" placeholder="Delivery city/address">
+              </div>
+            ` : ''}
+
+            ${state.currentMedActions.refill ? `
+              <!-- Refill Details -->
+              <div class="card-preview" style="background:#fff; border-left:4px solid #2e7d32;">
+                <h4 style="font-size:14px; margin-bottom:6px;">🔄 2. Refill Schedule</h4>
+                <label style="font-size:12px; font-weight:600; display:block; margin-bottom:4px;">How often does ${p9} need another supply?</label>
+                <div style="display:flex; gap:8px; flex-wrap:wrap; margin-bottom:10px;">
+                  ${['Monthly', 'Every 2 months', 'Custom', 'Unsure'].map(cad => `
+                    <label style="display:flex; align-items:center; gap:6px; font-size:12px; padding:6px 10px; border:1px solid #ddd; border-radius:4px; cursor:pointer; background:#fafafa;">
+                      <input type="radio" name="refCad" value="${cad}" ${state.refillFrequency===cad?'checked':''} onchange="state.refillFrequency='${cad}'">
+                      <span>${cad}</span>
+                    </label>
+                  `).join('')}
+                </div>
+                <p style="font-size:12px; color:#555; margin:0;">
+                  ℹ️ <strong>Refill note:</strong> Delivery is automatically triggered 3 days before supply runs out.
+                </p>
+              </div>
+            ` : ''}
+
+            ${state.currentMedActions.reminder ? `
+              <!-- Reminders -->
+              <div class="card-preview" style="background:#fff; border-left:4px solid #1565c0;">
+                <h4 style="font-size:14px; margin-bottom:6px;">⏰ 3. Medication Reminders (Adherence)</h4>
+                <div style="display:grid; grid-template-columns: 1fr 1fr; gap:10px;">
+                  <div>
+                    <label style="font-size:12px; font-weight:600; display:block; margin-bottom:2px;">How often is it taken?</label>
+                    <select onchange="state.reminderFrequency=this.value" style="font-size:12px; padding:6px 8px;">
+                      <option value="Once daily">Once daily</option>
+                      <option value="Twice daily">Twice daily</option>
+                      <option value="As needed">As needed</option>
+                    </select>
+                  </div>
+                  <div>
+                    <label style="font-size:12px; font-weight:600; display:block; margin-bottom:2px;">Dose Time</label>
+                    <input type="text" value="${state.reminderTime}" oninput="state.reminderTime=this.value" style="font-size:12px; padding:6px 8px;">
+                  </div>
+                </div>
+              </div>
+            ` : ''}
+
+            <div class="button-stack">
+              <button class="primary" onclick="saveActiveMedicationAndNext()">Save ${escapeHtml(med9)} Settings →</button>
+            </div>
+
+            <div class="nav-helpers">
+              <button type="button" class="secondary" onclick="goBack()" style="font-size:13px;">← Back</button>
+            </div>
+          </div>
+        `;
+        break;
+
+      // -------------------------------------------------------------
+      // 10. REPEAT / REVIEW FOR DAD’S OTHER MEDICATIONS
+      // -------------------------------------------------------------
+      case '10':
+        const p10 = state.activePersonName;
+        const prof10 = state.personProfiles[p10];
+
+        html = `
+          <div class="screen-card">
+            <span class="badge">10 · Medication Summary (${p10})</span>
+            <h1>All medications configured for ${p10}</h1>
+            <p class="hint">Here is how ${p10}’s medication plan is mapped:</p>
+
+            <div class="card-preview" style="background:#fff;">
+              <div style="display:flex; flex-direction:column; gap:10px;">
+                ${prof10.medications.map(m => `
+                  <div class="basket-item" style="padding:10px 14px;">
+                    <div>
+                      <strong style="font-size:14px;">${escapeHtml(m.name)}</strong>
+                      <div style="font-size:12px; color:#555; margin-top:2px;">${escapeHtml(m.summary)}</div>
+                    </div>
+                    <span class="status-badge ${m.refill?'status-active':m.order?'status-upcoming':'status-completed'}">
+                      ${m.refill ? 'Refill Active' : m.order ? 'Order Pending' : 'Saved'}
+                    </span>
+                  </div>
                 `).join('')}
               </div>
             </div>
 
             <div class="button-stack">
-              <button class="primary" onclick="proceedAfterPersonCompletion()">Save & Continue</button>
+              <button class="primary" onclick="navigateTo('11')">Next: Set Up Health Goals for ${p10} →</button>
             </div>
 
             <div class="nav-helpers">
@@ -1148,32 +1128,123 @@
         break;
 
       // -------------------------------------------------------------
-      // STEP 9 · Move to next person in queue
+      // 11. PERSON-LEVEL GOALS (Contextual Education)
       // -------------------------------------------------------------
-      case '9':
-        const completedPerson = state.activePersonName;
-        const nextPerson = state.setupQueue[state.currentPersonIndex + 1];
+      case '11':
+        const p11 = state.activePersonName;
 
         html = `
           <div class="screen-card">
-            <span class="badge">Step 9 · Next Person</span>
-            <h1>${completedPerson} is done. Next: ${nextPerson}</h1>
+            <span class="badge">11 · Person Goals (${p11})</span>
+            <h1>Set up goals for ${p11}</h1>
+            <p class="hint">Goals become operational rather than decorative.</p>
+
+            <!-- Contextual Education -->
+            <div class="contextual-edu">
+              <strong>💡 Why this matters for ${p11}:</strong>
+              <p style="margin:6px 0 0 0; font-size:13px;">
+                “Since you indicated ${p11} manages hypertension and takes Amlodipine, keeping a regular record of his blood pressure makes changes and dosage effectiveness much easier to spot.”
+              </p>
+            </div>
+
+            <div class="options-group">
+              <label class="option-row">
+                <input type="checkbox" checked onchange="state.bpGoalEnabled=this.checked">
+                <div>
+                  <span class="option-title">Track blood pressure</span>
+                  <span class="option-desc">Log readings and share weekly trend charts with his physician</span>
+                </div>
+              </label>
+
+              <label class="option-row">
+                <input type="checkbox" checked>
+                <div>
+                  <span class="option-title">Refill reminders</span>
+                  <span class="option-desc">Advance notification 3 days prior to dispatch</span>
+                </div>
+              </label>
+
+              <label class="option-row">
+                <input type="checkbox">
+                <div>
+                  <span class="option-title">Track blood sugar</span>
+                  <span class="option-desc">Fasting and post-meal glucose log</span>
+                </div>
+              </label>
+            </div>
+
+            <div class="button-stack">
+              <button class="primary" onclick="navigateTo('12')">Continue to Summary →</button>
+            </div>
+
+            <div class="nav-helpers">
+              <button type="button" class="secondary" onclick="goBack()" style="font-size:13px;">← Back</button>
+            </div>
+          </div>
+        `;
+        break;
+
+      // -------------------------------------------------------------
+      // 12. DAD SETUP SUMMARY
+      // -------------------------------------------------------------
+      case '12':
+        const p12 = state.activePersonName;
+        const prof12 = state.personProfiles[p12];
+
+        html = `
+          <div class="screen-card">
+            <span class="badge">12 · Person Summary</span>
+            <h1>${p12} is set up!</h1>
+            <p class="hint">Everything has been organized for ${p12}:</p>
+
+            <div class="card-preview" style="background:#fff;">
+              <h4 style="margin-bottom:6px;">${p12}’s Care Summary</h4>
+              <ul style="padding-left:20px; font-size:13px; color:#444; display:flex; flex-direction:column; gap:6px;">
+                <li><strong>3 medications:</strong> Amlodipine (ordered + monthly refill), Metformin (monthly refill), Paracetamol (saved)</li>
+                <li><strong>Clinical safety:</strong> Penicillin allergy noted · Safe dispensing confirmed</li>
+                <li><strong>Goals:</strong> Blood pressure tracker enabled</li>
+                <li><strong>Delivery:</strong> Kaduna</li>
+              </ul>
+            </div>
+
+            <div class="button-stack">
+              ${state.currentPersonIndex + 1 < state.setupQueue.length ? `
+                <button class="primary" onclick="startNextPerson()">Set up next person (${state.setupQueue[state.currentPersonIndex + 1]}) →</button>
+                <button class="secondary" onclick="navigateTo('14')">Finish for now & save account</button>
+              ` : `
+                <button class="primary" onclick="navigateTo('14')">Save Your Famasi & Create Account →</button>
+              `}
+            </div>
+
+            <div class="nav-helpers">
+              <button type="button" class="secondary" onclick="goBack()" style="font-size:13px;">← Back</button>
+            </div>
+          </div>
+        `;
+        break;
+
+      // -------------------------------------------------------------
+      // 13. NEXT SELECTED PERSON (Mum)
+      // -------------------------------------------------------------
+      case '13':
+        const nextPersonName = state.setupQueue[state.currentPersonIndex];
+
+        html = `
+          <div class="screen-card">
+            <span class="badge">13 · Next Person</span>
+            <h1>Dad is set up. Let’s set up ${nextPersonName}.</h1>
             <p class="hint">
-              Importantly, ${nextPerson}’s configuration can be completely different. Each person gets a custom lightweight loop.
+              ${nextPersonName}’s configuration can be completely different from Dad’s (e.g., 1 medication, order when needed, no goals).
             </p>
 
             <div class="card-preview" style="background:#fff;">
-              <div style="display:flex; justify-content:space-between; align-items:center;">
-                <div>
-                  <strong style="font-size:15px;">Ready to set up ${nextPerson}?</strong>
-                  <p style="font-size:13px; color:#666; margin:4px 0 0 0;">Add medications, configure refills, or save prescriptions.</p>
-                </div>
-                <button class="primary" onclick="startNextPersonInQueue()">Set up ${nextPerson} now</button>
-              </div>
+              <h4 style="margin-bottom:6px;">Quick profile for ${nextPersonName}</h4>
+              <p style="font-size:13px; color:#666; margin-bottom:12px;">Add her medications, prescriptions, or simply save drugs for when she needs them.</p>
+              <button class="primary" onclick="simulateMumSetup()">Quick set up for ${nextPersonName} (Losartan 50mg)</button>
             </div>
 
-            <div style="margin-top:16px; text-align:center;">
-              <button class="link-button" onclick="navigateTo('10')">Or skip ${nextPerson} for now and finish setup →</button>
+            <div class="button-stack">
+              <button class="secondary" onclick="navigateTo('14')">Skip ${nextPersonName} for now & save setup →</button>
             </div>
 
             <div class="nav-helpers">
@@ -1184,54 +1255,37 @@
         break;
 
       // -------------------------------------------------------------
-      // STEP 10 · Save your Famasi (Create Account)
+      // 14. ACCOUNT CREATION / SAVE
       // -------------------------------------------------------------
-      case '10':
+      case '14':
         html = `
           <div class="screen-card">
-            <span class="badge">Step 10 · Save Account</span>
+            <span class="badge">14 · Save Account</span>
             <h1>Save your Famasi</h1>
-            <p class="hint">You have completed setup for your household. Create an account to save everything and start managing care.</p>
+            <p class="hint">Create an account to preserve everything configured today and manage your family’s medications.</p>
 
-            <!-- Dynamic Work Summary -->
             <div class="card-preview" style="background:#fff;">
-              <h4 style="margin-bottom:8px;">What you’ve set up today:</h4>
-              <div style="display:flex; flex-direction:column; gap:10px;">
-                ${Object.keys(state.personProfiles).filter(p => state.personProfiles[p].medications.length > 0).map(p => {
-                  const prof = state.personProfiles[p];
-                  return `
-                    <div style="border-bottom:1px solid #eee; padding-bottom:8px;">
-                      <strong style="font-size:14px;">${p}</strong>
-                      <div style="font-size:13px; color:#555;">
-                        ${prof.medications.length} medication${prof.medications.length>1?'s':''} 
-                        · ${prof.goals.length > 0 ? prof.goals.join(', ') : 'Ready for refills'}
-                      </div>
-                    </div>
-                  `;
-                }).join('')}
-              </div>
+              <h4 style="margin-bottom:6px;">Configured in your household:</h4>
+              <ul style="padding-left:18px; font-size:13px; color:#555; display:flex; flex-direction:column; gap:6px;">
+                <li><strong>Dad:</strong> 3 medications, 2 refills, BP tracking (Kaduna)</li>
+                <li><strong>Mum:</strong> 1 medication (Order when needed)</li>
+                <li><strong>Discount unlocked:</strong> 10% off your first delivery</li>
+              </ul>
             </div>
 
-            <div style="margin-top:16px;">
-              <label style="font-size:13px; font-weight:600; display:block; margin-bottom:4px;">Your Full Name</label>
+            <div style="margin-top:14px;">
+              <label style="font-size:13px; font-weight:600; display:block; margin-bottom:4px;">Full Name</label>
               <input type="text" value="${escapeHtml(state.accountName)}" oninput="state.accountName=this.value">
 
               <label style="font-size:13px; font-weight:600; display:block; margin-bottom:4px;">Email Address</label>
               <input type="email" value="${escapeHtml(state.accountEmail)}" oninput="state.accountEmail=this.value">
 
-              <label style="font-size:13px; font-weight:600; display:block; margin-bottom:4px;">Create Password</label>
+              <label style="font-size:13px; font-weight:600; display:block; margin-bottom:4px;">Password</label>
               <input type="password" placeholder="••••••••" value="${escapeHtml(state.accountPassword)}" oninput="state.accountPassword=this.value">
             </div>
 
             <div class="button-stack">
-              <button class="primary" onclick="handleCreateAccount()">Create my account & Go to Home</button>
-            </div>
-
-            <div style="margin-top: 14px; text-align: center;">
-              <span style="font-size: 12px; color: #777;">Or fast sign-in with:</span>
-              <div style="margin-top: 8px;">
-                <button class="secondary" style="font-size: 13px;" onclick="handleCreateAccount()">Continue with Google</button>
-              </div>
+              <button class="primary" onclick="navigateTo('15')">Create account & continue</button>
             </div>
 
             <div class="nav-helpers">
@@ -1242,51 +1296,113 @@
         break;
 
       // -------------------------------------------------------------
-      // STEP 11 · Populated Home (Dashboard reflecting Faruq's Spec)
+      // 15. OPTIONAL PERSONALISATION / INSIGHT GATHERING
       // -------------------------------------------------------------
-      case 'Home':
+      case '15':
+        html = `
+          <div class="screen-card">
+            <div style="display:flex; justify-content:space-between; align-items:center;">
+              <span class="badge">15 · Optional Personalisation</span>
+              <span class="status-badge status-completed">Optional</span>
+            </div>
+            <h1>Help us further personalize your care</h1>
+            <p class="hint">These optional questions give our clinical team valuable insights to support your family. You can skip anytime.</p>
+
+            <label style="font-size:13px; font-weight:600; display:block; margin-bottom:4px;">1. Any family health history we should be aware of?</label>
+            <div style="display:grid; grid-template-columns: 1fr 1fr; gap:6px; margin-bottom:14px;">
+              ${['Hypertension', 'Diabetes', 'Glaucoma', 'Sickle Cell', 'Kidney Disease', 'None'].map(fh => `
+                <label style="font-size:12px; display:flex; align-items:center; gap:6px; cursor:pointer;">
+                  <input type="checkbox" ${state.optionalInsights.familyHistory.includes(fh)?'checked':''}>
+                  <span>${fh}</span>
+                </label>
+              `).join('')}
+            </div>
+
+            <label style="font-size:13px; font-weight:600; display:block; margin-bottom:4px;">2. Where do you usually buy medication today?</label>
+            <select style="font-size:13px;" onchange="state.optionalInsights.whereTheyBuy=this.value">
+              <option value="Local neighborhood pharmacy">Local neighborhood pharmacy</option>
+              <option value="Hospital pharmacy">Hospital pharmacy</option>
+              <option value="Open market chemist">Open market chemist</option>
+              <option value="Online / delivery">Online / delivery</option>
+            </select>
+
+            <label style="font-size:13px; font-weight:600; display:block; margin-bottom:4px;">3. What usually makes you miss a refill?</label>
+            <select style="font-size:13px;" onchange="state.optionalInsights.refillMissReason=this.value">
+              <option value="Pharmacy out of stock when needed">Pharmacy out of stock when needed</option>
+              <option value="Too busy / forget to pass by chemist">Too busy / forget to pass by chemist</option>
+              <option value="Price increases unexpectedly">Price increases unexpectedly</option>
+              <option value="Delay in doctor prescription renewal">Delay in doctor prescription renewal</option>
+            </select>
+
+            <label style="font-size:13px; font-weight:600; display:block; margin-bottom:4px;">4. What would you most like Famasi to make easier?</label>
+            <input type="text" value="${escapeHtml(state.optionalInsights.biggestWish)}" oninput="state.optionalInsights.biggestWish=this.value">
+
+            <div class="button-stack">
+              <button class="primary" onclick="navigateTo('16')">Save & Go to Dashboard</button>
+              <button class="secondary" onclick="navigateTo('16')">Skip for now</button>
+            </div>
+
+            <div class="nav-helpers">
+              <button type="button" class="secondary" onclick="goBack()" style="font-size:13px;">← Back</button>
+            </div>
+          </div>
+        `;
+        break;
+
+      // -------------------------------------------------------------
+      // 16. POPULATED HOME (Dashboard)
+      // -------------------------------------------------------------
+      case '16':
         html = `
           <div class="screen-card">
             <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:14px;">
               <div>
-                <span class="badge">Step 11 · Populated Home</span>
+                <span class="badge">16 · Populated Home</span>
                 <h1 style="margin-bottom:0;">Your Famasi</h1>
               </div>
-              <button class="secondary" style="font-size:12px; padding:4px 10px;" onclick="navigateTo('1')">Restart Flow</button>
+              <button class="secondary" style="font-size:12px; padding:4px 10px;" onclick="restartFlow()">Restart Flow</button>
             </div>
-            <p class="hint">Reflects your exact setup. People, medications, refills, and goals are already organized.</p>
+            <p class="hint">Everything you configured is organized and ready to manage.</p>
 
             <!-- Dad Card -->
             <div class="card-preview" style="background:#fff; border-left:4px solid #111;">
               <div style="display:flex; justify-content:space-between; align-items:flex-start;">
                 <div>
                   <h3 style="margin-bottom:4px;">Dad</h3>
-                  <span style="font-size:12px; color:#666;">Kaduna delivery address</span>
+                  <span style="font-size:12px; color:#666;">Kaduna delivery · Penicillin allergy noted</span>
                 </div>
-                <button class="secondary" style="font-size:12px; padding:4px 8px;" onclick="alert('Manage Dad profile')">Manage</button>
+                <span class="status-badge status-active">Refills active</span>
               </div>
 
               <div style="margin-top:14px; display:flex; flex-direction:column; gap:8px;">
                 <div class="basket-item" style="padding:8px 10px; font-size:13px;">
                   <div>
                     <strong>Amlodipine 10mg</strong>
-                    <div style="font-size:12px; color:#2e7d32;">Next refill: 14 Oct (Monthly)</div>
+                    <div style="font-size:12px; color:#2e7d32;">Next refill: 14 Oct · Order out for delivery</div>
                   </div>
-                  <button class="secondary" style="font-size:11px; padding:3px 8px;">Manage refill</button>
+                  <button class="secondary" style="font-size:11px; padding:3px 8px;">Track</button>
                 </div>
 
                 <div class="basket-item" style="padding:8px 10px; font-size:13px;">
                   <div>
                     <strong>Metformin 500mg</strong>
-                    <div style="font-size:12px; color:#555;">Saved for later</div>
+                    <div style="font-size:12px; color:#2e7d32;">Monthly refill scheduled</div>
+                  </div>
+                  <button class="secondary" style="font-size:11px; padding:3px 8px;">Manage</button>
+                </div>
+
+                <div class="basket-item" style="padding:8px 10px; font-size:13px;">
+                  <div>
+                    <strong>Paracetamol 500mg</strong>
+                    <div style="font-size:12px; color:#666;">Saved in cabinet</div>
                   </div>
                   <button class="primary" style="font-size:11px; padding:3px 8px;">Order now</button>
                 </div>
 
                 <div class="basket-item" style="padding:8px 10px; font-size:13px; background:#f9fbf9;">
                   <div>
-                    <strong>Blood Pressure Tracker</strong>
-                    <div style="font-size:12px; color:#666;">Goal attached to Dad</div>
+                    <strong>Blood Pressure Log</strong>
+                    <div style="font-size:12px; color:#666;">Hypertension care goal</div>
                   </div>
                   <button class="secondary" style="font-size:11px; padding:3px 8px;">Add reading</button>
                 </div>
@@ -1298,23 +1414,23 @@
               <div style="display:flex; justify-content:space-between; align-items:flex-start;">
                 <div>
                   <h3 style="margin-bottom:4px;">Mum</h3>
-                  <span style="font-size:12px; color:#666;">Lightweight setup</span>
+                  <span style="font-size:12px; color:#666;">Saved medications</span>
                 </div>
-                <button class="secondary" style="font-size:12px; padding:4px 8px;" onclick="alert('Manage Mum profile')">Manage</button>
+                <span class="status-badge status-upcoming">Saved</span>
               </div>
 
               <div style="margin-top:14px;">
                 <div class="basket-item" style="padding:8px 10px; font-size:13px;">
                   <div>
                     <strong>Losartan 50mg</strong>
-                    <div style="font-size:12px; color:#555;">Order when needed</div>
+                    <div style="font-size:12px; color:#555;">Order when needed · No refill set</div>
                   </div>
                   <button class="primary" style="font-size:11px; padding:3px 8px;">Order now</button>
                 </div>
               </div>
             </div>
 
-            <!-- You (Not set up yet - Faruq's Key Highlight) -->
+            <!-- You (Not set up yet) -->
             <div class="card-preview" style="background:#fcfcfc; border:1px dashed #ccc;">
               <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:8px;">
                 <div>
@@ -1323,58 +1439,16 @@
                     <span class="status-badge status-completed">Not set up yet</span>
                   </div>
                   <p style="font-size:12px; color:#666; margin:4px 0 0 0;">
-                    You chose Both during onboarding. Your profile is ready whenever you want to add your medications.
+                    Your profile is ready whenever you want to add your own medications.
                   </p>
                 </div>
-                <button class="primary" style="font-size:12px; padding:6px 12px;" onclick="startSetupForYou()">Set up my medications</button>
+                <button class="primary" style="font-size:12px; padding:6px 12px;" onclick="startSetupForMe()">Set up my medications</button>
               </div>
             </div>
 
-            <!-- Navigation Helper -->
             <div class="nav-helpers" style="margin-top:20px;">
-              <button class="secondary" onclick="navigateTo('1')">← Back to Onboarding Flow</button>
+              <button class="secondary" onclick="navigateTo('1')">← Back to Welcome</button>
               <button class="secondary" onclick="restartFlow()">Reset All</button>
-            </div>
-          </div>
-        `;
-        break;
-
-      // -------------------------------------------------------------
-      // EXISTING CUSTOMER FAST-PATH
-      // -------------------------------------------------------------
-      case 'ExistingCustomer':
-        html = `
-          <div class="screen-card">
-            <span class="badge">Fast-Path · Returning User</span>
-            <h1>Welcome back!</h1>
-            <p class="hint">We found your previous order records. Starting from your history is much faster.</p>
-
-            <div class="card-preview" style="background:#fff;">
-              <h4 style="margin-bottom:8px;">Previously Ordered Medications</h4>
-              <div style="display:flex; flex-direction:column; gap:8px;">
-                <div class="basket-item">
-                  <div>
-                    <strong>Amlodipine 10mg (30 tablets)</strong>
-                    <div style="font-size:12px; color:#666;">Last ordered 28 days ago · Delivered to Dad</div>
-                  </div>
-                  <button class="primary" style="font-size:12px; padding:4px 8px;" onclick="navigateTo('7B')">Set Refill</button>
-                </div>
-                <div class="basket-item">
-                  <div>
-                    <strong>Metformin 500mg (60 tablets)</strong>
-                    <div style="font-size:12px; color:#666;">Last ordered 45 days ago · Delivered to Dad</div>
-                  </div>
-                  <button class="secondary" style="font-size:12px; padding:4px 8px;" onclick="navigateTo('7A')">Reorder</button>
-                </div>
-              </div>
-            </div>
-
-            <div class="button-stack">
-              <button class="primary" onclick="navigateTo('Home')">Continue to Dashboard</button>
-            </div>
-
-            <div class="nav-helpers">
-              <button type="button" class="secondary" onclick="goBack()" style="font-size:13px;">← Back to Welcome</button>
             </div>
           </div>
         `;
@@ -1387,58 +1461,36 @@
     container.innerHTML = html;
   }
 
-  // -----------------------------------------------------------------
-  // Handlers and Flow Transitions
-  // -----------------------------------------------------------------
-  function handleStep2Continue() {
-    if (state.careScope === 'Myself') {
-      navigateTo('4');
-    } else {
-      navigateTo('3');
-    }
-  }
-
-  function handleStep3Continue() {
-    navigateTo('4');
-  }
-
+  // Helper logic
   function toggleGoal(g) {
     const idx = state.goals.indexOf(g);
-    if (idx > -1) {
-      state.goals.splice(idx, 1);
-    } else {
-      state.goals.push(g);
-    }
+    if (idx > -1) state.goals.splice(idx, 1);
+    else state.goals.push(g);
   }
 
-  function handleStep4Continue() {
+  function handleGoalsContinue() {
     const household = getHouseholdList();
     if (household.length === 1 && household[0] === 'Me') {
       state.setupQueue = ['Me'];
-      state.currentPersonIndex = 0;
       state.activePersonName = 'Me';
       navigateTo('6');
     } else {
-      // Default to Dad & Mum if available
       state.setupQueue = household.filter(p => p !== 'Me');
       if (state.setupQueue.length === 0) state.setupQueue = household;
       navigateTo('5');
     }
   }
 
-  function toggleSetupPerson(person) {
-    const idx = state.setupQueue.indexOf(person);
-    if (idx > -1) {
-      state.setupQueue.splice(idx, 1);
-    } else {
-      state.setupQueue.push(person);
-    }
+  function toggleSetupQueuePerson(p) {
+    const idx = state.setupQueue.indexOf(p);
+    if (idx > -1) state.setupQueue.splice(idx, 1);
+    else state.setupQueue.push(p);
     renderScreen();
   }
 
-  function startSetupQueue() {
+  function startPersonLoop() {
     if (state.setupQueue.length === 0) {
-      alert('Please select at least one person to set up today.');
+      alert('Please select at least one person to set up.');
       return;
     }
     state.currentPersonIndex = 0;
@@ -1446,17 +1498,37 @@
     navigateTo('6');
   }
 
-  function simulatePrescriptionUpload() {
+  function togglePersonAllergy(person, al) {
+    if (!state.personHealthBasics[person]) {
+      state.personHealthBasics[person] = { allergies: [], conditions: [] };
+    }
+    const arr = state.personHealthBasics[person].allergies;
+    const idx = arr.indexOf(al);
+    if (idx > -1) arr.splice(idx, 1);
+    else arr.push(al);
+  }
+
+  function togglePersonCondition(person, cd) {
+    if (!state.personHealthBasics[person]) {
+      state.personHealthBasics[person] = { allergies: [], conditions: [] };
+    }
+    const arr = state.personHealthBasics[person].conditions;
+    const idx = arr.indexOf(cd);
+    if (idx > -1) arr.splice(idx, 1);
+    else arr.push(cd);
+  }
+
+  function simulateUploadPrescription() {
     state.pendingMedList = [
       { name: 'Amlodipine 10mg', selected: true },
-      { name: 'Atorvastatin 20mg', selected: true },
-      { name: 'Metformin 500mg', selected: true }
+      { name: 'Metformin 500mg', selected: true },
+      { name: 'Paracetamol 500mg', selected: true }
     ];
     renderScreen();
   }
 
   function filterSampleMeds(query) {
-    const listEl = document.getElementById('quickSearchList');
+    const listEl = document.getElementById('quickMedDropdown');
     if (!listEl) return;
     if (!query || !query.trim()) {
       listEl.style.display = 'none';
@@ -1477,121 +1549,94 @@
   }
 
   function addCustomMed(name) {
-    if (!name) return;
     state.pendingMedList.push({ name: name, selected: true });
-    const searchInput = document.getElementById('medSearchInput');
+    const searchInput = document.getElementById('quickMedSearch');
     if (searchInput) searchInput.value = '';
-    const listEl = document.getElementById('quickSearchList');
+    const listEl = document.getElementById('quickMedDropdown');
     if (listEl) listEl.style.display = 'none';
     renderScreen();
   }
 
-  function removePendingMed(idx) {
-    state.pendingMedList.splice(idx, 1);
-    renderScreen();
-  }
-
-  function proceedToMedDivergence() {
-    if (state.pendingMedList.length === 0) return;
-    state.activeMedication = state.pendingMedList[0].name;
-    navigateTo('7');
-  }
-
-  function handleMedActionDivergence() {
-    if (state.medActionChoice === 'order') {
-      navigateTo('7A');
-    } else if (state.medActionChoice === 'refill') {
-      navigateTo('7B');
-    } else if (state.medActionChoice === 'save') {
-      navigateTo('7C');
-    } else if (state.medActionChoice === 'reminder') {
-      navigateTo('7D');
-    }
-  }
-
-  function completeMedicationStep(actionType) {
-    const person = state.activePersonName || 'Dad';
-    if (!state.personProfiles[person]) {
-      state.personProfiles[person] = { medications: [], goals: [] };
-    }
-
-    let summary = '';
-    if (actionType === 'order') {
-      summary = `${state.orderQty} pack · ${state.deliveryAddress} · ₦4,200`;
-    } else if (actionType === 'refill') {
-      summary = `${state.refillCadence} refill`;
-    } else if (actionType === 'save') {
-      summary = 'Saved for later';
-    } else if (actionType === 'reminder') {
-      summary = `${state.reminderSchedule} at ${state.reminderTime}`;
-    }
-
-    state.personProfiles[person].medications.push({
-      name: state.activeMedication,
-      action: actionType,
-      summary: summary
-    });
-
-    // If other medications were extracted from prescription, auto-save remaining so user doesn't re-enter
-    state.pendingMedList.forEach(m => {
-      if (m.name !== state.activeMedication) {
-        state.personProfiles[person].medications.push({
-          name: m.name,
-          action: 'save',
-          summary: 'Saved from prescription'
-        });
-      }
-    });
-
+  function startConfiguringMedications() {
+    state.activeMedIndex = 0;
+    state.currentMedActions = { order: true, refill: true, reminder: true };
     navigateTo('8');
   }
 
-  function togglePersonGoal(goal) {
-    const idx = state.personGoals.indexOf(goal);
-    if (idx > -1) {
-      state.personGoals.splice(idx, 1);
+  function handleMedActionBranching() {
+    if (!state.currentMedActions.order && !state.currentMedActions.refill && !state.currentMedActions.reminder) {
+      // Saved only
+      saveActiveMedicationAndNext();
     } else {
-      state.personGoals.push(goal);
-    }
-    const person = state.activePersonName;
-    if (state.personProfiles[person]) {
-      state.personProfiles[person].goals = [...state.personGoals];
+      navigateTo('9');
     }
   }
 
-  function proceedAfterPersonCompletion() {
-    const hasNext = state.currentPersonIndex + 1 < state.setupQueue.length;
-    if (hasNext) {
-      navigateTo('9');
+  function saveActiveMedicationAndNext() {
+    const medName = state.pendingMedList[state.activeMedIndex].name;
+    const person = state.activePersonName;
+
+    let summaryParts = [];
+    if (state.currentMedActions.order) summaryParts.push('Order now');
+    if (state.currentMedActions.refill) summaryParts.push(`${state.refillFrequency} refill`);
+    if (state.currentMedActions.reminder) summaryParts.push(`${state.reminderTime} reminder`);
+    if (summaryParts.length === 0) summaryParts.push('Saved to profile');
+
+    const medConfig = {
+      name: medName,
+      order: state.currentMedActions.order,
+      refill: state.currentMedActions.refill,
+      reminder: state.currentMedActions.reminder,
+      summary: summaryParts.join(' · ')
+    };
+
+    if (!state.personProfiles[person]) {
+      state.personProfiles[person] = { medications: [], goals: [], delivery: state.deliveryAddress };
+    }
+
+    const existingIdx = state.personProfiles[person].medications.findIndex(m => m.name === medName);
+    if (existingIdx > -1) {
+      state.personProfiles[person].medications[existingIdx] = medConfig;
+    } else {
+      state.personProfiles[person].medications.push(medConfig);
+    }
+
+    // Check if more pending meds
+    if (state.activeMedIndex + 1 < state.pendingMedList.length) {
+      state.activeMedIndex += 1;
+      state.currentMedActions = { order: false, refill: false, reminder: false };
+      navigateTo('8');
     } else {
       navigateTo('10');
     }
   }
 
-  function startNextPersonInQueue() {
+  function startNextPerson() {
     state.currentPersonIndex += 1;
     state.activePersonName = state.setupQueue[state.currentPersonIndex];
-    state.pendingMedList = [
-      { name: 'Losartan 50mg', selected: true }
-    ];
-    state.personGoals = [];
-    navigateTo('6');
+    navigateTo('13');
   }
 
-  function startSetupForYou() {
+  function simulateMumSetup() {
+    state.personProfiles['Mum'] = {
+      medications: [
+        { name: 'Losartan 50mg', order: false, refill: false, reminder: false, summary: 'Saved to profile · Order when needed' }
+      ],
+      goals: [],
+      delivery: 'Lagos'
+    };
+    navigateTo('14');
+  }
+
+  function startSetupForMe() {
     state.activePersonName = 'Me';
     state.pendingMedList = [
       { name: 'Omeprazole 20mg', selected: true }
     ];
-    state.personGoals = [];
+    state.currentMedActions = { order: true, refill: true, reminder: false };
     navigateTo('6');
   }
 
-  function handleCreateAccount() {
-    navigateTo('Home');
-  }
-
-  // Initial boot
   window.addEventListener('DOMContentLoaded', () => {
     renderScreen();
   });

@@ -2,32 +2,30 @@
 
 An interactive, pure wireframe prototype for the Famasi onboarding experience.
 
-## Architecture
+## Complete 16-Step Architecture
 
 ```
-Layer 1: Household Structure & Priorities
-  ├── Step 1 · Welcome (Value proposition)
-  ├── Step 2 · Who do you manage medication for? (Myself / Someone else / Both)
-  ├── Step 3 · Add the people you manage (Lightweight label/names: Dad, Mum, etc.)
-  └── Step 4 · Goals (What would you like Famasi to help with?)
+Household Setup (Who exists & baseline)
+  ├── 1. Welcome — Value proposition ("Order medications, stay ahead of refills, and manage medication for yourself or your family.")
+  ├── 2. Basic profile — Grouped fields: DOB, Sex, Location, How you usually pay (Self-pay / Insurance / Employer / Someone else)
+  ├── 3. Who do you manage medication for? — Myself / Someone else / Both (+ Add Mum/Dad/Partner/Child with name, sex, age)
+  ├── 4. Goals — Multi-select priorities (Refills, Family, Reminders, Health tracking)
+  └── 5. Who would you like to set up today? — Choose Me, Dad, Mum (Processed one person at a time)
 
-Layer 2: Person Setup Selection
-  └── Step 5 · Who would you like to set up today? (Me / Dad / Mum)
-        └── Configure one person at a time to keep momentum
+Person-Level Setup & Medication Loop (e.g. Dad)
+  ├── 6. Person-level health basics — Known allergies (Penicillin, Sulfa, etc.) & Long-term conditions (Hypertension, Diabetes)
+  ├── 7. Add Dad's medications — Search or Prescription upload simulation + 🎁 10% first-order incentive
+  ├── 8. Configure each medication — Multi-action co-existence (Order now + Refill + Reminder can all be selected together)
+  ├── 9. Action details — Fine-tune Order (quantity, address, price discount), Refill (cadence), and Reminder (frequency, time)
+  ├── 10. Repeat for Dad's other medications — Summary review of Dad's active meds
+  ├── 11. Person-level goals with contextual education — "Since Dad manages hypertension, tracking blood pressure makes changes easier to spot"
+  ├── 12. Dad setup summary — Clear reflection of created care plan
+  └── 13. Next selected person — Transition to Mum (Mum's setup can be completely different)
 
-Layer 3: Person-Level Grouped Setup & Medication Divergence
-  ├── Step 6 · Grouped setup for selected person (Search or Prescription extraction simulation)
-  ├── Step 7 · What should Famasi do with [Medication]?
-  │     ├── 7A: Order it now (Fulfillment, destination, refill bridge)
-  │     ├── 7B: Set up refills (Supply cadence, destination, recurring schedule)
-  │     ├── 7C: Add to medications (Save for later without purchase friction)
-  │     └── 7D: Set up reminders (Dose schedule, time, notifications)
-  ├── Step 8 · Complete that person & attach operational goals (BP tracker, glucose, etc.)
-  └── Step 9 · Next person in queue (Dad is done → Mum)
-
-Completion & Continuity
-  ├── Step 10 · Save your Famasi (Summary of configured care → Account creation)
-  └── Step 11 · Populated Home (Dashboard reflecting real setup; unconfigured profiles marked "Not set up yet")
+Account, Research Insights & Populated Home
+  ├── 14. Account creation / save — Create account to preserve setup and lock in the 10% discount
+  ├── 15. Optional personalisation / insight gathering — Family history, pharmacy pain points, missed refill causes (skippable)
+  └── 16. Populated Home (Dashboard) — Live reflection of configured household; unconfigured members show "Not set up yet"
 ```
 
 ## Running Locally
