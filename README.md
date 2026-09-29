@@ -32,11 +32,10 @@ An interactive, high-fidelity and lo-fi prototype for the Famasi onboarding expe
      - Curated plan items with `🪄 Curated Plan` badges (PMOS, Pregnancy Care, Hypertension Care Plan, etc.) and acute medication items.
      - Preserves the standard onboarding footer navigation (`Review Dad’s Medications (count) →` and `Skip medication entry for now`).
 
-7. **Single-Action Medication Review (No Redundant Config Screen)**:
-   - When medications are reviewed (Screen 16), users choose between:
-     - 🛒 **Convert to Order** (Immediate checkout with 10% welcome discount)
-     - ⏳ **Order Later** (Saved in digital cabinet)
-   - Auto-enrolls in smart refill reminders (3 days before supply runs out).
+7. **Whole-Cart Decision (Convert to Order vs. Order Later)**:
+   - When reviewing medications (Screen 16), the decision applies to the entire cart as a whole rather than configuring each medication individually.
+   - Users view a single consolidated cart summary (items, dosages, delivery destination, 10% welcome discount breakdown, and automated refill reminder enrollment).
+   - The user selects between **Convert to Order** (dispatch immediately) and **Order Later** (save to digital cabinet with smart refill alerts), with the footer button adapting directly (`Convert to Order` or `Confirm & Continue (Order Later)`).
 
 8. **Fixed Desktop Phone Mockup & Edge-to-Edge Mobile Prototype**:
    - **Desktop**: Fixed phone mock-up (`390px × 844px`), scrolling content body (`.screen-body`), permanently fixed bottom action buttons (`.screen-footer-pinned`).

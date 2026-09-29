@@ -1627,9 +1627,10 @@
 
     // Scratchpad for current active person adding meds
     currentMedInput: '',
+    cartOrderMode: 'order',
     temporaryMedList: [
       { name: 'Amlodipine 10mg', action: 'order', price: 3780, originalPrice: 4200 },
-      { name: 'Metformin 500mg', action: 'order_later', price: 2900, originalPrice: 2900 }
+      { name: 'Metformin 500mg', action: 'order', price: 2900, originalPrice: 3200 }
     ],
 
     // Dashboard tabs
@@ -2697,62 +2698,133 @@
         break;
 
       // ============================================================
-      // 16. CONVERT TO ORDER OR ORDER LATER (Decision: No separate config screen, auto-reminders)
+      // ============================================================
+      // 16. CONVERT TO ORDER OR ORDER LATER (Whole Cart Action)
       // ============================================================
       case '16':
         const p16 = state.activePersonName;
+        const currentMode = state.cartOrderMode || 'order';
+        const personAddress = state.personHealthData[p16]?.address || '14 Ahmadu Bello Way, Kaduna, Nigeria';
+        const subtotal = state.temporaryMedList.reduce((sum, m) => sum + (m.originalPrice || m.price || 0), 0);
+        const finalTotal = state.temporaryMedList.reduce((sum, m) => sum + (m.price || 0), 0);
+        const discountAmount = Math.max(0, subtotal - finalTotal);
 
         bodyHtml = `
           <div style="padding-top:10px;">
-            <div class="eyebrow-text">Medication Action Review</div>
-            <h1 class="screen-title">How should we handle ${p16}’s medications?</h1>
-            <p class="screen-subtitle">Choose whether to order immediately or keep saved in your cabinet for later.</p>
+            <div class="eyebrow-text">${p16}’s Cart Review</div>
+            <h1 class="screen-title">Review ${p16}’s medications</h1>
+            <p class="screen-subtitle">Everything in ${p16}’s cart before checkout or saving to cabinet.</p>
 
-            <div style="margin-top:20px;">
-              ${state.temporaryMedList.map((m, idx) => `
-                <div class="med-action-card">
-                  <div class="med-action-header">
-                    <div>
-                      <strong style="font-size:16px; color:var(--famasi-dark);">${escapeHtml(m.name)}</strong>
-                      <div style="font-size:12px; color:var(--famasi-gray-600); margin-top:2px;">
-                        Delivery to ${state.personHealthData[p16]?.address || 'Kaduna'}
+            <!-- Consolidated Cart Items Card -->
+            <div class="med-action-card" style="margin-top:16px;">
+              <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px; padding-bottom:8px; border-bottom:1px solid var(--famasi-gray-100);">
+                <span style="font-size:13px; font-weight:600; color:var(--famasi-gray-700);">
+                  Items in ${p16}’s Cart (${state.temporaryMedList.length})
+                </span>
+                <span style="font-size:11px; background:#dcfce7; color:#166534; font-weight:700; padding:2px 8px; border-radius:12px;">
+                  10% Welcome Perk
+                </span>
+              </div>
+
+              <!-- List of individual medications in this cart -->
+              <div style="display:flex; flex-direction:column; gap:10px;">
+                ${state.temporaryMedList.map((m, idx) => `
+                  <div style="display:flex; justify-content:space-between; align-items:flex-start; ${idx < state.temporaryMedList.length - 1 ? 'padding-bottom:10px; border-bottom:1px solid #f2f3f5;' : ''}">
+                    <div style="flex:1; padding-right:12px;">
+                      <div style="font-weight:600; font-size:14px; color:var(--famasi-dark);">${escapeHtml(m.name)}</div>
+                      <div style="font-size:12px; color:var(--famasi-gray-500); margin-top:2px;">
+                        ${m.subtitle ? escapeHtml(m.subtitle) + ' · ' : ''}Delivery to ${escapeHtml(personAddress)}
                       </div>
                     </div>
-                    <div style="text-align:right;">
-                      <span style="font-size:12px; text-decoration:line-through; color:var(--famasi-gray-500);">₦${m.originalPrice.toLocaleString()}</span>
-                      <div style="font-size:16px; font-weight:700; color:#15803d;">₦${m.price.toLocaleString()}</div>
-                      <span style="font-size:10px; color:#b45309; font-weight:600;">10% Welcome Perk</span>
+                    <div style="text-align:right; flex-shrink:0;">
+                      <span style="font-size:12px; text-decoration:line-through; color:var(--famasi-gray-400);">₦${(m.originalPrice || m.price).toLocaleString()}</span>
+                      <div style="font-size:14px; font-weight:700; color:#15803d;">₦${(m.price).toLocaleString()}</div>
                     </div>
                   </div>
+                `).join('')}
+              </div>
 
-                  <!-- Two Clear Decisions -->
-                  <div class="med-action-pills">
-                    <button class="med-action-pill-btn ${m.action === 'order' ? 'selected-order' : ''}" onclick="setMedAction(${idx}, 'order')">
-                      <span>🛒 Convert to Order</span>
-                      <small style="font-size:11px; font-weight:400; opacity:0.85;">Buy & dispatch now</small>
-                    </button>
-
-                    <button class="med-action-pill-btn ${m.action === 'order_later' ? 'selected-later' : ''}" onclick="setMedAction(${idx}, 'order_later')">
-                      <span>⏳ Order Later</span>
-                      <small style="font-size:11px; font-weight:400; opacity:0.85;">Save in cabinet</small>
-                    </button>
+              <!-- Price breakdown & total -->
+              <div style="margin-top:14px; padding-top:12px; border-top:1px dashed var(--famasi-gray-200);">
+                <div style="display:flex; justify-content:space-between; font-size:12px; color:var(--famasi-gray-600); margin-bottom:4px;">
+                  <span>Subtotal</span>
+                  <span>₦${subtotal.toLocaleString()}</span>
+                </div>
+                ${discountAmount > 0 ? `
+                  <div style="display:flex; justify-content:space-between; font-size:12px; color:#15803d; margin-bottom:6px;">
+                    <span>10% Welcome Discount</span>
+                    <span>-₦${discountAmount.toLocaleString()}</span>
                   </div>
+                ` : ''}
+                <div style="display:flex; justify-content:space-between; font-size:15px; font-weight:700; color:var(--famasi-dark); padding-top:4px; border-top:1px solid var(--famasi-gray-100);">
+                  <span>Cart Total</span>
+                  <span style="color:#15803d;">₦${finalTotal.toLocaleString()}</span>
+                </div>
+              </div>
 
-                  <!-- Auto-enroll in smart reminders (Decision requirement) -->
-                  <div class="auto-reminder-notice">
-                    <span>✓</span>
-                    <span>Auto-enrolled in <strong>Refill Reminders</strong> (Alerts 3 days before supply ends)</span>
+              <!-- Single auto-reminder notice for the whole cart -->
+              <div class="auto-reminder-notice">
+                <span>✓</span>
+                <span>Auto-enrolled in <strong>Refill Reminders</strong> (Alerts 3 days before supply ends)</span>
+              </div>
+            </div>
+
+            <!-- Whole-Cart Action Selector -->
+            <div style="margin-top:20px;">
+              <span style="font-size:13px; font-weight:600; color:var(--famasi-gray-700); display:block; margin-bottom:10px;">
+                How should we handle this cart?
+              </span>
+
+              <div class="option-cards-list" style="gap:10px;">
+                
+                <!-- Convert to Order -->
+                <div class="figma-option-card ${currentMode === 'order' ? 'selected' : ''}" onclick="setCartOrderMode('order')" style="padding:14px 16px; cursor:pointer;">
+                  <div class="card-left-content">
+                    <div>
+                      <span class="card-title">Convert to Order</span>
+                      <div class="card-subtitle">Checkout and dispatch immediately with 10% welcome discount</div>
+                    </div>
+                  </div>
+                  <div class="choice-indicator">
+                    <svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"></polyline></svg>
                   </div>
                 </div>
-              `).join('')}
+
+                <!-- Order Later -->
+                <div class="figma-option-card ${currentMode === 'order_later' ? 'selected' : ''}" onclick="setCartOrderMode('order_later')" style="padding:14px 16px; cursor:pointer;">
+                  <div class="card-left-content">
+                    <div>
+                      <span class="card-title">Order Later</span>
+                      <div class="card-subtitle">Save to ${p16}’s cabinet. Order whenever ready or wait for refill alerts</div>
+                    </div>
+                  </div>
+                  <div class="choice-indicator">
+                    <svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                  </div>
+                </div>
+
+              </div>
             </div>
+
           </div>
         `;
 
         footerHtml = `
-          <button class="btn-famasi-primary" onclick="saveMedicationsAndContinue()">
-            Confirm & Continue →
-          </button>
+          ${currentMode === 'order' ? `
+            <button class="btn-famasi-primary" onclick="confirmCartDecision('order')">
+              Convert to Order (₦${finalTotal.toLocaleString()}) →
+            </button>
+            <button class="btn-famasi-link" onclick="confirmCartDecision('order_later')">
+              Or Order Later (Confirm & Continue)
+            </button>
+          ` : `
+            <button class="btn-famasi-primary" onclick="confirmCartDecision('order_later')">
+              Confirm & Continue (Order Later) →
+            </button>
+            <button class="btn-famasi-link" onclick="confirmCartDecision('order')">
+              Switch to Convert to Order (₦${finalTotal.toLocaleString()})
+            </button>
+          `}
         `;
         break;
 
@@ -3457,6 +3529,18 @@
     render();
   }
 
+  function setCartOrderMode(mode) {
+    state.cartOrderMode = mode;
+    state.temporaryMedList.forEach(m => m.action = mode);
+    render();
+  }
+
+  function confirmCartDecision(mode) {
+    state.cartOrderMode = mode;
+    state.temporaryMedList.forEach(m => m.action = mode);
+    saveMedicationsAndContinue();
+  }
+
   function setMedAction(idx, action) {
     state.temporaryMedList[idx].action = action;
     render();
@@ -3468,6 +3552,12 @@
       state.personHealthData[person] = { allergies: [], conditions: [], address: 'Kaduna', medications: [], goals: [] };
     }
     state.personHealthData[person].medications = JSON.parse(JSON.stringify(state.temporaryMedList));
+    state.personHealthData[person].cartAction = state.cartOrderMode || 'order';
+    if (state.cartOrderMode === 'order') {
+      showToast(`Order converted for ${person}! 10% discount applied.`);
+    } else {
+      showToast(`Medications saved to ${person}’s cabinet.`);
+    }
     navigateTo('17');
   }
 
