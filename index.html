@@ -337,7 +337,8 @@
       box-shadow: none;
     }
 
-    .btn-famasi-secondary {
+    .btn-famasi-secondary,
+    .btn-famasi-outline {
       width: 100%;
       background: #ffffff;
       border: 1px solid var(--famasi-gray-400);
@@ -356,7 +357,8 @@
       transition: background 0.15s ease;
     }
 
-    .btn-famasi-secondary:hover {
+    .btn-famasi-secondary:hover,
+    .btn-famasi-outline:hover {
       background: var(--famasi-gray-100);
     }
 
@@ -2102,7 +2104,7 @@
           <button class="btn-famasi-primary" onclick="handleConfirmFamilyAttribution(true)">
             Confirm Family Care Circle
           </button>
-          <button class="btn-famasi-outline" onclick="handleConfirmFamilyAttribution(false)">
+          <button class="btn-famasi-link" onclick="handleConfirmFamilyAttribution(false)">
             These are all for me
           </button>
         `;
