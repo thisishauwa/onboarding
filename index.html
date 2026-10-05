@@ -2015,7 +2015,7 @@
 
         footerHtml = `
           <button class="btn-famasi-primary" onclick="handleImportConsent()">
-            Import & Personalize Care →
+            Import & Personalize Care
           </button>
           <button class="btn-famasi-link" onclick="navigateTo('3')">
             Start fresh without importing
@@ -2494,7 +2494,7 @@
 
         footerHtml = `
           <button class="btn-famasi-primary" onclick="navigateTo('8C')" ${state.selectedHMOs.length === 0 ? 'disabled' : ''}>
-            Continue with ${state.selectedHMOs.length} selected →
+            Continue with ${state.selectedHMOs.length} selected
           </button>
         `;
         break;
@@ -2535,7 +2535,7 @@
 
         footerHtml = `
           <button class="btn-famasi-primary" onclick="navigateTo('8D')">
-            Got it, continue setup →
+            Got it, continue setup
           </button>
         `;
         break;
@@ -2581,7 +2581,7 @@
 
         footerHtml = `
           <button class="btn-famasi-primary" onclick="navigateTo('9')">
-            Continue →
+            Continue
           </button>
         `;
         break;
@@ -2716,7 +2716,7 @@
 
         footerHtml = `
           <button class="btn-famasi-primary" onclick="navigateTo('13')">
-            Continue →
+            Continue
           </button>
         `;
         break;
@@ -2762,7 +2762,7 @@
 
         footerHtml = `
           <button class="btn-famasi-primary" onclick="navigateTo('14')">
-            Continue →
+            Continue
           </button>
         `;
         break;
@@ -2802,7 +2802,7 @@
 
         footerHtml = `
           <button class="btn-famasi-primary" onclick="navigateTo('15')">
-            Continue to Medications →
+            Continue to Medications
           </button>
         `;
         break;
@@ -2906,11 +2906,11 @@
         footerHtml = `
           ${state.temporaryMedList.length > 0 ? `
             <button class="btn-famasi-primary" onclick="navigateTo('16')">
-              Review ${p15}’s Medications (${state.temporaryMedList.length}) →
+              Review ${p15}’s Medications (${state.temporaryMedList.length})
             </button>
           ` : `
             <button class="btn-famasi-primary" onclick="navigateTo('17')">
-              Continue →
+              Continue
             </button>
           `}
           <button class="btn-famasi-link" onclick="navigateTo('17')">
@@ -3034,11 +3034,11 @@
         footerHtml = `
           ${currentMode === 'order' ? `
             <button class="btn-famasi-primary" onclick="confirmCartDecision('order')">
-              Convert to Order (₦${finalTotal.toLocaleString()}) →
+              Convert to Order (₦${finalTotal.toLocaleString()})
             </button>
           ` : `
             <button class="btn-famasi-primary" onclick="confirmCartDecision('order_later')">
-              Save to ${escapeHtml(p16)}’s Cabinet & Continue →
+              Save to ${escapeHtml(p16)}’s Cabinet & Continue
             </button>
           `}
         `;
@@ -3131,7 +3131,7 @@
 
         footerHtml = `
           <button class="btn-famasi-primary" onclick="navigateTo('18')">
-            Continue to Summary →
+            Continue to Summary
           </button>
         `;
         break;
@@ -3189,14 +3189,14 @@
         footerHtml = `
           ${hasNextPerson ? `
             <button class="btn-famasi-primary" onclick="proceedToNextPerson('${nextPersonName}')">
-              Set up next person: ${nextPersonName} →
+              Set up next person: ${nextPersonName}
             </button>
             <button class="btn-famasi-secondary" onclick="navigateTo('19')">
               Finish for now & save account
             </button>
           ` : `
             <button class="btn-famasi-primary" onclick="navigateTo('19')">
-              Complete & Secure Account →
+              Complete & Secure Account
             </button>
           `}
         `;
@@ -3250,7 +3250,7 @@
 
         footerHtml = `
           <button class="btn-famasi-primary" onclick="navigateTo('20')">
-            Secure My Household Cabinet →
+            Secure My Household Cabinet
           </button>
         `;
         break;
@@ -3293,7 +3293,7 @@
 
         footerHtml = `
           <button class="btn-famasi-primary" onclick="verifyAndOpenDashboard()">
-            Verify & Enter Dashboard →
+            Verify & Enter Dashboard
           </button>
           <button class="btn-famasi-link" onclick="verifyAndOpenDashboard()">
             Skip email & finish

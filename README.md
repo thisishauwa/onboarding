@@ -30,7 +30,7 @@ An interactive, high-fidelity and lo-fi prototype for the Famasi onboarding expe
      - Focused search box with `#5da5f6` border & `0 0 0 4px #e7f2fe` primary-50 glow effect and clear button.
      - Interactive filter pills: **💡 Suggested** and **📋 Plans**.
      - Curated plan items with `🪄 Curated Plan` badges (PMOS, Pregnancy Care, Hypertension Care Plan, etc.) and acute medication items.
-     - Preserves the standard onboarding footer navigation (`Review Dad’s Medications (count) →` and `Skip medication entry for now`).
+     - Preserves the standard onboarding footer navigation (`Review Dad’s Medications (count)` and `Skip medication entry for now`).
 
 7. **Whole-Cart Decision (Convert to Order vs. Order Later)**:
    - When reviewing medications (Screen 16), the decision applies to the entire cart as a whole rather than configuring each medication individually.
