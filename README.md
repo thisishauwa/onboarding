@@ -13,8 +13,8 @@ An interactive, high-fidelity and lo-fi prototype for the Famasi onboarding expe
    - Preserves full profile creation and password-free OTP verification until after the care plan is organized.
 
 3. **"What Do You Want Famasi to Help You Do?" (Screen 8D)**:
-   - Dedicated customization screen prior to care circle setup allowing users to choose their primary health objectives (Medication delivery & refills, Chronic condition management, Family care management, Pharmacist consultations).
-   - Minimalist, emoji-free card options aligned with the Figma care circle design language.
+   - Dedicated customization screen prior to family setup allowing users to choose their primary health objectives (Medication delivery & refills, Chronic condition management, Family care management, Pharmacist consultations).
+   - Minimalist, emoji-free card options aligned with the Figma family design language.
 
 4. **Multi-Select Payment & HMO Alpha Flow**:
    - Allows multi-selection of payment methods (Self-pay, HMO, Employer, Someone else).
@@ -58,7 +58,7 @@ Account & Household Setup
   ├── 2B. Can we have your phone number? (Phone only + Persona Toggle)
   │     ├── [Returning User Path]
   │     │     ├── 2C. Order History Found (5 Orders & Personalization Consent)
-  │     │     └── 2D. Smart Family Care Attribution (Multi-Person Caregiver Edge Case)
+  │     │     └── 2D. Family Attribution (Multi-Person Caregiver Edge Case)
   │     └── [New User Path]
   │           └── 3. Trust & 300k Community Reviews (Figma 24186:18430)
   ├── 4. Personalisation Intro — "Now it's your turn" (Figma 24192:19394)
