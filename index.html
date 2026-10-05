@@ -1433,7 +1433,7 @@
       </select>
 
       <button id="personaToggleBtn" class="reviewer-btn active" onclick="toggleCustomerPersona()" title="Toggle between Returning Customer (with 5 orders) and New User">
-        ⚡ Persona: Returning (5 Orders)
+        Persona: Returning (5 Orders)
       </button>
 
       <button class="reviewer-btn" onclick="resetAllState()">↺ Reset Flow</button>
@@ -1785,7 +1785,7 @@
     const personaBtn = document.getElementById('personaToggleBtn');
     if (personaBtn) {
       personaBtn.className = `reviewer-btn ${state.isReturningCustomer ? 'active' : ''}`;
-      personaBtn.textContent = state.isReturningCustomer ? '⚡ Persona: Returning (5 Orders)' : '✨ Persona: New User';
+      personaBtn.textContent = state.isReturningCustomer ? 'Persona: Returning (5 Orders)' : 'Persona: New User';
     }
 
     const progress = getProgressPercentage(state.currentScreen);
@@ -1913,7 +1913,7 @@
               <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:8px;">
                 <span style="font-size:11px; font-weight:700; text-transform:uppercase; letter-spacing:0.5px; color:var(--famasi-gray-600);">Prototype Persona Mode</span>
                 <span style="font-size:11px; color:${state.isReturningCustomer ? '#0284c7' : 'var(--famasi-gray-500)'}; font-weight:600;">
-                  ${state.isReturningCustomer ? '⚡ 5 Orders Attached' : '✨ First-time User'}
+                  ${state.isReturningCustomer ? '5 Orders Attached' : 'First-time User'}
                 </span>
               </div>
               <div style="display:flex; gap:8px;">
@@ -1926,8 +1926,8 @@
               </div>
               <p style="font-size:11px; color:var(--famasi-gray-600); margin-top:8px; line-height:1.35;">
                 ${state.isReturningCustomer 
-                  ? '⚡ Returning: Phone has 5 pharmacy orders. We’ll offer 1-tap import with family care attribution.' 
-                  : '✨ New User: First time with Famasi. Proceeds through standard brand introduction.'}
+                  ? 'Returning: Phone has 5 pharmacy orders. Offers 1-tap import with family care attribution.' 
+                  : 'New User: First time with Famasi. Proceeds through standard brand introduction.'}
               </p>
             </div>
           </div>
@@ -1946,67 +1946,57 @@
       case '2C':
         bodyHtml = `
           <div style="padding-top:10px;">
-            <div class="eyebrow-text">Welcome Back to Famasi 👋</div>
+            <div class="eyebrow-text">Welcome back</div>
             <h1 class="screen-title" style="margin-top:6px; font-size:24px; line-height:1.25;">
               We found 5 orders attached to this number.
             </h1>
             <p style="font-size:14px; color:var(--famasi-gray-700); margin-top:6px; line-height:1.45;">
-              Would you like to import your prescription & refill history to personalize your care?
+              Would you like to import your prescription and refill history to personalize your care?
             </p>
 
             <!-- Found Records Summary Card -->
-            <div style="margin-top:18px; background:#ffffff; border:1px solid #dbeafe; border-radius:16px; padding:16px; box-shadow:0 4px 16px rgba(13,148,136,0.04);">
+            <div style="margin-top:18px; background:#ffffff; border:1px solid var(--famasi-gray-200); border-radius:16px; padding:16px; box-shadow:var(--famasi-shadow);">
               <div style="display:flex; align-items:center; justify-content:space-between; padding-bottom:12px; border-bottom:1px solid var(--famasi-gray-100);">
-                <div style="display:flex; align-items:center; gap:8px;">
-                  <span style="font-size:18px;">📋</span>
-                  <div>
-                    <strong style="font-size:13px; color:var(--famasi-dark);">Famasi Pharmacy Records</strong>
-                    <div style="font-size:11px; color:var(--famasi-gray-600);">${escapeHtml(state.userPhone)}</div>
-                  </div>
+                <div>
+                  <strong style="font-size:13px; color:var(--famasi-dark);">Famasi Pharmacy Records</strong>
+                  <div style="font-size:11px; color:var(--famasi-gray-600); margin-top:2px;">${escapeHtml(state.userPhone)}</div>
                 </div>
-                <span style="background:#e0f2fe; color:var(--famasi-blue); font-size:11px; font-weight:700; padding:3px 8px; border-radius:999px;">
+                <span style="background:var(--famasi-gray-100); color:var(--famasi-dark); font-size:11px; font-weight:600; padding:3px 8px; border-radius:6px;">
                   5 Orders Found
                 </span>
               </div>
 
               <!-- Detected Highlights -->
-              <div style="margin-top:12px; display:flex; flex-direction:column; gap:10px;">
-                <div style="display:flex; align-items:flex-start; gap:10px;">
-                  <span style="font-size:15px; margin-top:1px;">💊</span>
-                  <div>
-                    <div style="font-size:12px; font-weight:600; color:var(--famasi-dark);">3 Active Maintenance Prescriptions</div>
-                    <div style="font-size:12px; color:var(--famasi-gray-600); margin-top:2px;">
-                      Amlodipine 10mg, Metformin 500mg, Losartan 50mg
-                    </div>
+              <div style="margin-top:14px; display:flex; flex-direction:column; gap:12px;">
+                <div>
+                  <div style="font-size:11px; font-weight:700; text-transform:uppercase; letter-spacing:0.5px; color:var(--famasi-gray-500);">3 Active Maintenance Prescriptions</div>
+                  <div style="font-size:13px; color:var(--famasi-dark); margin-top:3px; font-weight:500;">
+                    Amlodipine 10mg, Metformin 500mg, Losartan 50mg
                   </div>
                 </div>
 
-                <div style="display:flex; align-items:flex-start; gap:10px;">
-                  <span style="font-size:15px; margin-top:1px;">📍</span>
-                  <div>
-                    <div style="font-size:12px; font-weight:600; color:var(--famasi-dark);">Known Delivery Locations</div>
-                    <div style="font-size:12px; color:var(--famasi-gray-600); margin-top:2px;">
-                      Barnawa (Kaduna) & Victoria Island / Lekki (Lagos)
-                    </div>
+                <div>
+                  <div style="font-size:11px; font-weight:700; text-transform:uppercase; letter-spacing:0.5px; color:var(--famasi-gray-500);">Known Delivery Locations</div>
+                  <div style="font-size:13px; color:var(--famasi-dark); margin-top:3px; font-weight:500;">
+                    Barnawa (Kaduna) and Victoria Island / Lekki (Lagos)
                   </div>
                 </div>
 
-                <div style="display:flex; align-items:flex-start; gap:10px;">
-                  <span style="font-size:15px; margin-top:1px;">🛡️</span>
-                  <div>
-                    <div style="font-size:12px; font-weight:600; color:var(--famasi-dark);">Pre-filling Known Fields</div>
-                    <div style="font-size:12px; color:var(--famasi-gray-600); margin-top:2px;">
-                      Sex, delivery address, and active medications will be pre-filled. Unknowns will be left for you to quickly complete.
-                    </div>
+                <div>
+                  <div style="font-size:11px; font-weight:700; text-transform:uppercase; letter-spacing:0.5px; color:var(--famasi-gray-500);">Pre-filled Information</div>
+                  <div style="font-size:12.5px; color:var(--famasi-gray-700); margin-top:3px; line-height:1.4;">
+                    Sex, delivery addresses, and active medications will be pre-filled. Unknown fields are left blank for you to complete.
                   </div>
                 </div>
               </div>
 
               <!-- Multi-person Notice -->
-              <div style="margin-top:14px; background:#eff6ff; border-radius:10px; padding:10px 12px; display:flex; gap:8px; align-items:flex-start;">
-                <span style="font-size:14px;">💡</span>
-                <p style="font-size:11.5px; color:#1e40af; line-height:1.4; margin:0;">
-                  <strong>Family Orders Detected:</strong> Your past orders have deliveries in both Kaduna and Lagos. Next, we’ll help you attribute them to the right family members.
+              <div style="margin-top:14px; background:#f8fafc; border:1px solid var(--famasi-gray-200); border-radius:10px; padding:12px 14px;">
+                <div style="font-size:11px; font-weight:700; text-transform:uppercase; letter-spacing:0.5px; color:var(--famasi-blue); margin-bottom:3px;">
+                  Family Caregiver Detected
+                </div>
+                <p style="font-size:12px; color:var(--famasi-gray-700); line-height:1.4; margin:0;">
+                  Your past orders show deliveries across Kaduna and Lagos. Next, we will help you attribute each medication to the right family member.
                 </p>
               </div>
             </div>
@@ -2029,77 +2019,77 @@
       case '2D':
         bodyHtml = `
           <div style="padding-top:10px;">
-            <div class="eyebrow-text">Smart Circle Attribution</div>
+            <div class="eyebrow-text">Care Circle Setup</div>
             <h1 class="screen-title" style="margin-top:6px; font-size:24px; line-height:1.25;">
               Who do these medications belong to?
             </h1>
             <p style="font-size:13.5px; color:var(--famasi-gray-700); margin-top:6px; line-height:1.45;">
-              We noticed orders delivered to different locations. Confirm your Family Care Circle:
+              We noticed orders delivered to different locations. Confirm your family care circle:
             </p>
 
             <div style="margin-top:16px; display:flex; flex-direction:column; gap:10px;">
               <!-- Person 1: Dad -->
-              <div style="background:#ffffff; border:1px solid var(--famasi-gray-300); border-radius:14px; padding:12px 14px; box-shadow:0 2px 6px rgba(0,0,0,0.03);">
+              <div style="background:#ffffff; border:1px solid var(--famasi-gray-200); border-radius:14px; padding:14px; box-shadow:var(--famasi-shadow);">
                 <div style="display:flex; justify-content:space-between; align-items:center;">
                   <div style="display:flex; align-items:center; gap:10px;">
-                    <div style="width:34px; height:34px; border-radius:50%; background:#e0f2fe; display:flex; align-items:center; justify-content:center; font-size:16px;">
-                      👴
+                    <div style="width:32px; height:32px; border-radius:50%; background:var(--famasi-gray-100); display:flex; align-items:center; justify-content:center; font-size:12px; font-weight:700; color:var(--famasi-dark);">
+                      D
                     </div>
                     <div>
                       <strong style="font-size:13.5px; color:var(--famasi-dark);">Dad (Papa)</strong>
                       <div style="font-size:11px; color:var(--famasi-gray-600);">Barnawa, Kaduna · Senior</div>
                     </div>
                   </div>
-                  <span style="font-size:11px; font-weight:700; color:#0284c7; background:#e0f2fe; padding:2px 8px; border-radius:999px;">
+                  <span style="font-size:11px; font-weight:600; color:var(--famasi-gray-700); background:var(--famasi-gray-100); padding:2px 8px; border-radius:6px;">
                     3 Orders
                   </span>
                 </div>
-                <div style="margin-top:8px; padding-top:8px; border-top:1px dashed var(--famasi-gray-200); font-size:11.5px; color:var(--famasi-gray-700);">
-                  <div style="font-weight:600; color:var(--famasi-dark); margin-bottom:4px;">Attributed Prescriptions:</div>
-                  <div style="display:flex; flex-wrap:wrap; gap:5px;">
-                    <span style="background:var(--famasi-gray-100); padding:2px 7px; border-radius:6px; font-size:11px; color:var(--famasi-dark);">💊 Amlodipine 10mg (Monthly)</span>
-                    <span style="background:var(--famasi-gray-100); padding:2px 7px; border-radius:6px; font-size:11px; color:var(--famasi-dark);">💊 Metformin 500mg (Monthly)</span>
+                <div style="margin-top:10px; padding-top:10px; border-top:1px solid var(--famasi-gray-100); font-size:11.5px; color:var(--famasi-gray-700);">
+                  <div style="font-weight:600; color:var(--famasi-dark); margin-bottom:5px; font-size:11px; text-transform:uppercase; letter-spacing:0.5px;">Prescriptions:</div>
+                  <div style="display:flex; flex-wrap:wrap; gap:6px;">
+                    <span style="background:var(--famasi-gray-50); border:1px solid var(--famasi-gray-200); padding:3px 8px; border-radius:6px; font-size:11px; color:var(--famasi-dark);">Amlodipine 10mg (Monthly)</span>
+                    <span style="background:var(--famasi-gray-50); border:1px solid var(--famasi-gray-200); padding:3px 8px; border-radius:6px; font-size:11px; color:var(--famasi-dark);">Metformin 500mg (Monthly)</span>
                   </div>
                 </div>
               </div>
 
               <!-- Person 2: Mum -->
-              <div style="background:#ffffff; border:1px solid var(--famasi-gray-300); border-radius:14px; padding:12px 14px; box-shadow:0 2px 6px rgba(0,0,0,0.03);">
+              <div style="background:#ffffff; border:1px solid var(--famasi-gray-200); border-radius:14px; padding:14px; box-shadow:var(--famasi-shadow);">
                 <div style="display:flex; justify-content:space-between; align-items:center;">
                   <div style="display:flex; align-items:center; gap:10px;">
-                    <div style="width:34px; height:34px; border-radius:50%; background:#fce7f3; display:flex; align-items:center; justify-content:center; font-size:16px;">
-                      👵
+                    <div style="width:32px; height:32px; border-radius:50%; background:var(--famasi-gray-100); display:flex; align-items:center; justify-content:center; font-size:12px; font-weight:700; color:var(--famasi-dark);">
+                      M
                     </div>
                     <div>
                       <strong style="font-size:13.5px; color:var(--famasi-dark);">Mum (Mama)</strong>
                       <div style="font-size:11px; color:var(--famasi-gray-600);">Victoria Island, Lagos · Senior</div>
                     </div>
                   </div>
-                  <span style="font-size:11px; font-weight:700; color:#db2777; background:#fce7f3; padding:2px 8px; border-radius:999px;">
+                  <span style="font-size:11px; font-weight:600; color:var(--famasi-gray-700); background:var(--famasi-gray-100); padding:2px 8px; border-radius:6px;">
                     1 Order
                   </span>
                 </div>
-                <div style="margin-top:8px; padding-top:8px; border-top:1px dashed var(--famasi-gray-200); font-size:11.5px; color:var(--famasi-gray-700);">
-                  <div style="font-weight:600; color:var(--famasi-dark); margin-bottom:4px;">Attributed Prescriptions:</div>
-                  <div style="display:flex; flex-wrap:wrap; gap:5px;">
-                    <span style="background:var(--famasi-gray-100); padding:2px 7px; border-radius:6px; font-size:11px; color:var(--famasi-dark);">💊 Losartan 50mg (Refill in 6 days)</span>
+                <div style="margin-top:10px; padding-top:10px; border-top:1px solid var(--famasi-gray-100); font-size:11.5px; color:var(--famasi-gray-700);">
+                  <div style="font-weight:600; color:var(--famasi-dark); margin-bottom:5px; font-size:11px; text-transform:uppercase; letter-spacing:0.5px;">Prescriptions:</div>
+                  <div style="display:flex; flex-wrap:wrap; gap:6px;">
+                    <span style="background:var(--famasi-gray-50); border:1px solid var(--famasi-gray-200); padding:3px 8px; border-radius:6px; font-size:11px; color:var(--famasi-dark);">Losartan 50mg (Refill in 6 days)</span>
                   </div>
                 </div>
               </div>
 
               <!-- Person 3: You -->
-              <div style="background:#ffffff; border:1px solid var(--famasi-gray-300); border-radius:14px; padding:12px 14px; box-shadow:0 2px 6px rgba(0,0,0,0.03);">
+              <div style="background:#ffffff; border:1px solid var(--famasi-gray-200); border-radius:14px; padding:14px; box-shadow:var(--famasi-shadow);">
                 <div style="display:flex; justify-content:space-between; align-items:center;">
                   <div style="display:flex; align-items:center; gap:10px;">
-                    <div style="width:34px; height:34px; border-radius:50%; background:#f0fdf4; display:flex; align-items:center; justify-content:center; font-size:16px;">
-                      👤
+                    <div style="width:32px; height:32px; border-radius:50%; background:var(--famasi-gray-100); display:flex; align-items:center; justify-content:center; font-size:12px; font-weight:700; color:var(--famasi-dark);">
+                      ${escapeHtml(state.userName.charAt(0) || 'U')}
                     </div>
                     <div>
                       <strong style="font-size:13.5px; color:var(--famasi-dark);">${escapeHtml(state.userName)} (You)</strong>
                       <div style="font-size:11px; color:var(--famasi-gray-600);">Lekki Phase 1, Lagos</div>
                     </div>
                   </div>
-                  <span style="font-size:11px; font-weight:700; color:#16a34a; background:#dcfce7; padding:2px 8px; border-radius:999px;">
+                  <span style="font-size:11px; font-weight:600; color:var(--famasi-gray-700); background:var(--famasi-gray-100); padding:2px 8px; border-radius:6px;">
                     Primary User
                   </span>
                 </div>
@@ -2110,10 +2100,10 @@
 
         footerHtml = `
           <button class="btn-famasi-primary" onclick="handleConfirmFamilyAttribution(true)">
-            ✓ Yes, Confirm Family Care Circle
+            Confirm Family Care Circle
           </button>
           <button class="btn-famasi-outline" onclick="handleConfirmFamilyAttribution(false)">
-            No, these are all for me
+            These are all for me
           </button>
         `;
         break;
@@ -2506,16 +2496,16 @@
         bodyHtml = `
           <div style="padding-top:10px;">
             <div class="alpha-badge-pill">
-              <span>⚡</span> Alpha Early Access
+              Alpha Early Access
             </div>
             <h1 class="screen-title" style="font-size:26px;">
-              Direct HMO billing is coming soon!
+              Direct HMO billing is coming soon
             </h1>
             <p class="screen-subtitle">
               You are one of our first alpha users testing insurance workflows.
             </p>
 
-            <div class="med-action-card" style="margin-top:20px; border-left: 4px solid var(--famasi-blue); background:#ffffff;">
+            <div class="med-action-card" style="margin-top:20px; background:#ffffff;">
               <h3 style="font-size:16px; margin-bottom:8px; color:var(--famasi-black);">How it works during Alpha:</h3>
               <ul style="padding-left:18px; font-size:14px; color:var(--famasi-gray-700); display:flex; flex-direction:column; gap:8px; line-height:1.45;">
                 <li><strong>Verified Direct Dispense:</strong> You can place orders right now via card or transfer.</li>
@@ -2525,9 +2515,8 @@
             </div>
 
             <div class="cohort-insight-card" style="margin-top:16px;">
-              <span style="font-size:20px;">🎁</span>
               <div>
-                <strong>Alpha Perk:</strong> As an early HMO tester, your first order will receive <strong>10% off</strong> all prescription medicines!
+                <strong>Alpha Perk:</strong> As an early HMO tester, your first order will receive <strong>10% off</strong> all prescription medicines.
               </div>
             </div>
           </div>
@@ -3121,7 +3110,6 @@
             </div>
 
             <div class="cohort-insight-card" style="margin-top:16px;">
-              <span style="font-size:20px;">💡</span>
               <div>
                 <strong>Clinical evidence:</strong> Patients tracking vitals regularly show a <strong>43% reduction</strong> in emergency medication adjustments.
               </div>
@@ -3149,10 +3137,10 @@
         bodyHtml = `
           <div style="padding-top:10px;">
             <div class="eyebrow-text">Care Plan Complete</div>
-            <h1 class="screen-title">🎉 ${p18} is all set up!</h1>
+            <h1 class="screen-title">${p18} is all set up</h1>
             <p class="screen-subtitle">Everything is organized into ${p18}’s digital care cabinet.</p>
 
-            <div class="med-action-card" style="margin-top:20px; border-left:4px solid var(--famasi-blue);">
+            <div class="med-action-card" style="margin-top:20px;">
               <h3 style="font-size:16px; margin-bottom:12px; color:var(--famasi-black);">${p18}’s Summary</h3>
               
               <div style="display:flex; flex-direction:column; gap:10px; font-size:13px;">
@@ -3178,7 +3166,7 @@
                 <div>
                   <strong style="color:var(--famasi-dark);">Active Features:</strong>
                   <div style="color:#16a34a; font-weight:600; margin-top:2px;">
-                    ✓ Auto-refill monitoring · 10% welcome discount applied
+                    Auto-refill monitoring · 10% welcome discount applied
                   </div>
                 </div>
               </div>
@@ -3215,9 +3203,9 @@
             <div style="display:flex; flex-direction:column; gap:12px; margin-top:24px;">
               
               <div style="background:#ffffff; border:1px solid var(--famasi-gray-200); border-radius:14px; padding:16px; display:flex; gap:14px; align-items:center;">
-                <span style="font-size:26px;">💊</span>
+                <div style="font-size:18px; font-weight:800; color:var(--famasi-blue); min-width:54px; letter-spacing:-0.5px;">100%</div>
                 <div>
-                  <strong style="font-size:15px; color:var(--famasi-black);">100% Genuine Direct Dispense</strong>
+                  <strong style="font-size:15px; color:var(--famasi-black);">Direct Manufacturer Dispense</strong>
                   <p style="font-size:13px; color:var(--famasi-gray-600); margin-top:2px;">
                     Zero open market risks. Sourced direct from verified manufacturers with NAFDAC batch tracing.
                   </p>
@@ -3225,9 +3213,9 @@
               </div>
 
               <div style="background:#ffffff; border:1px solid var(--famasi-gray-200); border-radius:14px; padding:16px; display:flex; gap:14px; align-items:center;">
-                <span style="font-size:26px;">⚡</span>
+                <div style="font-size:18px; font-weight:800; color:var(--famasi-blue); min-width:54px; letter-spacing:-0.5px;">3 hrs</div>
                 <div>
-                  <strong style="font-size:15px; color:var(--famasi-black);">Under 3 Hours Urgent Delivery</strong>
+                  <strong style="font-size:15px; color:var(--famasi-black);">Rapid Citywide Delivery</strong>
                   <p style="font-size:13px; color:var(--famasi-gray-600); margin-top:2px;">
                     Rapid dispatch across Lagos and Abuja; 24-hour tracked courier nationwide.
                   </p>
@@ -3235,9 +3223,9 @@
               </div>
 
               <div style="background:#ffffff; border:1px solid var(--famasi-gray-200); border-radius:14px; padding:16px; display:flex; gap:14px; align-items:center;">
-                <span style="font-size:26px;">❤️</span>
+                <div style="font-size:18px; font-weight:800; color:var(--famasi-blue); min-width:54px; letter-spacing:-0.5px;">94%</div>
                 <div>
-                  <strong style="font-size:15px; color:var(--famasi-black);">94% Refill Adherence Rate</strong>
+                  <strong style="font-size:15px; color:var(--famasi-black);">Refill Adherence Rate</strong>
                   <p style="font-size:13px; color:var(--famasi-gray-600); margin-top:2px;">
                     Families on Famasi prevent emergency hospital readmissions by never skipping maintenance doses.
                   </p>
@@ -3274,7 +3262,7 @@
             </div>
 
             <div style="text-align:center; margin-bottom:20px;">
-              <button class="reviewer-btn" style="font-size:11px;" onclick="autoFillOtpDemo()">⚡ Quick-Fill Demo Code (1234)</button>
+              <button class="reviewer-btn" style="font-size:11px;" onclick="autoFillOtpDemo()">Fill Demo Code (1234)</button>
             </div>
 
             <!-- Optional / Skippable Email prompt (Decision requirement) -->
