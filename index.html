@@ -1583,8 +1583,10 @@
     userAge: 28,
     userAddress: 'Lekki Phase 1, Lagos, Nigeria',
 
-    // Payment method (multi-select + HMO)
+    // Payment method (integrated at cart checkout)
+    paymentMethod: 'card', // 'card' | 'hmo'
     paymentMethods: ['Health insurance/HMO'],
+    selectedHMO: 'Reliance HMO',
     selectedHMOs: ['Reliance HMO'],
 
     // What do you want Famasi to help you do?
@@ -1753,6 +1755,7 @@
       '8': 54,
       '8B': 58,
       '8C': 62,
+      '8D': 54,
       '9': 68,
       '10': 74,
       '10B': 76,
@@ -2168,7 +2171,7 @@
             </div>
 
             <div style="font-size:13px; color:var(--famasi-gray-600); text-align:center; margin-top:8px;">
-              Swipe horizontally to view more patient stories →
+              Swipe horizontally to view more patient stories
             </div>
           </div>
         `;
@@ -2186,14 +2189,14 @@
       case '4':
         bodyHtml = `
           <div style="flex:1; display:flex; flex-direction:column; justify-content:center; text-align:center; padding:20px 10px;">
-            <div style="font-size:16px; color:var(--famasi-gray-600); margin-bottom:12px;">
-              Now it’s your turn
+            <div style="font-size:13px; font-weight:600; text-transform:uppercase; letter-spacing:0.5px; color:var(--famasi-blue); margin-bottom:12px;">
+              Account Manager Profile
             </div>
-            <h1 class="screen-title" style="font-size:32px; font-weight:600; line-height:1.25; margin-bottom:16px;">
-              Let’s personalise Famasi<br>a bit for you
+            <h1 class="screen-title" style="font-size:30px; font-weight:600; line-height:1.25; margin-bottom:16px;">
+              Let’s set up your profile
             </h1>
-            <p style="font-size:15px; color:var(--famasi-gray-600); max-width:290px; margin:0 auto; line-height:1.5;">
-              We’ll ask 3 quick questions to format your health cabinet, check safety, and unlock your 10% welcome bonus.
+            <p style="font-size:14.5px; color:var(--famasi-gray-700); max-width:300px; margin:0 auto; line-height:1.5;">
+              Even if you’re managing care for a parent or family member, we need your primary details to secure your family dashboard, assign your dedicated care coordinator, and coordinate deliveries.
             </p>
           </div>
         `;
@@ -2211,9 +2214,9 @@
       case '5':
         bodyHtml = `
           <div style="padding-top:10px;">
-            <div class="eyebrow-text">Okay, ${escapeHtml(state.userName)}</div>
+            <div class="eyebrow-text">Account Manager Profile</div>
             <h1 class="screen-title">What is your sex?</h1>
-            <p class="screen-subtitle">Used strictly for clinical dosing accuracy and prescription screening.</p>
+            <p class="screen-subtitle">Used for your primary account records and clinical dosing whenever you add medications for yourself.</p>
 
             <div class="option-cards-list" style="margin-top:28px;">
               <div class="figma-option-card ${state.userSex === 'Female' ? 'selected' : ''}" onclick="state.userSex='Female'; render();">
@@ -2349,9 +2352,9 @@
       case '7':
         bodyHtml = `
           <div style="padding-top:10px;">
-            <div class="eyebrow-text">Your Location</div>
+            <div class="eyebrow-text">Account Manager Profile</div>
             <h1 class="screen-title">Where do you live?</h1>
-            <p class="screen-subtitle">We match you to local accredited dispensing pharmacies for swift delivery.</p>
+            <p class="screen-subtitle">We use your primary address to match your local accredited pharmacy network and set your default caregiver delivery zone.</p>
 
             <div class="famasi-input-group" style="margin-top:24px;">
               <div class="famasi-input-wrapper">
@@ -2371,7 +2374,7 @@
         `;
 
         footerHtml = `
-          <button class="btn-famasi-primary" onclick="navigateTo('8')">
+          <button class="btn-famasi-primary" onclick="navigateTo('8D')">
             Continue
           </button>
         `;
@@ -2536,27 +2539,52 @@
       // ============================================================
       case '8D':
         const famasiGoalOptions = [
-          { title: 'Medication delivery & refills', desc: 'Doorstep deliveries on schedule' },
-          { title: 'Chronic condition management', desc: 'Support for ongoing health needs' },
-          { title: 'Care for family members', desc: 'Manage prescriptions for loved ones' },
-          { title: 'Pharmacist consultations', desc: 'Advice and dosage guidance' },
-          { title: 'All of the above', desc: 'Full pharmacy care for you and your family' }
+          {
+            title: 'Medication delivery & refills',
+            desc: 'Scheduled doorstep delivery before supplies run out',
+            badge: 'Enables 3-Day Refill Alerts'
+          },
+          {
+            title: 'Chronic condition management',
+            desc: 'Track blood pressure, blood sugar, and health vitals',
+            badge: 'Enables Health Vitals Log'
+          },
+          {
+            title: 'Care for family members',
+            desc: 'Coordinate prescriptions and deliveries across different cities',
+            badge: 'Enables Multi-City Cabinets'
+          },
+          {
+            title: 'Pharmacist consultations',
+            desc: 'Licensed pharmacist guidance and dosage review',
+            badge: 'Enables 1-on-1 Clinical Support'
+          },
+          {
+            title: 'All of the above',
+            desc: 'Complete end-to-end pharmacy and family wellness care',
+            badge: 'All Platform Features'
+          }
         ];
 
         bodyHtml = `
           <div style="padding-top:10px;">
             <div class="eyebrow-text">Personalising your care</div>
             <h1 class="screen-title">What do you want Famasi to help you do?</h1>
-            <p class="screen-subtitle">Select all that apply.</p>
+            <p class="screen-subtitle">Select all that apply. Your choices configure your automated reminders, delivery routes, and care team.</p>
 
             <div class="option-cards-list" style="margin-top:20px;">
               ${famasiGoalOptions.map(opt => {
                 const isSelected = state.userGoals.includes(opt.title);
                 return `
                   <div class="figma-option-card ${isSelected ? 'selected' : ''}" onclick="toggleUserGoal('${opt.title}')" style="padding:14px 16px;">
-                    <div class="card-left-content">
+                    <div class="card-left-content" style="flex:1;">
                       <div>
-                        <span class="card-title">${opt.title}</span>
+                        <div style="display:flex; align-items:center; gap:8px; margin-bottom:2px;">
+                          <span class="card-title">${opt.title}</span>
+                          <span style="font-size:10px; font-weight:700; background:${isSelected ? '#dbeafe' : 'var(--famasi-gray-100)'}; color:${isSelected ? 'var(--famasi-blue)' : 'var(--famasi-gray-600)'}; padding:2px 7px; border-radius:6px;">
+                            ${opt.badge}
+                          </span>
+                        </div>
                         <div class="card-subtitle">${opt.desc}</div>
                       </div>
                     </div>
@@ -2982,16 +3010,70 @@
               </div>
             </div>
 
+            <!-- Payment & Coverage Method (Contextual Cart Checkout) -->
+            <div style="margin-top:18px;">
+              <span style="font-size:13px; font-weight:600; color:var(--famasi-gray-700); display:block; margin-bottom:8px;">
+                How would you like to pay?
+              </span>
+
+              <div class="option-cards-list" style="gap:8px;">
+                <!-- Self Pay -->
+                <div class="figma-option-card ${state.paymentMethod === 'card' ? 'selected' : ''}" onclick="state.paymentMethod='card'; render();" style="padding:12px 14px; cursor:pointer;">
+                  <div class="card-left-content">
+                    <div>
+                      <span class="card-title" style="font-size:14px;">Debit Card, USSD or Bank Transfer</span>
+                      <div class="card-subtitle">Pay directly for rapid pharmacy dispatch</div>
+                    </div>
+                  </div>
+                  <div class="choice-indicator">
+                    <svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                  </div>
+                </div>
+
+                <!-- HMO -->
+                <div class="figma-option-card ${state.paymentMethod === 'hmo' ? 'selected' : ''}" onclick="state.paymentMethod='hmo'; render();" style="padding:12px 14px; cursor:pointer;">
+                  <div class="card-left-content">
+                    <div>
+                      <div style="display:flex; align-items:center; gap:6px;">
+                        <span class="card-title" style="font-size:14px;">Health Insurance / HMO</span>
+                        <span style="font-size:10px; font-weight:700; background:#fef3c7; color:#92400e; padding:1px 6px; border-radius:4px;">Alpha Early Access</span>
+                      </div>
+                      <div class="card-subtitle">Get itemized stamped claims receipts for quick HMO reimbursement</div>
+                    </div>
+                  </div>
+                  <div class="choice-indicator">
+                    <svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                  </div>
+                </div>
+
+                ${state.paymentMethod === 'hmo' ? `
+                  <div style="background:#f8fafc; border:1px solid var(--famasi-gray-200); border-radius:12px; padding:12px; margin-top:2px;">
+                    <div style="font-size:11.5px; font-weight:600; color:var(--famasi-dark); margin-bottom:8px;">Select HMO Provider:</div>
+                    <div style="display:flex; flex-wrap:wrap; gap:6px;">
+                      ${nigerianHMOs.slice(0, 5).map(h => `
+                        <button type="button" onclick="state.selectedHMO='${h}'; render();" style="padding:4px 10px; font-size:11.5px; border-radius:100px; border:1px solid ${state.selectedHMO === h ? 'var(--famasi-blue)' : 'var(--famasi-gray-300)'}; background:${state.selectedHMO === h ? '#e7f2fe' : '#ffffff'}; color:${state.selectedHMO === h ? 'var(--famasi-blue)' : 'var(--famasi-gray-700)'}; cursor:pointer; font-weight:600;">
+                          ${h}
+                        </button>
+                      `).join('')}
+                    </div>
+                    <div style="font-size:11.5px; color:var(--famasi-gray-600); margin-top:8px; line-height:1.4;">
+                      Famasi generates stamped claims receipts tailored for ${escapeHtml(state.selectedHMO || 'your HMO')}.
+                    </div>
+                  </div>
+                ` : ''}
+              </div>
+            </div>
+
             <!-- Whole-Cart Action Selector -->
-            <div style="margin-top:20px;">
-              <span style="font-size:13px; font-weight:600; color:var(--famasi-gray-700); display:block; margin-bottom:10px;">
+            <div style="margin-top:18px;">
+              <span style="font-size:13px; font-weight:600; color:var(--famasi-gray-700); display:block; margin-bottom:8px;">
                 How should we handle this cart?
               </span>
 
-              <div class="option-cards-list" style="gap:10px;">
+              <div class="option-cards-list" style="gap:8px;">
                 
                 <!-- Convert to Order -->
-                <div class="figma-option-card ${currentMode === 'order' ? 'selected' : ''}" onclick="setCartOrderMode('order')" style="padding:14px 16px; cursor:pointer;">
+                <div class="figma-option-card ${currentMode === 'order' ? 'selected' : ''}" onclick="setCartOrderMode('order')" style="padding:12px 14px; cursor:pointer;">
                   <div class="card-left-content">
                     <div>
                       <span class="card-title">Convert to Order</span>
@@ -3004,7 +3086,7 @@
                 </div>
 
                 <!-- Order Later -->
-                <div class="figma-option-card ${currentMode === 'order_later' ? 'selected' : ''}" onclick="setCartOrderMode('order_later')" style="padding:14px 16px; cursor:pointer;">
+                <div class="figma-option-card ${currentMode === 'order_later' ? 'selected' : ''}" onclick="setCartOrderMode('order_later')" style="padding:12px 14px; cursor:pointer;">
                   <div class="card-left-content">
                     <div>
                       <span class="card-title">Order Later</span>
@@ -3136,60 +3218,114 @@
         const hasNextPerson = state.currentPersonIndex + 1 < state.setupQueue.length;
         const nextPersonName = hasNextPerson ? state.setupQueue[state.currentPersonIndex + 1] : null;
 
-        bodyHtml = `
-          <div style="padding-top:10px;">
-            <div class="eyebrow-text">Care Plan Complete</div>
-            <h1 class="screen-title">${p18} is all set up</h1>
-            <p class="screen-subtitle">Everything is organized into ${p18}’s digital care cabinet.</p>
+        if (state.hasImportedHistory) {
+          // Returning customer: All family members already imported & attributed
+          bodyHtml = `
+            <div style="padding-top:10px;">
+              <div class="eyebrow-text">Family Setup Complete</div>
+              <h1 class="screen-title">Your family cabinet is ready</h1>
+              <p class="screen-subtitle">All 5 pharmacy orders have been attributed and configured.</p>
 
-            <div class="med-action-card" style="margin-top:20px;">
-              <h3 style="font-size:16px; margin-bottom:12px; color:var(--famasi-black);">${p18}’s Summary</h3>
-              
-              <div style="display:flex; flex-direction:column; gap:10px; font-size:13px;">
-                <div>
-                  <strong style="color:var(--famasi-dark);">Medications configured (${p18Meds.length}):</strong>
-                  <div style="color:var(--famasi-gray-700); margin-top:2px;">
-                    ${p18Meds.map(m => `${m.name} (${m.action === 'order' ? 'Ordered now' : 'Saved in cabinet'})`).join(', ')}
+              <div style="display:flex; flex-direction:column; gap:12px; margin-top:18px;">
+                <!-- Dad Summary -->
+                <div class="med-action-card" style="margin:0;">
+                  <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px;">
+                    <div>
+                      <strong style="font-size:15px; color:var(--famasi-black);">Dad (Papa)</strong>
+                      <div style="font-size:12px; color:var(--famasi-gray-600);">Barnawa, Kaduna · Penicillin allergy logged</div>
+                    </div>
+                    <span style="font-size:11px; background:#dcfce7; color:#15803d; font-weight:600; padding:2px 8px; border-radius:100px;">Refills Active</span>
+                  </div>
+                  <div style="font-size:12.5px; color:var(--famasi-gray-700); line-height:1.4;">
+                    Amlodipine 10mg (Monthly dispatch) · Metformin 500mg (Cabinet ready)
                   </div>
                 </div>
 
-                <div>
-                  <strong style="color:var(--famasi-dark);">Delivery Address:</strong>
-                  <div style="color:var(--famasi-gray-700); margin-top:2px;">${p18Data.address || 'Kaduna'}</div>
-                </div>
-
-                <div>
-                  <strong style="color:var(--famasi-dark);">Clinical Safeguards:</strong>
-                  <div style="color:var(--famasi-gray-700); margin-top:2px;">
-                    Allergies: ${p18Data.allergies?.join(', ') || 'None'} · Conditions: ${p18Data.conditions?.join(', ') || 'None'}
+                <!-- Mum Summary -->
+                <div class="med-action-card" style="margin:0;">
+                  <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px;">
+                    <div>
+                      <strong style="font-size:15px; color:var(--famasi-black);">Mum (Mama)</strong>
+                      <div style="font-size:12px; color:var(--famasi-gray-600);">Victoria Island, Lagos</div>
+                    </div>
+                    <span style="font-size:11px; background:var(--famasi-gray-100); color:var(--famasi-gray-700); font-weight:600; padding:2px 8px; border-radius:100px;">Cabinet Ready</span>
+                  </div>
+                  <div style="font-size:12.5px; color:var(--famasi-gray-700); line-height:1.4;">
+                    Losartan 50mg (Refill reminder in 6 days)
                   </div>
                 </div>
 
-                <div>
-                  <strong style="color:var(--famasi-dark);">Active Features:</strong>
-                  <div style="color:#16a34a; font-weight:600; margin-top:2px;">
-                    Auto-refill monitoring · 10% welcome discount applied
+                <!-- Account Manager Summary -->
+                <div class="med-action-card" style="margin:0; background:#f8fafc;">
+                  <div style="display:flex; justify-content:space-between; align-items:center;">
+                    <div>
+                      <strong style="font-size:14px; color:var(--famasi-dark);">${escapeHtml(state.userName)} (You)</strong>
+                      <div style="font-size:12px; color:var(--famasi-gray-600);">Primary Account Coordinator · Lekki Phase 1, Lagos</div>
+                    </div>
                   </div>
                 </div>
               </div>
             </div>
-          </div>
-        `;
+          `;
 
-        footerHtml = `
-          ${hasNextPerson ? `
-            <button class="btn-famasi-primary" onclick="proceedToNextPerson('${nextPersonName}')">
-              Set up next person: ${nextPersonName}
-            </button>
-            <button class="btn-famasi-secondary" onclick="navigateTo('19')">
-              Finish for now & save account
-            </button>
-          ` : `
-            <button class="btn-famasi-primary" onclick="navigateTo('19')">
+          footerHtml = `
+            <button class="btn-famasi-primary" onclick="navigateTo('20')">
               Complete & Secure Account
             </button>
-          `}
-        `;
+          `;
+        } else {
+          // New customer setup
+          bodyHtml = `
+            <div style="padding-top:10px;">
+              <div class="eyebrow-text">Care Plan Complete</div>
+              <h1 class="screen-title">${p18} is all set up</h1>
+              <p class="screen-subtitle">Everything is organized into ${p18}’s digital care cabinet.</p>
+
+              <div class="med-action-card" style="margin-top:20px;">
+                <h3 style="font-size:16px; margin-bottom:12px; color:var(--famasi-black);">${p18}’s Summary</h3>
+                
+                <div style="display:flex; flex-direction:column; gap:10px; font-size:13px;">
+                  <div>
+                    <strong style="color:var(--famasi-dark);">Medications configured (${p18Meds.length}):</strong>
+                    <div style="color:var(--famasi-gray-700); margin-top:2px;">
+                      ${p18Meds.map(m => `${m.name} (${m.action === 'order' ? 'Ordered now' : 'Saved in cabinet'})`).join(', ')}
+                    </div>
+                  </div>
+
+                  <div>
+                    <strong style="color:var(--famasi-dark);">Delivery Address:</strong>
+                    <div style="color:var(--famasi-gray-700); margin-top:2px;">${p18Data.address || 'Kaduna'}</div>
+                  </div>
+
+                  <div>
+                    <strong style="color:var(--famasi-dark);">Clinical Safeguards:</strong>
+                    <div style="color:var(--famasi-gray-700); margin-top:2px;">
+                      Allergies: ${p18Data.allergies?.join(', ') || 'None'} · Conditions: ${p18Data.conditions?.join(', ') || 'None'}
+                    </div>
+                  </div>
+
+                  <div>
+                    <strong style="color:var(--famasi-dark);">Active Features:</strong>
+                    <div style="color:#16a34a; font-weight:600; margin-top:2px;">
+                      Auto-refill monitoring · 10% welcome discount applied
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          `;
+
+          footerHtml = `
+            <button class="btn-famasi-primary" onclick="navigateTo('20')">
+              Complete & Secure Account
+            </button>
+            ${hasNextPerson ? `
+              <button class="btn-famasi-link" onclick="proceedToNextPerson('${nextPersonName}')">
+                Set up ${nextPersonName} now
+              </button>
+            ` : ''}
+          `;
+        }
         break;
 
       // ============================================================
@@ -3246,37 +3382,29 @@
         break;
 
       // ============================================================
-      // 20. CONFIRM ACCOUNT & OTP (Decision: OTP-based, skippable email, no password)
+      // 20. CONFIRM ACCOUNT & OTP (SMS Verification)
       // ============================================================
       case '20':
         bodyHtml = `
           <div style="padding-top:10px;">
-            <div class="eyebrow-text">Almost Done</div>
+            <div class="eyebrow-text">Account Verification</div>
             <h1 class="screen-title">Verify your phone number</h1>
-            <p class="screen-subtitle">We sent a 4-digit code to <strong>${escapeHtml(state.userPhone)}</strong> to lock in your cabinet.</p>
+            <p class="screen-subtitle">We sent a 4-digit verification code via SMS to <strong>${escapeHtml(state.userPhone)}</strong>.</p>
 
             <!-- 4-digit OTP Boxes -->
-            <div class="otp-input-group">
+            <div class="otp-input-group" style="margin-top:28px;">
               <input type="text" maxlength="1" class="otp-box" id="otp1" value="${state.otpEntered[0] || '1'}" oninput="focusNextOtp(this, 'otp2')">
               <input type="text" maxlength="1" class="otp-box" id="otp2" value="${state.otpEntered[1] || '2'}" oninput="focusNextOtp(this, 'otp3')">
               <input type="text" maxlength="1" class="otp-box" id="otp3" value="${state.otpEntered[2] || '3'}" oninput="focusNextOtp(this, 'otp4')">
               <input type="text" maxlength="1" class="otp-box" id="otp4" value="${state.otpEntered[3] || '4'}" oninput="checkOtpComplete()">
             </div>
 
-            <div style="text-align:center; margin-bottom:20px;">
+            <div style="text-align:center; margin-top:16px;">
               <button class="reviewer-btn" style="font-size:11px;" onclick="autoFillOtpDemo()">Fill Demo Code (1234)</button>
             </div>
 
-            <!-- Optional / Skippable Email prompt (Decision requirement) -->
-            <div class="famasi-input-group" style="margin-top:24px; border-top:1px solid var(--famasi-gray-200); padding-top:18px;">
-              <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px;">
-                <label class="famasi-input-label" style="margin:0;">Email for Receipts & Monthly Reports</label>
-                <span style="font-size:11px; color:var(--famasi-gray-500); font-weight:600;">OPTIONAL</span>
-              </div>
-              <input type="email" class="famasi-input" value="${escapeHtml(state.userEmail)}" oninput="state.userEmail = this.value" placeholder="e.g. hauwa@famasi.health">
-              <div style="font-size:12px; color:var(--famasi-gray-600); margin-top:4px;">
-                Receive downloadable HMO claim reimbursement sheets by email.
-              </div>
+            <div style="text-align:center; margin-top:28px; font-size:13px; color:var(--famasi-gray-600);">
+              Didn’t receive SMS? <a href="#" onclick="showToast('New verification code sent!'); return false;" style="color:var(--famasi-blue); font-weight:600; text-decoration:none;">Resend code (0:45)</a>
             </div>
           </div>
         `;
@@ -3284,9 +3412,6 @@
         footerHtml = `
           <button class="btn-famasi-primary" onclick="verifyAndOpenDashboard()">
             Verify & Enter Dashboard
-          </button>
-          <button class="btn-famasi-link" onclick="verifyAndOpenDashboard()">
-            Skip email & finish
           </button>
         `;
         break;
@@ -3327,17 +3452,29 @@
             </div>
 
             <!-- HMO Alpha Dossier Card (If HMO was selected) -->
-            ${state.paymentMethods.includes('Health insurance/HMO') ? `
+            ${state.paymentMethods.includes('Health insurance/HMO') || state.paymentMethod === 'hmo' ? `
               <div style="background:#fffbeb; border:1px solid #fde68a; border-radius:14px; padding:14px; margin-bottom:18px; display:flex; align-items:center; justify-content:space-between;">
                 <div>
                   <strong style="font-size:13px; color:#92400e;">⚡ HMO Alpha Reimbursement Pack</strong>
-                  <div style="font-size:12px; color:#b45309; margin-top:2px;">Claims receipt ready for ${state.selectedHMOs[0] || 'Reliance HMO'}</div>
+                  <div style="font-size:12px; color:#b45309; margin-top:2px;">Claims receipt ready for ${state.selectedHMO || state.selectedHMOs[0] || 'Reliance HMO'}</div>
                 </div>
                 <button class="reviewer-btn" style="font-size:11px; background:#fff; border-color:#f59e0b; color:#92400e;" onclick="alert('Itemized claims invoice for ₦3,780 ready to download.')">Download PDF</button>
               </div>
             ` : ''}
 
-            <!-- Care Circle Tabs -->
+            <!-- Active Features Configured from 8D -->
+            <div style="display:flex; flex-wrap:wrap; gap:6px; margin-bottom:14px;">
+              ${state.userGoals.map(g => {
+                let badge = 'Refill Alerts Active';
+                if (g.includes('Chronic')) badge = 'Vitals Tracker Linked';
+                else if (g.includes('family')) badge = 'Multi-City Family Cabinets';
+                else if (g.includes('Pharmacist')) badge = 'WhatsApp Clinical Desk';
+                else if (g.includes('All')) badge = 'All Platform Features';
+                return `<span style="font-size:11px; font-weight:600; background:#f1f5f9; color:var(--famasi-dark); padding:3px 8px; border-radius:6px; border:1px solid var(--famasi-gray-200);">✓ ${badge}</span>`;
+              }).join('')}
+            </div>
+
+            <!-- Family Tabs -->
             <div style="display:flex; border-bottom:1px solid var(--famasi-gray-200); margin-bottom:14px;">
               <button style="flex:1; padding:8px 0; font-size:14px; font-weight:600; border:none; background:none; border-bottom:2px solid var(--famasi-blue); color:var(--famasi-blue); cursor:pointer;">
                 Household Cabinet
@@ -3458,7 +3595,7 @@
     if (state.isReturningCustomer) {
       navigateTo('2C');
     } else {
-      navigateTo('3');
+      navigateTo('4');
     }
   }
 
@@ -3506,13 +3643,17 @@
     } else if (state.currentScreen === '6B') {
       navigateTo('7');
     } else if (state.currentScreen === '7') {
-      navigateTo('8');
+      navigateTo('8D');
     } else if (state.currentScreen === '8' || state.currentScreen === '8B' || state.currentScreen === '8C') {
+      navigateTo('8D');
+    } else if (state.currentScreen === '8D') {
       navigateTo('9');
     } else if (state.currentScreen === '12' || state.currentScreen === '13' || state.currentScreen === '14') {
       navigateTo('15');
     } else if (state.currentScreen === '15' || state.currentScreen === '16' || state.currentScreen === '17') {
       navigateTo('18');
+    } else if (state.currentScreen === '18' || state.currentScreen === '19') {
+      navigateTo('20');
     } else {
       navigateTo('21');
     }
@@ -3793,6 +3934,14 @@
   function confirmCartDecision(mode) {
     state.cartOrderMode = mode;
     state.temporaryMedList.forEach(m => m.action = mode);
+    if (state.paymentMethod === 'hmo') {
+      if (!state.paymentMethods.includes('Health insurance/HMO')) {
+        state.paymentMethods.push('Health insurance/HMO');
+      }
+      if (state.selectedHMO && !state.selectedHMOs.includes(state.selectedHMO)) {
+        state.selectedHMOs.unshift(state.selectedHMO);
+      }
+    }
     saveMedicationsAndContinue();
   }
 
