@@ -3036,15 +3036,9 @@
             <button class="btn-famasi-primary" onclick="confirmCartDecision('order')">
               Convert to Order (₦${finalTotal.toLocaleString()}) →
             </button>
-            <button class="btn-famasi-link" onclick="confirmCartDecision('order_later')">
-              Or Order Later (Confirm & Continue)
-            </button>
           ` : `
             <button class="btn-famasi-primary" onclick="confirmCartDecision('order_later')">
-              Confirm & Continue (Order Later) →
-            </button>
-            <button class="btn-famasi-link" onclick="confirmCartDecision('order')">
-              Switch to Convert to Order (₦${finalTotal.toLocaleString()})
+              Save to ${escapeHtml(p16)}’s Cabinet & Continue →
             </button>
           `}
         `;
