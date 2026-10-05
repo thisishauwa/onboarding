@@ -416,6 +416,13 @@
       display: flex;
       align-items: center;
       gap: 14px;
+      flex: 1;
+      min-width: 0;
+    }
+
+    .card-left-content > div {
+      flex: 1;
+      min-width: 0;
     }
 
     .card-icon {
@@ -424,18 +431,23 @@
       display: flex;
       align-items: center;
       justify-content: center;
+      flex-shrink: 0;
     }
 
     .card-title {
-      font-size: 16px;
+      font-size: 15.5px;
       font-weight: 500;
       color: var(--famasi-dark);
+      line-height: 1.35;
+      word-break: break-word;
     }
 
     .card-subtitle {
       font-size: 13px;
       color: var(--famasi-gray-600);
-      margin-top: 2px;
+      margin-top: 3px;
+      line-height: 1.4;
+      word-break: break-word;
     }
 
     /* Radio / Check Circle */
@@ -449,6 +461,7 @@
       align-items: center;
       justify-content: center;
       flex-shrink: 0;
+      margin-left: 12px;
       transition: all 0.15s ease;
     }
 
@@ -2541,28 +2554,23 @@
         const famasiGoalOptions = [
           {
             title: 'Medication delivery & refills',
-            desc: 'Scheduled doorstep delivery before supplies run out',
-            badge: 'Enables 3-Day Refill Alerts'
+            desc: 'Scheduled doorstep deliveries before your supply runs out'
           },
           {
             title: 'Chronic condition management',
-            desc: 'Track blood pressure, blood sugar, and health vitals',
-            badge: 'Enables Health Vitals Log'
+            desc: 'Support and tracking for blood pressure, glucose, and health vitals'
           },
           {
             title: 'Care for family members',
-            desc: 'Coordinate prescriptions and deliveries across different cities',
-            badge: 'Enables Multi-City Cabinets'
+            desc: 'Prescriptions and multi-city delivery for parents and loved ones'
           },
           {
             title: 'Pharmacist consultations',
-            desc: 'Licensed pharmacist guidance and dosage review',
-            badge: 'Enables 1-on-1 Clinical Support'
+            desc: 'Direct dosage verification, advice, and WhatsApp clinical check-ins'
           },
           {
             title: 'All of the above',
-            desc: 'Complete end-to-end pharmacy and family wellness care',
-            badge: 'All Platform Features'
+            desc: 'Comprehensive pharmacy and wellness care for your whole family'
           }
         ];
 
@@ -2570,21 +2578,16 @@
           <div style="padding-top:10px;">
             <div class="eyebrow-text">Personalising your care</div>
             <h1 class="screen-title">What do you want Famasi to help you do?</h1>
-            <p class="screen-subtitle">Select all that apply. Your choices configure your automated reminders, delivery routes, and care team.</p>
+            <p class="screen-subtitle">Select all that apply.</p>
 
-            <div class="option-cards-list" style="margin-top:20px;">
+            <div class="option-cards-list" style="margin-top:20px; gap:10px;">
               ${famasiGoalOptions.map(opt => {
                 const isSelected = state.userGoals.includes(opt.title);
                 return `
-                  <div class="figma-option-card ${isSelected ? 'selected' : ''}" onclick="toggleUserGoal('${opt.title}')" style="padding:14px 16px;">
-                    <div class="card-left-content" style="flex:1;">
+                  <div class="figma-option-card ${isSelected ? 'selected' : ''}" onclick="toggleUserGoal('${opt.title}')" style="padding:15px 18px;">
+                    <div class="card-left-content">
                       <div>
-                        <div style="display:flex; align-items:center; gap:8px; margin-bottom:2px;">
-                          <span class="card-title">${opt.title}</span>
-                          <span style="font-size:10px; font-weight:700; background:${isSelected ? '#dbeafe' : 'var(--famasi-gray-100)'}; color:${isSelected ? 'var(--famasi-blue)' : 'var(--famasi-gray-600)'}; padding:2px 7px; border-radius:6px;">
-                            ${opt.badge}
-                          </span>
-                        </div>
+                        <div class="card-title">${opt.title}</div>
                         <div class="card-subtitle">${opt.desc}</div>
                       </div>
                     </div>
@@ -3034,9 +3037,9 @@
                 <div class="figma-option-card ${state.paymentMethod === 'hmo' ? 'selected' : ''}" onclick="state.paymentMethod='hmo'; render();" style="padding:12px 14px; cursor:pointer;">
                   <div class="card-left-content">
                     <div>
-                      <div style="display:flex; align-items:center; gap:6px;">
+                      <div style="display:flex; align-items:center; flex-wrap:wrap; gap:6px;">
                         <span class="card-title" style="font-size:14px;">Health Insurance / HMO</span>
-                        <span style="font-size:10px; font-weight:700; background:#fef3c7; color:#92400e; padding:1px 6px; border-radius:4px;">Alpha Early Access</span>
+                        <span style="font-size:10px; font-weight:700; background:#fef3c7; color:#92400e; padding:1px 6px; border-radius:4px; flex-shrink:0;">Alpha Early Access</span>
                       </div>
                       <div class="card-subtitle">Get itemized stamped claims receipts for quick HMO reimbursement</div>
                     </div>
@@ -3229,12 +3232,12 @@
               <div style="display:flex; flex-direction:column; gap:12px; margin-top:18px;">
                 <!-- Dad Summary -->
                 <div class="med-action-card" style="margin:0;">
-                  <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px;">
-                    <div>
+                  <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:6px; gap:8px;">
+                    <div style="flex:1; min-width:0;">
                       <strong style="font-size:15px; color:var(--famasi-black);">Dad (Papa)</strong>
                       <div style="font-size:12px; color:var(--famasi-gray-600);">Barnawa, Kaduna · Penicillin allergy logged</div>
                     </div>
-                    <span style="font-size:11px; background:#dcfce7; color:#15803d; font-weight:600; padding:2px 8px; border-radius:100px;">Refills Active</span>
+                    <span style="font-size:11px; background:#dcfce7; color:#15803d; font-weight:600; padding:2px 8px; border-radius:100px; flex-shrink:0;">Refills Active</span>
                   </div>
                   <div style="font-size:12.5px; color:var(--famasi-gray-700); line-height:1.4;">
                     Amlodipine 10mg (Monthly dispatch) · Metformin 500mg (Cabinet ready)
@@ -3243,12 +3246,12 @@
 
                 <!-- Mum Summary -->
                 <div class="med-action-card" style="margin:0;">
-                  <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px;">
-                    <div>
+                  <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:6px; gap:8px;">
+                    <div style="flex:1; min-width:0;">
                       <strong style="font-size:15px; color:var(--famasi-black);">Mum (Mama)</strong>
                       <div style="font-size:12px; color:var(--famasi-gray-600);">Victoria Island, Lagos</div>
                     </div>
-                    <span style="font-size:11px; background:var(--famasi-gray-100); color:var(--famasi-gray-700); font-weight:600; padding:2px 8px; border-radius:100px;">Cabinet Ready</span>
+                    <span style="font-size:11px; background:var(--famasi-gray-100); color:var(--famasi-gray-700); font-weight:600; padding:2px 8px; border-radius:100px; flex-shrink:0;">Cabinet Ready</span>
                   </div>
                   <div style="font-size:12.5px; color:var(--famasi-gray-700); line-height:1.4;">
                     Losartan 50mg (Refill reminder in 6 days)
