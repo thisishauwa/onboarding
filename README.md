@@ -41,6 +41,12 @@ An interactive, high-fidelity and lo-fi prototype for the Famasi onboarding expe
    - **Desktop**: Fixed phone mock-up (`390px × 844px`), scrolling content body (`.screen-body`), permanently fixed bottom action buttons (`.screen-footer-pinned`).
    - **Mobile Breakpoint (`<= 640px`)**: The phone mockup chrome (bezels, box-shadows, fake status bar, home bar) is completely removed; the prototype fills 100vw × 100dvh edge-to-edge as a native mobile app directly on the screen with a discreet bottom-sheet screen switcher accessible by tapping the progress bar.
 
+9. **Returning Pharmacy Customer Personalization (Screens 2C & 2D)**:
+   - **New to App ≠ New to Pharmacy**: Customers who previously purchased through Famasi's retail branches, website, or concierge WhatsApp have established clinical records. Forcing them through generic onboarding creates friction and breaks trust.
+   - **Dynamic Recognition**: Entering their phone number on Screen 2B matches existing pharmacy records and displays Screen 2C: *"We found 5 orders attached to this number. Would you like to import and personalize?"*
+   - **Multi-Person Caregiver Attribution Edge Case**: Solves the critical edge case where an account holder (e.g. adult daughter) manages orders for multiple family members across cities. Famasi auto-groups past orders by recipient (Dad in Kaduna with Amlodipine/Metformin, Mum in Lagos with Losartan, Self in Lagos) on Screen 2D so medications are never clinically misattributed.
+   - **"It Just Works"**: Pre-fills known fields (medications, delivery locations, payment preferences) while leaving unknowns (exact DOB, safety flags) for quick confirmation. Bypasses 12 repetitive screens and fast-tracks the user directly to medication review and smart refills.
+
 ---
 
 ## Screen Flow Architecture
@@ -49,8 +55,12 @@ An interactive, high-fidelity and lo-fi prototype for the Famasi onboarding expe
 Account & Household Setup
   ├── 1. Welcome & Value Proposition (Figma 24192:19137)
   ├── 2. What should we call you? (Name only)
-  ├── 2B. Can we have your phone number? (Phone only)
-  ├── 3. Trust & 300k Community Reviews (Figma 24186:18430)
+  ├── 2B. Can we have your phone number? (Phone only + Persona Toggle)
+  │     ├── [Returning User Path]
+  │     │     ├── 2C. Order History Found (5 Orders & Personalization Consent)
+  │     │     └── 2D. Smart Family Care Attribution (Multi-Person Caregiver Edge Case)
+  │     └── [New User Path]
+  │           └── 3. Trust & 300k Community Reviews (Figma 24186:18430)
   ├── 4. Personalisation Intro — "Now it's your turn" (Figma 24192:19394)
   ├── 5. What is your sex? (Figma 24195:19532)
   ├── 6. When were you born? (Figma 24195:19608 — Smooth iOS Wheel Picker)
