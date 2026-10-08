@@ -24,32 +24,39 @@ An interactive, high-fidelity and lo-fi prototype for the Famasi onboarding expe
      - Pharmacist consultations (`Enables 1-on-1 WhatsApp Clinical Desk`)
    - Selections dynamically customize the user's dashboard widgets on Screen 21.
 
-5. **Streamlined Family Setup (No Redundant Priority Screen)**:
+5. **Earned Personalised Insight & Payoff (Screen 9B)**:
+   - Replaced premature age-based assumptions (Screen 6B) with an earned, dynamic payoff screen immediately following Screen 9 ("Who do you manage medication for?").
+   - Synthesizes user choices into a personalized reflection:
+     - **Screen 9** (`careScope`: Myself, Someone else, Both) drives the narrative headline and relationship context.
+     - **Screen 8D** (`userGoals`) drives supporting benefit blocks, feature commitments, and tailored CTAs.
+     - Routes directly to member setup (Screen 10 for family/someone else) or individual clinical setup (Screen 12 for oneself).
+
+6. **Streamlined Family Setup (No Redundant Priority Screen)**:
    - When users select family members on Screen 10 (e.g. Dad, Mum), clicking Continue drops them directly into setting up the first person in order.
    - Eliminates the redundant care plan priority screen.
 
-6. **Medication Addition Flow with Integrated Figma Design (Screen 15)**:
+7. **Medication Addition Flow with Integrated Figma Design (Screen 15)**:
    - Seamlessly blends the standard onboarding page structure with Figma design tokens (`Node 24133:15811`):
      - Question & eyebrow: **"What is Dad getting?"** / **"What are you getting?"**
      - Focused search box with `#5da5f6` border & `0 0 0 4px #e7f2fe` primary-50 glow effect and clear button.
      - Interactive filter pills: **💡 Suggested** and **📋 Plans**.
      - Curated plan items with `🪄 Curated Plan` badges and acute medication items.
 
-7. **Whole-Cart Decision (Convert to Order vs. Order Later)**:
+8. **Whole-Cart Decision (Convert to Order vs. Order Later)**:
    - When reviewing medications (Screen 16), the decision applies to the entire cart as a whole rather than configuring each medication individually.
    - Users view a single consolidated cart summary (items, dosages, delivery destination, 10% welcome discount breakdown, and automated refill reminder enrollment).
 
-8. **Returning User History Fast-Track & Unified Summary (Screens 2C, 2D, 18)**:
+9. **Returning User History Fast-Track & Unified Summary (Screens 2C, 2D, 18)**:
    - Entering a phone number with existing pharmacy orders offers 1-tap import on Screen 2C and family attribution on Screen 2D.
    - Bypasses redundant clinical loops: on Screen 18, imported family members (Dad and Mum) are presented in a unified summary, leading straight to account security without forcing a redundant 7-step questionnaire for Mum.
 
-9. **Loop Fatigue Prevention for New Multi-Member Accounts (Screen 18)**:
-   - For new users setting up multiple family members, the primary CTA is **Complete & Secure Account**, with an optional secondary action to set up the next person now. Users can secure their account immediately and configure other family members later from their dashboard.
+10. **Loop Fatigue Prevention for New Multi-Member Accounts (Screen 18)**:
+    - For new users setting up multiple family members, the primary CTA is **Complete & Secure Account**, with an optional secondary action to set up the next person now. Users can secure their account immediately and configure other family members later from their dashboard.
 
-10. **Clean, Focused SMS Verification (Screen 20)**:
+11. **Clean, Focused SMS Verification (Screen 20)**:
     - Simplified to a pure 4-digit SMS OTP screen with auto-advancing inputs and demo quick-fill, removing distracting secondary inputs and ambiguous buttons.
 
-11. **Fixed Desktop Phone Mockup & Edge-to-Edge Mobile Prototype**:
+12. **Fixed Desktop Phone Mockup & Edge-to-Edge Mobile Prototype**:
     - **Desktop**: Fixed phone mock-up (`390px × 844px`), scrolling content body (`.screen-body`), permanently fixed bottom action buttons (`.screen-footer-pinned`).
     - **Mobile Breakpoint (`<= 640px`)**: The phone mockup chrome is removed; the prototype fills 100vw × 100dvh edge-to-edge as a native mobile app directly on the screen with a discreet bottom-sheet screen switcher accessible by tapping the progress bar.
 
@@ -69,11 +76,11 @@ Account & Household Setup
   ├── 4. Account Manager Profile Intro (Securing family dashboard)
   ├── 5. What is your sex? (Account Manager Records)
   ├── 6. When were you born? (Smooth iOS Wheel Picker)
-  ├── 6B. Full-Page Insight: Caring Across Distance (Noom pattern)
   ├── 7. Where do you live? (Account Manager Location)
   ├── 8D. What do you want Famasi to help you do? (Actionable Feature Config)
-  ├── 9. Who do you manage medication for? (Figma 24197:19891)
-  ├── 10. Let's add the people you manage (Figma 24198:19984)
+  ├── 9. Who do you manage medication for? (Myself / Someone else / Both)
+  ├── 9B. Personalised Setup Insight (Dynamic Payoff & Care Reflection)
+  ├── 10. Let's add the people you manage (For 'Someone else' or 'Both')
   └── 10B. Member Accordion Details (Mama / DOB) (Figma 24199:20069)
 
 Direct Person Clinical & Medication Setup (Dad)

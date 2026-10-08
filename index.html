@@ -1421,13 +1421,13 @@
           <option value="4">4 · Personalisation Intro (Figma 24192-19394)</option>
           <option value="5">5 · What is your sex? (Figma 24195-19532)</option>
           <option value="6">6 · When were you born? (Figma 24195-19608)</option>
-          <option value="6B">6B · Insight: Caring Across Distance (Full Page)</option>
           <option value="7">7 · Where do you live? (Figma 24197-19705)</option>
           <option value="8">8 · Payment Method Multi-select (Figma 24197-19791)</option>
           <option value="8B">8B · HMO Provider Selection</option>
           <option value="8C">8C · HMO Alpha Early Access Notice</option>
           <option value="8D">8D · What do you want Famasi to help you do?</option>
           <option value="9">9 · Who do you manage for? (Figma 24197-19891)</option>
+          <option value="9B">9B · Personalised Setup Insight (Dynamic Payoff)</option>
           <option value="10">10 · Add People You Manage (Figma 24198-19984)</option>
           <option value="10B">10B · Member Details Accordion (Figma 24199-20069)</option>
         </optgroup>
@@ -1528,7 +1528,6 @@
           <button class="sheet-screen-btn" data-screen="4" onclick="selectScreenFromSheet('4')">4 · Personalisation Intro</button>
           <button class="sheet-screen-btn" data-screen="5" onclick="selectScreenFromSheet('5')">5 · What is your sex?</button>
           <button class="sheet-screen-btn" data-screen="6" onclick="selectScreenFromSheet('6')">6 · When were you born? (Date Picker)</button>
-          <button class="sheet-screen-btn" data-screen="6B" onclick="selectScreenFromSheet('6B')">6B · Insight: Caring Across Distance</button>
           <button class="sheet-screen-btn" data-screen="7" onclick="selectScreenFromSheet('7')">7 · Where do you live? (Address)</button>
         </div>
 
@@ -1543,6 +1542,7 @@
         <div class="sheet-section-title">Care Loop & Loved Ones</div>
         <div class="sheet-grid">
           <button class="sheet-screen-btn" data-screen="9" onclick="selectScreenFromSheet('9')">9 · Who do you manage for?</button>
+          <button class="sheet-screen-btn" data-screen="9B" onclick="selectScreenFromSheet('9B')">9B · Personalised Setup Insight</button>
           <button class="sheet-screen-btn" data-screen="10" onclick="selectScreenFromSheet('10')">10 · Add People You Manage</button>
           <button class="sheet-screen-btn" data-screen="12" onclick="selectScreenFromSheet('12')">12 · Setup Person Intro</button>
         </div>
@@ -1763,13 +1763,14 @@
       '4': 24,
       '5': 30,
       '6': 36,
-      '6B': 42,
-      '7': 48,
-      '8': 54,
-      '8B': 58,
-      '8C': 62,
-      '8D': 54,
-      '9': 68,
+      '6B': 40,
+      '7': 44,
+      '8': 50,
+      '8B': 54,
+      '8C': 58,
+      '8D': 52,
+      '9': 60,
+      '9B': 68,
       '10': 74,
       '10B': 76,
       '11': 80,
@@ -2310,7 +2311,7 @@
         `;
 
         footerHtml = `
-          <button class="btn-famasi-primary" onclick="navigateTo('6B')">
+          <button class="btn-famasi-primary" onclick="navigateTo('7')">
             Continue
           </button>
         `;
@@ -2664,8 +2665,29 @@
         `;
 
         footerHtml = `
-          <button class="btn-famasi-primary" onclick="handleCareScopeContinue()">
+          <button class="btn-famasi-primary" onclick="navigateTo('9B')">
             Continue
+          </button>
+        `;
+        break;
+
+      // ============================================================
+      // 9B. PERSONALISED SETUP INSIGHT & PAYOFF (Earned Reflection)
+      // ============================================================
+      case '9B':
+        const content9B = getScreen9BContent();
+        bodyHtml = `
+          <div style="padding-top:10px; display:flex; flex-direction:column; flex:1;">
+            <div class="eyebrow-text" style="font-size:13px; font-weight:700; color:var(--famasi-blue); text-transform:uppercase; letter-spacing:0.5px; margin-bottom:12px;">Your Famasi setup</div>
+            <h1 class="screen-title" style="font-size:24px; line-height:1.25; margin-bottom:12px;">${content9B.headline}</h1>
+            <p class="screen-subtitle" style="font-size:15px; line-height:1.55; color:var(--famasi-gray-700); margin-bottom:20px;">${content9B.body}</p>
+            ${content9B.middleHtml}
+          </div>
+        `;
+
+        footerHtml = `
+          <button class="btn-famasi-primary" onclick="handle9BContinue()">
+            ${content9B.ctaText}
           </button>
         `;
         break;
@@ -3641,9 +3663,7 @@
       handleConfirmFamilyAttribution(true);
     } else if (state.currentScreen === '5') {
       navigateTo('6');
-    } else if (state.currentScreen === '6') {
-      navigateTo('6B');
-    } else if (state.currentScreen === '6B') {
+    } else if (state.currentScreen === '6' || state.currentScreen === '6B') {
       navigateTo('7');
     } else if (state.currentScreen === '7') {
       navigateTo('8D');
@@ -3651,6 +3671,10 @@
       navigateTo('8D');
     } else if (state.currentScreen === '8D') {
       navigateTo('9');
+    } else if (state.currentScreen === '9') {
+      navigateTo('9B');
+    } else if (state.currentScreen === '9B') {
+      handle9BContinue();
     } else if (state.currentScreen === '12' || state.currentScreen === '13' || state.currentScreen === '14') {
       navigateTo('15');
     } else if (state.currentScreen === '15' || state.currentScreen === '16' || state.currentScreen === '17') {
@@ -3688,6 +3712,267 @@
       state.selectedHMOs.push(hmo);
     }
     render();
+  }
+
+  function handle9BContinue() {
+    if (state.careScope === 'Myself') {
+      state.setupQueue = ['Me'];
+      state.activePersonName = 'Me';
+      state.currentPersonIndex = 0;
+      navigateTo('12');
+    } else {
+      navigateTo('10');
+    }
+  }
+
+  function getScreen9BContent() {
+    const goals = state.userGoals || [];
+    const scope = state.careScope || 'Both';
+    const hasAll = goals.includes('All of the above');
+    const hasRefills = goals.includes('Medication delivery & refills') || hasAll;
+    const hasChronic = goals.includes('Chronic condition management') || hasAll;
+    const hasFamily = goals.includes('Care for family members') || hasAll;
+    const hasPharm = goals.includes('Pharmacist consultations') || hasAll;
+    const activeGoals = hasAll 
+      ? ['Medication delivery & refills', 'Chronic condition management', 'Care for family members', 'Pharmacist consultations']
+      : goals.filter(g => g !== 'All of the above');
+    const goalCount = hasAll ? 4 : activeGoals.length;
+
+    const benefitCopyMap = {
+      'Medication delivery & refills': 'Stay ahead of refills and make repeat ordering easier.',
+      'Chronic condition management': 'Keep medications alongside the health routines and vitals that matter.',
+      'Care for family members': 'Give each person their own care profile without mixing their information.',
+      'Pharmacist consultations': 'Get pharmacist support when medication questions come up.'
+    };
+
+    let headline = '';
+    let body = '';
+    let middleHtml = '';
+    let ctaText = '';
+
+    // ==========================================
+    // 1. SCOPE: MYSELF
+    // ==========================================
+    if (scope === 'Myself') {
+      ctaText = 'Set up my care';
+
+      if (hasFamily && goalCount <= 2) {
+        headline = 'We’ll start with you.';
+        body = 'You can add parents or other loved ones later without starting again.';
+        const otherGoals = activeGoals.filter(g => g !== 'Care for family members');
+        if (otherGoals.length > 0) {
+          middleHtml = `
+            <div style="background:var(--famasi-gray-50); border:1px solid var(--famasi-gray-200); border-radius:14px; padding:16px;">
+              <div style="font-size:12px; font-weight:700; color:var(--famasi-gray-500); text-transform:uppercase; letter-spacing:0.5px; margin-bottom:12px;">Your setup will include:</div>
+              <div style="display:flex; flex-direction:column; gap:10px;">
+                ${otherGoals.map(g => `
+                  <div style="display:flex; align-items:flex-start; gap:10px;">
+                    <div style="width:20px; height:20px; border-radius:50%; background:var(--famasi-blue); color:#fff; display:flex; align-items:center; justify-content:center; font-size:11px; font-weight:700; flex-shrink:0; margin-top:1px;">✓</div>
+                    <div style="font-size:13px; color:var(--famasi-gray-800); line-height:1.45; font-weight:500;">${benefitCopyMap[g] || g}</div>
+                  </div>
+                `).join('')}
+              </div>
+            </div>
+          `;
+        }
+      } else if (goalCount === 1) {
+        if (hasRefills) {
+          headline = 'No more waiting until the pack is almost empty.';
+          body = 'Famasi can help you keep track of your medications and make refilling them easier before you run out.';
+        } else if (hasChronic) {
+          headline = 'Your medication is only one part of the picture.';
+          body = 'Famasi can keep your medicines alongside the health numbers you need to monitor, like blood pressure or glucose.';
+        } else if (hasPharm) {
+          headline = 'You don’t have to figure every medication question out alone.';
+          body = 'You’ll be able to get pharmacist support when you need help understanding your medicines.';
+        } else {
+          headline = 'You’re setting Famasi up for yourself.';
+          body = 'We’ll help you keep your medications, refills and health routines organised in one place, so staying on top of your care takes less remembering.';
+        }
+      } else if (goalCount > 1) {
+        headline = 'You’re setting Famasi up for yourself.';
+        body = 'We’ll help you keep your medications, refills and health routines organised in one place, so staying on top of your care takes less remembering.';
+
+        const benefitList = [];
+        if (hasRefills) benefitList.push('Refill reminders & doorstep delivery');
+        if (hasChronic) benefitList.push('Health tracking & routine monitoring');
+        if (hasPharm) benefitList.push('Clinical pharmacist guidance');
+        if (hasFamily) benefitList.push('Add loved ones later anytime');
+
+        middleHtml = `
+          <div style="background:var(--famasi-gray-50); border:1px solid var(--famasi-gray-200); border-radius:14px; padding:16px;">
+            <div style="font-size:12px; font-weight:700; color:var(--famasi-gray-500); text-transform:uppercase; letter-spacing:0.5px; margin-bottom:12px;">Your setup will include:</div>
+            <div style="display:flex; flex-direction:column; gap:10px;">
+              ${benefitList.map(item => `
+                <div style="display:flex; align-items:flex-start; gap:10px;">
+                  <div style="width:20px; height:20px; border-radius:50%; background:var(--famasi-blue); color:#fff; display:flex; align-items:center; justify-content:center; font-size:11px; font-weight:700; flex-shrink:0; margin-top:1px;">✓</div>
+                  <div style="font-size:13px; color:var(--famasi-gray-800); line-height:1.45; font-weight:500;">${item}</div>
+                </div>
+              `).join('')}
+            </div>
+          </div>
+        `;
+      } else {
+        headline = 'You’re setting Famasi up for yourself.';
+        body = 'We’ll help you keep your medications, refills and health routines organised in one place, so staying on top of your care takes less remembering.';
+      }
+    }
+
+    // ==========================================
+    // 2. SCOPE: SOMEONE ELSE
+    // ==========================================
+    else if (scope === 'Someone else') {
+      ctaText = 'Add who I care for';
+
+      if (hasFamily && (!hasAll && goalCount <= 2)) {
+        headline = 'You’re setting up care for someone you love.';
+        body = 'We’ll give them their own medication profile, help you stay ahead of their refills and keep their care separate from yours.';
+        ctaText = 'Add who I care for';
+      } else if (hasRefills && !hasChronic && !hasPharm && !hasFamily && !hasAll) {
+        headline = 'You shouldn’t have to wait for “my medicine has finished.”';
+        body = 'We’ll help you organise what they take and stay ahead of the next refill.';
+        ctaText = 'Set up their medications';
+      } else if (hasChronic && !hasRefills && !hasPharm && !hasFamily && !hasAll) {
+        headline = 'Managing a condition takes more than remembering a drug name.';
+        body = 'We’ll help you organise their medications and the health routines that go with their care.';
+        ctaText = 'Set up their care';
+      } else if (hasPharm && !hasRefills && !hasChronic && !hasFamily && !hasAll) {
+        headline = 'Sometimes the hardest part of caring for someone is not knowing what to ask.';
+        body = 'Famasi keeps their medication information together so pharmacist conversations have the right context.';
+        ctaText = 'Add who I care for';
+      } else if (goalCount > 1) {
+        headline = 'You’re helping someone else stay on top of their care.';
+        body = 'Famasi keeps their medications, refill needs and care details organised in one place, while you stay in control of the setup.';
+        ctaText = 'Add who I care for';
+
+        const manageList = [];
+        if (hasRefills) manageList.push('Their medications and refills');
+        if (hasChronic) manageList.push('Their health routines and vitals');
+        if (hasPharm) manageList.push('Pharmacist questions when they come up');
+        if (hasFamily) manageList.push('Their own care profile and delivery details');
+
+        middleHtml = `
+          <div style="background:var(--famasi-gray-50); border:1px solid var(--famasi-gray-200); border-radius:14px; padding:16px;">
+            <div style="font-size:12px; font-weight:700; color:var(--famasi-gray-500); text-transform:uppercase; letter-spacing:0.5px; margin-bottom:12px;">We’ll help you manage:</div>
+            <div style="display:flex; flex-direction:column; gap:10px;">
+              ${manageList.map(item => `
+                <div style="display:flex; align-items:flex-start; gap:10px;">
+                  <div style="width:20px; height:20px; border-radius:50%; background:var(--famasi-blue); color:#fff; display:flex; align-items:center; justify-content:center; font-size:11px; font-weight:700; flex-shrink:0; margin-top:1px;">✓</div>
+                  <div style="font-size:13px; color:var(--famasi-gray-800); line-height:1.45; font-weight:500;">${item}</div>
+                </div>
+              `).join('')}
+            </div>
+          </div>
+        `;
+      } else {
+        headline = 'You’re helping someone else stay on top of their care.';
+        body = 'Famasi keeps their medications, refill needs and care details organised in one place, while you stay in control of the setup.';
+        ctaText = 'Add who I care for';
+      }
+    }
+
+    // ==========================================
+    // 3. SCOPE: BOTH
+    // ==========================================
+    else { // Both
+      ctaText = 'Set up my family';
+
+      if (hasAll || goalCount >= 3) {
+        headline = 'You’re not just ordering medication. You’re managing care.';
+        body = 'That can mean different medicines, refill dates and delivery cities to keep in your head. Famasi gives each person their own profile while you manage everything together.';
+        ctaText = 'Set up my family';
+
+        middleHtml = `
+          <div style="background:var(--famasi-gray-50); border:1px solid var(--famasi-gray-200); border-radius:14px; padding:16px; margin-bottom:14px;">
+            <div style="font-size:11px; font-weight:700; color:var(--famasi-gray-500); text-transform:uppercase; letter-spacing:0.5px; margin-bottom:12px;">Your Famasi will keep</div>
+            
+            <div style="display:flex; flex-direction:column; gap:12px;">
+              <div style="display:flex; align-items:flex-start; gap:12px;">
+                <div style="width:34px; height:34px; border-radius:9px; background:var(--famasi-blue-light); color:var(--famasi-blue); display:flex; align-items:center; justify-content:center; font-size:17px; flex-shrink:0;">👤</div>
+                <div>
+                  <div style="font-size:14px; font-weight:700; color:var(--famasi-dark);">You</div>
+                  <div style="font-size:13px; color:var(--famasi-gray-600); line-height:1.4;">Medication, refills and personal health routines</div>
+                </div>
+              </div>
+
+              <div style="height:1px; background:var(--famasi-gray-200);"></div>
+
+              <div style="display:flex; align-items:flex-start; gap:12px;">
+                <div style="width:34px; height:34px; border-radius:9px; background:#fef3c7; color:#b45309; display:flex; align-items:center; justify-content:center; font-size:17px; flex-shrink:0;">👨‍👩‍👧</div>
+                <div>
+                  <div style="font-size:14px; font-weight:700; color:var(--famasi-dark);">Your loved ones</div>
+                  <div style="font-size:13px; color:var(--famasi-gray-600); line-height:1.4;">Their own prescriptions, conditions, deliveries and refill schedules</div>
+                </div>
+              </div>
+
+              <div style="height:1px; background:var(--famasi-gray-200);"></div>
+
+              <div style="display:flex; align-items:flex-start; gap:12px;">
+                <div style="width:34px; height:34px; border-radius:9px; background:#dcfce7; color:#15803d; display:flex; align-items:center; justify-content:center; font-size:17px; flex-shrink:0;">🛡️</div>
+                <div>
+                  <div style="font-size:14px; font-weight:700; color:var(--famasi-dark);">All together for you</div>
+                  <div style="font-size:13px; color:var(--famasi-gray-600); line-height:1.4;">One place to manage care and get pharmacist support</div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div style="background:#eff6ff; border:1px solid #bfdbfe; border-radius:12px; padding:12px 14px; display:flex; align-items:center; gap:10px;">
+            <span style="font-size:16px;">✨</span>
+            <span style="font-size:13px; font-weight:600; color:#1e40af; line-height:1.4;">Everyone gets their own care profile. You get one place to manage it all.</span>
+          </div>
+        `;
+      } else if (hasFamily && (!hasRefills || !hasChronic)) {
+        headline = 'One account shouldn’t mean one person’s medication.';
+        body = 'Famasi gives everyone you manage their own care profile, while you see the whole family from one place.';
+        ctaText = 'Build my family care';
+
+        middleHtml = `
+          <div style="background:#eff6ff; border:1px solid #bfdbfe; border-radius:12px; padding:14px 16px;">
+            <div style="font-size:14px; font-weight:700; color:#1e40af; margin-bottom:4px;">Everyone gets their own cabinet.</div>
+            <div style="font-size:13px; color:#1e3a8a; line-height:1.45;">You get one place to manage them without mixing up orders or delivery addresses.</div>
+          </div>
+        `;
+      } else if (hasRefills && !hasChronic) {
+        headline = 'Different people. Different medicines. Different refill dates.';
+        body = 'Famasi keeps them separate, while you manage them together.';
+        ctaText = 'Set up my household';
+
+        middleHtml = `
+          <div style="background:var(--famasi-gray-50); border:1px solid var(--famasi-gray-200); border-radius:14px; padding:16px;">
+            <div style="display:flex; align-items:flex-start; gap:10px;">
+              <div style="width:20px; height:20px; border-radius:50%; background:var(--famasi-blue); color:#fff; display:flex; align-items:center; justify-content:center; font-size:11px; font-weight:700; flex-shrink:0;">✓</div>
+              <div style="font-size:13px; color:var(--famasi-gray-800); line-height:1.45; font-weight:500;">We’ll keep each person’s medications and refills separate, so one person’s order does not get mixed up with another’s.</div>
+            </div>
+          </div>
+        `;
+      } else if (hasChronic && !hasRefills) {
+        headline = 'Everyone’s health needs are different. Their profiles should be too.';
+        body = 'Famasi keeps each person’s medications, conditions and health routines attached to the right person.';
+        ctaText = 'Set up my family';
+
+        middleHtml = `
+          <div style="background:var(--famasi-gray-50); border:1px solid var(--famasi-gray-200); border-radius:14px; padding:16px;">
+            <div style="display:flex; align-items:flex-start; gap:10px;">
+              <div style="width:20px; height:20px; border-radius:50%; background:var(--famasi-blue); color:#fff; display:flex; align-items:center; justify-content:center; font-size:11px; font-weight:700; flex-shrink:0;">✓</div>
+              <div style="font-size:13px; color:var(--famasi-gray-800); line-height:1.45; font-weight:500;">Each person gets their own health tracking, so Dad’s blood pressure monitoring never sits beside your own medication schedule.</div>
+            </div>
+          </div>
+        `;
+      } else {
+        headline = 'You’re managing more than one person’s care.';
+        body = 'That can mean different medicines, different refill dates and different needs to keep in your head at the same time. Famasi gives each person their own care profile, while you manage everything from one place.';
+        ctaText = 'Set up my family';
+
+        middleHtml = `
+          <div style="background:#eff6ff; border:1px solid #bfdbfe; border-radius:12px; padding:14px 16px;">
+            <div style="font-size:13px; font-weight:600; color:#1e40af; line-height:1.45;">Everyone gets their own cabinet. You get one place to manage them.</div>
+          </div>
+        `;
+      }
+    }
+
+    return { headline, body, middleHtml, ctaText };
   }
 
   function handleCareScopeContinue() {
